@@ -60,25 +60,8 @@
             text-align: center;
         }
         #easter-egg-game h2 { font-size: 24px; margin-bottom: 20px; }
-        #game-area {
-            width: 300px;
-            height: 300px;
-            background: #333;
-            position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-        }
-        .target {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: #ff4757;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .target:active { transform: scale(0.8); }
-        #game-score { font-size: 20px; margin-top: 20px; }
+        #game-canvas { border: 2px solid #fff; border-radius: 8px; background: #70c5ce; max-width: 90vw; max-height: 70vh; }
+        #game-info { font-size: 20px; margin-bottom: 10px; }
         #close-game {
             margin-top: 20px;
             padding: 10px 20px;
@@ -96,13 +79,13 @@
     <div class="container">
         <h1>
             <span class="carrot">🥕</span> 萝卜头本波的应用下载站
-            <span class="version" id="version-tag" onclick="handleVersionClick()">v0.3.3</span>
         </h1>
 
         <!-- 验证区域 -->
         <div id="verify-section">
             <h2>🔒 请输入卡密访问</h2>
-            <p>请联系管理员获取卡密</p>
+            <!-- 已更新为解析到的真实抖音主页链接 -->
+            <p>关注管理员的抖音账号 <a href="https://www.douyin.com/user/MS4wLjABAAAAc1D3ZwfPny1XogR1E9NxQISdrtv8zeXmCUlml-QzpTUE79DAtnzBjLLwahQl3KlV" target="_blank" style="color: #007bff; text-decoration: none;">@萝卜头本波</a> 获取卡密</p>
             <input type="password" id="password-input" placeholder="请输入卡密...">
             <br><br>
             <button onclick="checkPassword()">验证</button>
@@ -130,7 +113,7 @@
                 <li class="app-item">
                     <div class="app-info">
                         <h3>vmos-release-2.0.0-alpha05_20005.apk</h3>
-                        <p>大小: 317.6M</p>
+                        <p>大小: 317.6 MB</p>
                     </div>
                     <a href="https://pan.quark.cn/s/xxxxx" class="download-btn" target="_blank">去网盘下载</a>
                 </li>
@@ -157,15 +140,17 @@
 
         <div class="footer">
             萝卜头本波 版权所有 | Powered by GitHub
+            <br>
+            <span class="version" id="version-tag" onclick="handleVersionClick()">v0.4.5</span>
         </div>
     </div>
 
     <!-- 彩蛋小游戏弹窗 -->
     <div id="easter-egg-game">
-        <h2>🎉 恭喜发现彩蛋！</h2>
-        <p>快速点击红色圆球，看看你 10 秒能点多少个！</p>
-        <div id="game-area"></div>
-        <div id="game-score">得分: 0</div>
+        <h2>🥕 Flappy 萝卜头</h2>
+        <div id="game-info">得分: <span id="game-score">0</span></div>
+        <canvas id="game-canvas" width="320" height="480"></canvas>
+        <p style="font-size: 14px; margin-top: 10px;">点击屏幕或按空格键让萝卜飞起来</p>
         <button id="close-game" onclick="closeGame()">关闭游戏</button>
     </div>
 
@@ -202,57 +187,83 @@
             // 连续点击 7 次触发彩蛋
             if (clickCount >= 7) {
                 clickCount = 0;
-                startEasterEggGame();
+                startFlappyGame();
             }
         }
 
-        // 彩蛋小游戏逻辑
-        let gameScore = 0;
-        let gameTimer = null;
+        // Flappy 萝卜头游戏逻辑
+        const canvas = document.getElementById("game-canvas");
+        const ctx = canvas.getContext("2d");
+        let gameRunning = false;
+        let score = 0;
+        let frames = 0;
+        let bird = { x: 50, y: 150, vy: 0, size: 24 };
+        let pipes = [];
+        const gravity = 0.5;
+        const jump = -8;
+        const pipeWidth = 50;
+        const pipeGap = 120;
 
-        function startEasterEggGame() {
-            const gameContainer = document.getElementById("easter-egg-game");
-            const gameArea = document.getElementById("game-area");
-            const scoreDisplay = document.getElementById("game-score");
-            
-            gameContainer.style.display = "flex";
-            gameScore = 0;
-            scoreDisplay.innerText = "得分: 0";
-            gameArea.innerHTML = "";
-
-            // 生成随机位置的圆球
-            function spawnTarget() {
-                const target = document.createElement("div");
-                target.className = "target";
-                const maxX = gameArea.offsetWidth - 40;
-                const maxY = gameArea.offsetHeight - 40;
-                target.style.left = Math.random() * maxX + "px";
-                target.style.top = Math.random() * maxY + "px";
-                
-                target.onclick = () => {
-                    gameScore++;
-                    scoreDisplay.innerText = "得分: " + gameScore;
-                    target.remove();
-                    spawnTarget();
-                };
-                
-                gameArea.appendChild(target);
-            }
-
-            spawnTarget();
-
-            // 10秒后结束游戏
-            gameTimer = setTimeout(() => {
-                gameArea.innerHTML = "<h3 style='margin-top:120px;'>时间到！</h3><p>你的最终得分: " + gameScore + "</p>";
-            }, 10000);
+        function startFlappyGame() {
+            document.getElementById("easter-egg-game").style.display = "flex";
+            gameRunning = true;
+            score = 0;
+            frames = 0;
+            bird.y = 150;
+            bird.vy = 0;
+            pipes = [];
+            document.getElementById("game-score").innerText = score;
+            gameLoop();
         }
 
         function closeGame() {
+            gameRunning = false;
             document.getElementById("easter-egg-game").style.display = "none";
-            clearTimeout(gameTimer);
-            document.getElementById("game-area").innerHTML = "";
         }
-    </script>
 
-</body>
-</html>
+        function flap() {
+            if (gameRunning) {
+                bird.vy = jump;
+            }
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 萝卜头物理
+            bird.vy += gravity;
+            bird.y += bird.vy;
+
+            // 画萝卜头
+            ctx.font = `${bird.size}px serif`;
+            ctx.fillText("🥕", bird.x, bird.y);
+
+            // 生成管道
+            if (frames % 100 === 0) {
+                let topHeight = Math.random() * (canvas.height - pipeGap - 100) + 50;
+                pipes.push({ x: canvas.width, top: topHeight, passed: false });
+            }
+
+            // 画管道并检测碰撞
+            for (let i = 0; i < pipes.length; i++) {
+                let p = pipes[i];
+                p.x -= 2;
+
+                // 上管道
+                ctx.fillStyle = "#28a745";
+                ctx.fillRect(p.x, 0, pipeWidth, p.top);
+                // 下管道
+                ctx.fillRect(p.x, p.top + pipeGap, pipeWidth, canvas.height - (p.top + pipeGap));
+
+                // 计分
+                if (!p.passed && p.x + pipeWidth < bird.x) {
+                    score++;
+                    p.passed = true;
+                    document.getElementById("game-score").innerText = score;
+                }
+
+                // 碰撞检测
+                if (
+                    bird.x + bird.size > p.x &&
+                    bird.x < p.x +
