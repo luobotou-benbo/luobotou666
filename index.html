@@ -5,78 +5,254 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>萝卜头本波的应用下载站</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f6f8fa; color: #24292e; margin: 0; padding: 20px; line-height: 1.5; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #0366d6; margin-bottom: 30px; font-size: 24px; }
-        .app-list { list-style: none; padding: 0; margin: 0; }
-        .app-item { border-bottom: 1px solid #eaecef; padding: 20px 0; display: flex; justify-content: space-between; align-items: center; }
-        .app-item:last-child { border-bottom: none; }
-        .app-info h3 { margin: 0 0 5px 0; font-size: 18px; }
-        .app-info p { margin: 0; color: #586069; font-size: 14px; }
-        .download-btn { background-color: #2ea44f; color: white; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; font-size: 14px; transition: background 0.2s; white-space: nowrap; }
-        .download-btn:hover { background-color: #2c974b; }
-        .footer { text-align: center; margin-top: 30px; color: #586069; font-size: 12px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #007bff; }
+        h2 { border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-top: 30px; }
+        .app-list { list-style: none; padding: 0; }
+        .app-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .app-info h3 { margin: 0 0 5px 0; font-size: 16px; }
+        .app-info p { margin: 0; font-size: 12px; color: #666; }
+        .download-btn { background-color: #28a745; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-size: 14px; }
+        .footer { text-align: center; margin-top: 40px; font-size: 12px; color: #999; }
+        
+        /* 验证区域样式 */
+        #verify-section { text-align: center; padding: 40px 0; }
+        #verify-section input { padding: 10px; width: 70%; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+        #verify-section button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        #verify-section button:hover { background-color: #0056b3; }
+        #error-msg { color: red; margin-top: 10px; display: none; }
+        
+        /* 默认隐藏下载内容 */
+        #download-section { display: none; }
+
+        /* 萝卜动态效果 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .carrot {
+            display: inline-block;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        /* 版本号样式 */
+        .version {
+            font-size: 12px;
+            color: #aaa;
+            cursor: pointer;
+            user-select: none;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        /* 彩蛋小游戏样式 */
+        #easter-egg-game {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+        }
+        #easter-egg-game h2 { font-size: 24px; margin-bottom: 20px; }
+        #game-area {
+            width: 300px;
+            height: 300px;
+            background: #333;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        .target {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #ff4757;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .target:active { transform: scale(0.8); }
+        #game-score { font-size: 20px; margin-top: 20px; }
+        #close-game {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🥕 萝卜头本波的应用下载站</h1>
-    
-    <ul class="app-list">
-        <!-- 应用 1 -->
-        <li class="app-item">
-            <div class="app-info">
-                <h3>skyadb-v1.1.5-beta (2).apk</h3>
-                <p>大小：5.4M</p>
-            </div>
-            <a href="https://pan.quark.cn/s/00e3183b3359" class="download-btn" target="_blank">去网盘下载</a>
-        </li>
+    <div class="container">
+        <h1>
+            <span class="carrot">🥕</span> 萝卜头本波的应用下载站
+            <span class="version" id="version-tag" onclick="handleVersionClick()">v0.3.3</span>
+        </h1>
 
-        <!-- 应用 2 -->
-        <li class="app-item">
-            <div class="app-info">
-                <h3>表盘自定义工具v6.4.0_2.apk</h3>
-                <p>大小：45.6M</p>
-            </div>
-            <a href="https://pan.quark.cn/s/0d14b2cc2f98" class="download-btn" target="_blank">去网盘下载</a>
-        </li>
+        <!-- 验证区域 -->
+        <div id="verify-section">
+            <h2>🔒 请输入卡密访问</h2>
+            <p>请联系管理员获取卡密</p>
+            <input type="password" id="password-input" placeholder="请输入卡密...">
+            <br><br>
+            <button onclick="checkPassword()">验证</button>
+            <p id="error-msg">卡密错误，请重试！</p>
+        </div>
 
-        <!-- 应用 3 -->
-        <li class="app-item">
-            <div class="app-info">
-                <h3>vmos-release-2.0.0-alpha05_20005.apk</h3>
-                <p>大小：317.6M</p>
-            </div>
-            <a href="https://pan.quark.cn/s/c357f51d426e" class="download-btn" target="_blank">去网盘下载</a>
-        </li>
+        <!-- 下载内容区域（验证通过后显示） -->
+        <div id="download-section">
+            <h2>📱 应用下载</h2>
+            <ul class="app-list">
                 <li class="app-item">
-            <div class="app-info">
-                <h3>AstroBox 1.5.5 (安卓版)</h3>
-                <p>小米手环/手表第三方表盘与快应用安装工具箱</p>
-            </div>
-            <a href="https://pan.quark.cn/s/a57b861e261f" class="download-btn" target="_blank">去网盘下载</a>
-        </li>
+                    <div class="app-info">
+                        <h3>skyadb</h3>
+                        <p>大小: 未知</p>
+                    </div>
+                    <a href="https://pan.quark.cn/s/xxxxx" class="download-btn" target="_blank">去网盘下载</a>
+                </li>
+                <li class="app-item">
+                    <div class="app-info">
+                        <h3>表盘工具</h3>
+                        <p>大小: 未知</p>
+                    </div>
+                    <a href="https://pan.quark.cn/s/xxxxx" class="download-btn" target="_blank">去网盘下载</a>
+                </li>
+                <li class="app-item">
+                    <div class="app-info">
+                        <h3>vmos-release-2.0.0-alpha05_20005.apk</h3>
+                        <p>大小: 317.6M</p>
+                    </div>
+                    <a href="https://pan.quark.cn/s/xxxxx" class="download-btn" target="_blank">去网盘下载</a>
+                </li>
+                <li class="app-item">
+                    <div class="app-info">
+                        <h3>AstroBox 1.5.5 (安卓版)</h3>
+                        <p>小米手环/手表第三方表盘与快应用安装工具箱</p>
+                    </div>
+                    <a href="https://pan.quark.cn/s/a57b861e261f" class="download-btn" target="_blank">去网盘下载</a>
+                </li>
+            </ul>
 
-    </ul>
+            <h2>📚 独立资料区</h2>
+            <ul class="app-list">
+                <li class="app-item">
+                    <div class="app-info">
+                        <h3>学而思学习机解锁工具</h3>
+                        <p>二三代不借助电脑解除安装限制步骤 v0.1</p>
+                    </div>
+                    <a href="https://pan.quark.cn/s/d94457c4c28f" class="download-btn" target="_blank">去网盘下载</a>
+                </li>
+            </ul>
+        </div>
 
-    <div class="footer">
-        萝卜头本波 版权所有 | Powered by GitHub
+        <div class="footer">
+            萝卜头本波 版权所有 | Powered by GitHub
+        </div>
     </div>
-        <h2>📚 独立资料区</h2>
-    <ul class="app-list">
-        <li class="app-item">
-            <div class="app-info">
-                <h3>学而思学习机解除安装限制工具</h3>
-                <p>二三代不借助电脑解除安装限制步骤 v0.1</p>
-            </div>
-            <a href="https://pan.quark.cn/s/d94457c4c28f" class="download-btn" target="_blank">去网盘下载</a>
-        </li>
-    </ul>
-    
-</div>
+
+    <!-- 彩蛋小游戏弹窗 -->
+    <div id="easter-egg-game">
+        <h2>🎉 恭喜发现彩蛋！</h2>
+        <p>快速点击红色圆球，看看你 10 秒能点多少个！</p>
+        <div id="game-area"></div>
+        <div id="game-score">得分: 0</div>
+        <button id="close-game" onclick="closeGame()">关闭游戏</button>
+    </div>
+
+    <script>
+        // 卡密验证逻辑
+        function checkPassword() {
+            var correctPassword = "luobotounb666";
+            var userInput = document.getElementById("password-input").value;
+            var errorMsg = document.getElementById("error-msg");
+            var verifySection = document.getElementById("verify-section");
+            var downloadSection = document.getElementById("download-section");
+
+            if (userInput === correctPassword) {
+                verifySection.style.display = "none";
+                downloadSection.style.display = "block";
+            } else {
+                errorMsg.style.display = "block";
+            }
+        }
+
+        // 版本号连续点击彩蛋逻辑（3秒内点击7次）
+        let clickCount = 0;
+        let clickTimer = null;
+
+        function handleVersionClick() {
+            clickCount++;
+            
+            // 如果3秒内没有继续点击，重置计数器
+            clearTimeout(clickTimer);
+            clickTimer = setTimeout(() => {
+                clickCount = 0;
+            }, 3000);
+
+            // 连续点击 7 次触发彩蛋
+            if (clickCount >= 7) {
+                clickCount = 0;
+                startEasterEggGame();
+            }
+        }
+
+        // 彩蛋小游戏逻辑
+        let gameScore = 0;
+        let gameTimer = null;
+
+        function startEasterEggGame() {
+            const gameContainer = document.getElementById("easter-egg-game");
+            const gameArea = document.getElementById("game-area");
+            const scoreDisplay = document.getElementById("game-score");
+            
+            gameContainer.style.display = "flex";
+            gameScore = 0;
+            scoreDisplay.innerText = "得分: 0";
+            gameArea.innerHTML = "";
+
+            // 生成随机位置的圆球
+            function spawnTarget() {
+                const target = document.createElement("div");
+                target.className = "target";
+                const maxX = gameArea.offsetWidth - 40;
+                const maxY = gameArea.offsetHeight - 40;
+                target.style.left = Math.random() * maxX + "px";
+                target.style.top = Math.random() * maxY + "px";
+                
+                target.onclick = () => {
+                    gameScore++;
+                    scoreDisplay.innerText = "得分: " + gameScore;
+                    target.remove();
+                    spawnTarget();
+                };
+                
+                gameArea.appendChild(target);
+            }
+
+            spawnTarget();
+
+            // 10秒后结束游戏
+            gameTimer = setTimeout(() => {
+                gameArea.innerHTML = "<h3 style='margin-top:120px;'>时间到！</h3><p>你的最终得分: " + gameScore + "</p>";
+            }, 10000);
+        }
+
+        function closeGame() {
+            document.getElementById("easter-egg-game").style.display = "none";
+            clearTimeout(gameTimer);
+            document.getElementById("game-area").innerHTML = "";
+        }
+    </script>
 
 </body>
 </html>
-# luobotou666
-66668888
