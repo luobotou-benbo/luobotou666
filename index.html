@@ -5,265 +5,165 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>萝卜头本波的应用下载站</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        body { font-family: sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         h1 { text-align: center; color: #007bff; }
-        h2 { border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-top: 30px; }
-        .app-list { list-style: none; padding: 0; }
+        h2 { border-bottom: 2px solid #007bff; padding-bottom: 10px; }
         .app-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; }
-        .app-info h3 { margin: 0 0 5px 0; font-size: 16px; }
-        .app-info p { margin: 0; font-size: 12px; color: #666; }
-        .download-btn { background-color: #28a745; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-size: 14px; }
-        .footer { text-align: center; margin-top: 40px; font-size: 12px; color: #999; }
-        
-        /* 验证区域样式 */
-        #verify-section { text-align: center; padding: 40px 0; }
-        #verify-section input { padding: 10px; width: 70%; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
-        #verify-section button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
-        #verify-section button:hover { background-color: #0056b3; }
-        #error-msg { color: red; margin-top: 10px; display: none; }
-        
-        /* 默认隐藏下载内容 */
+        .download-btn { background-color: #28a745; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; }
+        #verify-section { text-align: center; padding: 20px 0; }
         #download-section { display: none; }
-
-        /* 萝卜动态效果 */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        .carrot {
-            display: inline-block;
-            animation: float 2s ease-in-out infinite;
-        }
-
-        /* 版本号样式 */
-        .version {
-            font-size: 12px;
-            color: #aaa;
-            cursor: pointer;
-            user-select: none;
-            display: inline-block;
-            margin-left: 5px;
-        }
-
-        /* 彩蛋小游戏样式 */
-        #easter-egg-game {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: white;
-            text-align: center;
-        }
-        #easter-egg-game h2 { font-size: 24px; margin-bottom: 20px; }
-        #game-canvas { border: 2px solid #fff; border-radius: 8px; background: #70c5ce; max-width: 90vw; max-height: 70vh; }
-        #game-info { font-size: 20px; margin-bottom: 10px; }
-        #close-game {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #ff4757;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+        .version { font-size: 12px; color: #aaa; cursor: pointer; user-select: none; }
+        
+        /* 小游戏样式 */
+        #game-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; justify-content: center; align-items: center; flex-direction: column; color: white; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>
-            <span class="carrot">🥕</span> 萝卜头本波的应用下载站
-        </h1>
+<div class="container">
+    <h1>🥕 萝卜头本波的应用下载站</h1>
 
-        <!-- 验证区域 -->
-        <div id="verify-section">
-            <h2>🔒 请输入卡密访问</h2>
-            <!-- 已更新为解析到的真实抖音主页链接 -->
-            <p>关注管理员的抖音账号 <a href="https://www.douyin.com/user/MS4wLjABAAAAc1D3ZwfPny1XogR1E9NxQISdrtv8zeXmCUlml-QzpTUE79DAtnzBjLLwahQl3KlV" target="_blank" style="color: #007bff; text-decoration: none;">@萝卜头本波</a> 获取卡密</p>
-            <input type="password" id="password-input" placeholder="请输入卡密...">
-            <br><br>
-            <button onclick="checkPassword()">验证</button>
-            <p id="error-msg">卡密错误，请重试！</p>
+    <!-- 1. 验证区域 -->
+    <div id="verify-section">
+        <h2>🔒 请输入卡密访问</h2>
+        <p>关注管理员的抖音账号 <a href="https://www.douyin.com/user/MS4wLjABAAAAc1D3ZwfPny1XogR1E9NxQISdrtv8zeXmCUlml-QzpTUE79DAtnzBjLLwahQl3KlV" target="_blank" style="color: #007bff;">@萝卜头本波</a> 获取卡密</p>
+        <input type="password" id="password-input" placeholder="请输入卡密..." style="padding: 10px; width: 70%; margin: 10px 0;">
+        <br>
+        <button onclick="checkPassword()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px;">验证</button>
+        <p id="error-msg" style="color: red; display: none;">卡密错误，请重试！</p>
+    </div>
+
+    <!-- 2. 下载内容区域 -->
+    <div id="download-section">
+        <h2>📱 应用下载</h2>
+        <div class="app-item">
+            <div><h3 style="margin:0;">表盘自定义工具v6.4.0_2.apk</h3><p style="margin:0; font-size:12px; color:#666;">大小: 45.6M</p></div>
+            <a href="https://pan.quark.cn/s/517d85a70610" class="download-btn" target="_blank">下载</a>
+        </div>
+        <div class="app-item">
+            <div><h3 style="margin:0;">AstroBox 1.5.5 (安卓版)</h3><p style="margin:0; font-size:12px; color:#666;">大小: 25.9M</p></div>
+            <a href="https://pan.quark.cn/s/510dd381a495" class="download-btn" target="_blank">下载</a>
+        </div>
+        <div class="app-item">
+            <div><h3 style="margin:0;">vmos-release.apk</h3><p style="margin:0; font-size:12px; color:#666;">大小: 317.6 MB</p></div>
+            <a href="https://pan.quark.cn/s/xxxxx" class="download-btn" target="_blank">下载</a>
+        </div>
+        <div class="app-item">
+            <div><h3 style="margin:0;">skyadb</h3><p style="margin:0; font-size:12px; color:#666;">大小: 未知</p></div>
+            <a href="https://pan.quark.cn/s/xxxxx" class="download-btn" target="_blank">下载</a>
         </div>
 
-        <!-- 下载内容区域（验证通过后显示） -->
-        <div id="download-section">
-            <h2>📱 应用下载</h2>
-            <ul class="app-list">
-                <li class="app-item">
-                    <div class="app-info">
-                        <h3>skyadb</h3>
-                        <p>大小: 未知</p>
-                    </div>
-                    <a href="https://pan.quark.cn/s/xxxxx" class="download-btn" target="_blank">去网盘下载</a>
-                </li>
-                <li class="app-item">
-                    <div class="app-info">
-                        <h3>表盘工具</h3>
-                        <p>大小: 未知</p>
-                    </div>
-                    <a href="https://pan.quark.cn/s/xxxxx" class="download-btn" target="_blank">去网盘下载</a>
-                </li>
-                <li class="app-item">
-                    <div class="app-info">
-                        <h3>vmos-release-2.0.0-alpha05_20005.apk</h3>
-                        <p>大小: 317.6 MB</p>
-                    </div>
-                    <a href="https://pan.quark.cn/s/xxxxx" class="download-btn" target="_blank">去网盘下载</a>
-                </li>
-                <li class="app-item">
-                    <div class="app-info">
-                        <h3>AstroBox 1.5.5 (安卓版)</h3>
-                        <p>小米手环/手表第三方表盘与快应用安装工具箱</p>
-                    </div>
-                    <a href="https://pan.quark.cn/s/a57b861e261f" class="download-btn" target="_blank">去网盘下载</a>
-                </li>
-            </ul>
-
-            <h2>📚 独立资料区</h2>
-            <ul class="app-list">
-                <li class="app-item">
-                    <div class="app-info">
-                        <h3>学而思学习机解锁工具</h3>
-                        <p>二三代不借助电脑解除安装限制步骤 v0.1</p>
-                    </div>
-                    <a href="https://pan.quark.cn/s/d94457c4c28f" class="download-btn" target="_blank">去网盘下载</a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="footer">
-            萝卜头本波 版权所有 | Powered by GitHub
-            <br>
-            <span class="version" id="version-tag" onclick="handleVersionClick()">v0.4.5</span>
+        <h2>📚 独立资料区</h2>
+        <div class="app-item">
+            <div><h3 style="margin:0;">学而思解锁工具</h3><p style="margin:0; font-size:12px; color:#666;">v0.1</p></div>
+            <a href="https://pan.quark.cn/s/d94457c4c28f" class="download-btn" target="_blank">下载</a>
         </div>
     </div>
 
-    <!-- 彩蛋小游戏弹窗 -->
-    <div id="easter-egg-game">
-        <h2>🥕 Flappy 萝卜头</h2>
-        <div id="game-info">得分: <span id="game-score">0</span></div>
-        <canvas id="game-canvas" width="320" height="480"></canvas>
-        <p style="font-size: 14px; margin-top: 10px;">点击屏幕或按空格键让萝卜飞起来</p>
-        <button id="close-game" onclick="closeGame()">关闭游戏</button>
+    <div style="text-align: center; margin-top: 30px; color: #999; font-size: 12px;">
+        萝卜头本波 版权所有
+        <br>
+        <span class="version" id="version-tag">v0.4.5</span>
     </div>
+</div>
 
-    <script>
-        // 卡密验证逻辑
-        function checkPassword() {
-            var correctPassword = "luobotounb666";
-            var userInput = document.getElementById("password-input").value;
-            var errorMsg = document.getElementById("error-msg");
-            var verifySection = document.getElementById("verify-section");
-            var downloadSection = document.getElementById("download-section");
+<!-- 3. 彩蛋小游戏弹窗 -->
+<div id="game-modal">
+    <h2>🥕 Flappy 萝卜头</h2>
+    <p>得分: <span id="score">0</span></p>
+    <canvas id="canvas" width="300" height="400" style="background: #70c5ce; border: 2px solid white;"></canvas>
+    <p style="font-size: 14px;">点击屏幕让萝卜飞起来</p>
+    <button onclick="closeGame()" style="margin-top: 10px; padding: 10px 20px; background: red; color: white; border: none; border-radius: 5px;">关闭游戏</button>
+</div>
 
-            if (userInput === correctPassword) {
-                verifySection.style.display = "none";
-                downloadSection.style.display = "block";
-            } else {
-                errorMsg.style.display = "block";
-            }
+<script>
+    // 1. 卡密验证逻辑
+    function checkPassword() {
+        var input = document.getElementById("password-input").value;
+        if (input === "luobotounb666") {
+            document.getElementById("verify-section").style.display = "none";
+            document.getElementById("download-section").style.display = "block";
+        } else {
+            document.getElementById("error-msg").style.display = "block";
         }
+    }
 
-        // 版本号连续点击彩蛋逻辑（3秒内点击7次）
-        let clickCount = 0;
-        let clickTimer = null;
+    // 2. 版本号彩蛋逻辑 (3秒内点7次)
+    let clickCount = 0;
+    let timer = null;
+    document.getElementById("version-tag").onclick = function() {
+        clickCount++;
+        clearTimeout(timer);
+        timer = setTimeout(() => { clickCount = 0; }, 3000);
+        if (clickCount >= 7) {
+            clickCount = 0;
+            startGame();
+        }
+    };
 
-        function handleVersionClick() {
-            clickCount++;
+    // 3. 小游戏逻辑
+    let gameRunning = false;
+    let score = 0;
+    let birdY = 150, birdVY = 0;
+    let pipes = [];
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    function startGame() {
+        document.getElementById("game-modal").style.display = "flex";
+        gameRunning = true;
+        score = 0;
+        birdY = 150;
+        pipes = [];
+        document.getElementById("score").innerText = score;
+        gameLoop();
+    }
+
+    function closeGame() {
+        gameRunning = false;
+        document.getElementById("game-modal").style.display = "none";
+    }
+
+    function flap() { if(gameRunning) birdVY = -8; }
+    canvas.addEventListener("click", flap);
+
+    function gameLoop() {
+        if (!gameRunning) return;
+        ctx.clearRect(0, 0, 300, 400);
+        
+        // 物理
+        birdVY += 0.5;
+        birdY += birdVY;
+        ctx.font = "24px serif";
+        ctx.fillText("🥕", 50, birdY);
+
+        // 管道
+        if (pipes.length === 0 || pipes[pipes.length-1].x < 150) {
+            pipes.push({ x: 300, top: Math.random() * 200 + 50 });
+        }
+        for (let i = 0; i < pipes.length; i++) {
+            let p = pipes[i];
+            p.x -= 2;
+            ctx.fillStyle = "green";
+            ctx.fillRect(p.x, 0, 40, p.top);
+            ctx.fillRect(p.x, p.top + 100, 40, 300);
             
-            // 如果3秒内没有继续点击，重置计数器
-            clearTimeout(clickTimer);
-            clickTimer = setTimeout(() => {
-                clickCount = 0;
-            }, 3000);
-
-            // 连续点击 7 次触发彩蛋
-            if (clickCount >= 7) {
-                clickCount = 0;
-                startFlappyGame();
+            // 计分
+            if (!p.passed && p.x + 40 < 50) { score++; p.passed = true; document.getElementById("score").innerText = score; }
+            // 碰撞
+            if (50 + 24 > p.x && 50 < p.x + 40 && (birdY < p.top || birdY + 24 > p.top + 100)) {
+                gameRunning = false;
+                alert("Game Over! 得分: " + score);
             }
         }
+        if (pipes[0] && pipes[0].x < -40) pipes.shift();
+        if (birdY > 400 || birdY < 0) { gameRunning = false; alert("Game Over!"); }
 
-        // Flappy 萝卜头游戏逻辑
-        const canvas = document.getElementById("game-canvas");
-        const ctx = canvas.getContext("2d");
-        let gameRunning = false;
-        let score = 0;
-        let frames = 0;
-        let bird = { x: 50, y: 150, vy: 0, size: 24 };
-        let pipes = [];
-        const gravity = 0.5;
-        const jump = -8;
-        const pipeWidth = 50;
-        const pipeGap = 120;
+        requestAnimationFrame(gameLoop);
+    }
+</script>
 
-        function startFlappyGame() {
-            document.getElementById("easter-egg-game").style.display = "flex";
-            gameRunning = true;
-            score = 0;
-            frames = 0;
-            bird.y = 150;
-            bird.vy = 0;
-            pipes = [];
-            document.getElementById("game-score").innerText = score;
-            gameLoop();
-        }
+</body>
+</html>
 
-        function closeGame() {
-            gameRunning = false;
-            document.getElementById("easter-egg-game").style.display = "none";
-        }
-
-        function flap() {
-            if (gameRunning) {
-                bird.vy = jump;
-            }
-        }
-
-        function gameLoop() {
-            if (!gameRunning) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // 萝卜头物理
-            bird.vy += gravity;
-            bird.y += bird.vy;
-
-            // 画萝卜头
-            ctx.font = `${bird.size}px serif`;
-            ctx.fillText("🥕", bird.x, bird.y);
-
-            // 生成管道
-            if (frames % 100 === 0) {
-                let topHeight = Math.random() * (canvas.height - pipeGap - 100) + 50;
-                pipes.push({ x: canvas.width, top: topHeight, passed: false });
-            }
-
-            // 画管道并检测碰撞
-            for (let i = 0; i < pipes.length; i++) {
-                let p = pipes[i];
-                p.x -= 2;
-
-                // 上管道
-                ctx.fillStyle = "#28a745";
-                ctx.fillRect(p.x, 0, pipeWidth, p.top);
-                // 下管道
-                ctx.fillRect(p.x, p.top + pipeGap, pipeWidth, canvas.height - (p.top + pipeGap));
-
-                // 计分
-                if (!p.passed && p.x + pipeWidth < bird.x) {
-                    score++;
-                    p.passed = true;
-                    document.getElementById("game-score").innerText = score;
-                }
-
-                // 碰撞检测
-                if (
-                    bird.x + bird.size > p.x &&
-                    bird.x < p.x +
