@@ -2,168 +2,397 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>萝卜头本波的应用下载站</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #007bff; }
-        h2 { border-bottom: 2px solid #007bff; padding-bottom: 10px; }
-        .app-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; }
-        .download-btn { background-color: #28a745; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; }
-        #verify-section { text-align: center; padding: 20px 0; }
-        #download-section { display: none; }
-        .version { font-size: 12px; color: #aaa; cursor: pointer; user-select: none; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; }
         
-        /* 小游戏样式 */
-        #game-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; justify-content: center; align-items: center; flex-direction: column; color: white; }
+        header { text-align: center; margin-bottom: 30px; position: relative; }
+        h1 { margin: 0; font-size: 1.5rem; color: #2c3e50; }
+        .version-tag { 
+            display: inline-block; margin-top: 8px; padding: 4px 10px; 
+            background-color: #e9ecef; color: #6c757d; border-radius: 20px; 
+            font-size: 0.8rem; font-weight: bold; cursor: pointer; user-select: none;
+        }
+        
+        .app-list { list-style: none; padding: 0; margin: 0; }
+        .app-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .app-item:last-child { border-bottom: none; }
+        .app-info h3 { margin: 0 0 5px 0; font-size: 1.1rem; }
+        .app-info p { margin: 0; font-size: 0.85rem; color: #666; }
+        .download-btn { text-decoration: none; background-color: #007bff; color: white; padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; transition: background 0.2s; }
+        .download-btn:active { background-color: #0056b3; }
+
+        /* --- 游戏界面 --- */
+        #game-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.92); z-index: 9999; 
+            flex-direction: column; align-items: center; justify-content: center; 
+        }
+        #score-board { 
+            color: #fff; font-size: 1.1rem; margin-bottom: 8px; font-family: monospace; 
+            display: flex; gap: 30px; 
+        }
+        #score-board span { color: #ffd700; }
+        canvas { background: #70c5ce; border-radius: 8px; box-shadow: 0 0 30px rgba(0,200,255,0.3); max-width: 90%; }
+        
+        /* 关闭按钮 */
+        #close-game-btn {
+            position: absolute; top: 60px; right: 20px;
+            background: rgba(255, 50, 50, 0.85); color: white;
+            border: 2px solid white; padding: 8px 15px; border-radius: 8px;
+            font-size: 0.95rem; font-weight: bold; cursor: pointer; z-index: 10000;
+        }
+
+        /* --- 开始/结束 覆盖层 --- */
+        .game-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.7); border-radius: 8px; z-index: 5;
+        }
+        .game-screen h2 { color: #fff; font-size: 1.8rem; margin: 0 0 5px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .game-screen .final-score { color: #ffd700; font-size: 1.3rem; margin: 5px 0 20px 0; }
+        .game-screen .best-score { color: #aaa; font-size: 0.95rem; margin-bottom: 20px; }
+        .game-screen button {
+            padding: 12px 35px; font-size: 1.1rem; border: none; border-radius: 25px;
+            cursor: pointer; font-weight: bold; margin: 6px; transition: transform 0.1s;
+        }
+        .game-screen button:active { transform: scale(0.95); }
+        .btn-start { background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; }
+        .btn-restart { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+        .btn-close-small { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.4) !important; }
+        .game-tip { color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 15px; }
+
+        /* --- 密码弹窗 --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10001; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; }
+        .modal input { width: 85%; padding: 10px; margin: 15px 0; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; }
+        .modal button { background: #28a745; color: white; border: none; padding: 10px 25px; border-radius: 6px; font-size: 1rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🥕 萝卜头本波的应用下载站</h1>
+    <header>
+        <h1>萝卜头本波的应用下载站</h1>
+        <div class="version-tag" id="version-display">v0.5.0</div>
+    </header>
 
-    <!-- 1. 验证区域 -->
-    <div id="verify-section">
-        <h2>🔒 请输入卡密访问</h2>
-        <p>关注管理员的抖音账号 <a href="https://www.douyin.com/user/MS4wLjABAAAAc1D3ZwfPny1XogR1E9NxQISdrtv8zeXmCUlml-QzpTUE79DAtnzBjLLwahQl3KlV" target="_blank" style="color: #007bff;">@萝卜头本波</a> 获取卡密</p>
-        <input type="password" id="password-input" placeholder="请输入卡密..." style="padding: 10px; width: 70%; margin: 10px 0;">
-        <br>
-        <button onclick="checkPassword()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px;">验证</button>
-        <p id="error-msg" style="color: red; display: none;">卡密错误，请重试！</p>
-    </div>
-
-    <!-- 2. 下载内容区域 -->
-    <div id="download-section">
-        <h2>📱 应用下载</h2>
-        <div class="app-item">
-            <div><h3 style="margin:0;">表盘自定义工具v6.4.0_2.apk</h3><p style="margin:0; font-size:12px; color:#666;">大小: 45.6M</p></div>
-            <a href="https://pan.quark.cn/s/517d85a70610" class="download-btn" target="_blank">下载</a>
-        </div>
-        <div class="app-item">
-            <div><h3 style="margin:0;">AstroBox 1.5.5 (安卓版)</h3><p style="margin:0; font-size:12px; color:#666;">大小: 25.9M</p></div>
-            <a href="https://pan.quark.cn/s/510dd381a495" class="download-btn" target="_blank">下载</a>
-        </div>
-        <div class="app-item">
-            <div><h3 style="margin:0;">vmos-release.apk</h3><p style="margin:0; font-size:12px; color:#666;">大小: 317.6 MB</p></div>
-            <a href="https://pan.quark.cn/s/xxxxx" class="download-btn" target="_blank">下载</a>
-        </div>
-        <div class="app-item">
-            <div><h3 style="margin:0;">skyadb</h3><p style="margin:0; font-size:12px; color:#666;">大小: 未知</p></div>
-            <a href="https://pan.quark.cn/s/xxxxx" class="download-btn" target="_blank">下载</a>
-        </div>
-
-        <h2>📚 独立资料区</h2>
-        <div class="app-item">
-            <div><h3 style="margin:0;">学而思解锁工具</h3><p style="margin:0; font-size:12px; color:#666;">v0.1</p></div>
-            <a href="https://pan.quark.cn/s/d94457c4c28f" class="download-btn" target="_blank">下载</a>
-        </div>
-    </div>
-
-    <div style="text-align: center; margin-top: 30px; color: #999; font-size: 12px;">
-        萝卜头本波 版权所有
-        <br>
-        <span class="version" id="version-tag">v0.4.5</span>
-    </div>
+    <ul class="app-list">
+        <li class="app-item">
+            <div class="app-info">
+                <h3>AstroBox (解压版)</h3>
+                <p>大小: 120MB | 版本: 1.5.5</p>
+            </div>
+            <a href="https://pan.quark.cn/s/510dd381a495" class="download-btn" target="_blank">去夸克下载</a>
+        </li>
+        <li class="app-item">
+            <div class="app-info">
+                <h3>表盘自定义工具</h3>
+                <p>大小: 15MB | 版本: 6.4.0</p>
+            </div>
+            <a href="https://pan.quark.cn/s/517d85a70610" class="download-btn" target="_blank">去夸克下载</a>
+        </li>
+    </ul>
 </div>
 
-<!-- 3. 彩蛋小游戏弹窗 -->
-<div id="game-modal">
-    <h2>🥕 Flappy 萝卜头</h2>
-    <p>得分: <span id="score">0</span></p>
-    <canvas id="canvas" width="300" height="400" style="background: #70c5ce; border: 2px solid white;"></canvas>
-    <p style="font-size: 14px;">点击屏幕让萝卜飞起来</p>
-    <button onclick="closeGame()" style="margin-top: 10px; padding: 10px 20px; background: red; color: white; border: none; border-radius: 5px;">关闭游戏</button>
+<!-- 游戏层 -->
+<div id="game-overlay">
+    <div id="score-board">
+        得分: <span id="score-display">0</span> &nbsp;&nbsp; 最高: <span id="best-display">0</span>
+    </div>
+    <div style="position: relative; display: inline-block;">
+        <canvas id="gameCanvas" width="320" height="480"></canvas>
+        
+        <!-- 开始界面 -->
+        <div class="game-screen" id="start-screen">
+            <h2>🥕 萝卜快跑</h2>
+            <p style="color:#ccc; margin:5px 0 20px 0; font-size:0.9rem;">躲避管道，越远越高分！</p>
+            <button class="btn-start" id="btn-start">开始游戏</button>
+            <p class="game-tip">点击屏幕 / 按空格 跳跃</p>
+        </div>
+
+        <!-- 结束界面 -->
+        <div class="game-screen" id="end-screen" style="display:none;">
+            <h2>💥 游戏结束</h2>
+            <div class="final-score">得分: <span id="final-score">0</span></div>
+            <div class="best-score">🏆 最高纪录: <span id="final-best">0</span></div>
+            <button class="btn-restart" id="btn-restart">重新开始</button>
+            <button class="btn-close-small" id="btn-close-end">关闭游戏</button>
+        </div>
+    </div>
+    <button id="close-game-btn">关闭游戏 X</button>
+</div>
+
+<!-- 密码弹窗 -->
+<div id="password-modal" class="modal">
+    <div class="modal-content">
+        <h3>🎮 请输入启动密码</h3>
+        <input type="password" id="pwd-input" placeholder="输入密码...">
+        <br>
+        <button onclick="checkPassword()">进入</button>
+    </div>
 </div>
 
 <script>
-    // 1. 卡密验证逻辑
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // --- 游戏状态 ---
+    const STATE = { READY: 0, PLAYING: 1, OVER: 2 };
+    let gameState = STATE.READY;
+    let score = 0;
+    let bestScore = 0;
+    let frameCount = 0;
+
+    // --- 萝卜（鸟）属性 --- 速度调慢
+    const bird = { x: 60, y: 200, w: 28, h: 28, velocity: 0, gravity: 0.25, jumpForce: -4.2 };
+    
+    // --- 管道 ---
+    let pipes = [];
+    const pipeWidth = 45;
+    const pipeGap = 130; // 管道间距
+    const pipeSpeed = 2;
+
+    // --- DOM 元素 ---
+    const startScreen = document.getElementById('start-screen');
+    const endScreen = document.getElementById('end-screen');
+    const scoreDisplay = document.getElementById('score-display');
+    const bestDisplay = document.getElementById('best-display');
+    const finalScore = document.getElementById('final-score');
+    const finalBest = document.getElementById('final-best');
+
+    // --- 版本号彩蛋 ---
+    let clickCount = 0;
+    let clickTimer = null;
+    document.getElementById('version-display').addEventListener('click', () => {
+        clickCount++;
+        if (clickCount === 1) {
+            clickTimer = setTimeout(() => { clickCount = 0; }, 2000);
+        }
+        if (clickCount >= 5) {
+            clearTimeout(clickTimer);
+            clickCount = 0;
+            document.getElementById('password-modal').style.display = 'flex';
+            document.getElementById('pwd-input').focus();
+        }
+    });
+
+    // --- 密码验证 ---
     function checkPassword() {
-        var input = document.getElementById("password-input").value;
-        if (input === "luobotounb666") {
-            document.getElementById("verify-section").style.display = "none";
-            document.getElementById("download-section").style.display = "block";
+        const pwd = document.getElementById('pwd-input').value;
+        if (pwd === '123456') {
+            document.getElementById('password-modal').style.display = 'none';
+            openGame();
         } else {
-            document.getElementById("error-msg").style.display = "block";
+            alert('密码错误！');
+            document.getElementById('pwd-input').value = '';
         }
     }
 
-    // 2. 版本号彩蛋逻辑 (3秒内点7次)
-    let clickCount = 0;
-    let timer = null;
-    document.getElementById("version-tag").onclick = function() {
-        clickCount++;
-        clearTimeout(timer);
-        timer = setTimeout(() => { clickCount = 0; }, 3000);
-        if (clickCount >= 7) {
-            clickCount = 0;
-            startGame();
-        }
-    };
+    // --- 打开游戏界面 ---
+    function openGame() {
+        document.getElementById('game-overlay').style.display = 'flex';
+        showStartScreen();
+        drawBackground(); // 画一个静态背景
+    }
 
-    // 3. 小游戏逻辑
-    let gameRunning = false;
-    let score = 0;
-    let birdY = 150, birdVY = 0;
-    let pipes = [];
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
+    // --- 显示开始界面 ---
+    function showStartScreen() {
+        gameState = STATE.READY;
+        startScreen.style.display = 'flex';
+        endScreen.style.display = 'none';
+    }
 
+    // --- 开始游戏 ---
     function startGame() {
-        document.getElementById("game-modal").style.display = "flex";
-        gameRunning = true;
-        score = 0;
-        birdY = 150;
+        gameState = STATE.PLAYING;
+        startScreen.style.display = 'none';
+        endScreen.style.display = 'none';
+        // 重置数据
+        bird.y = 200;
+        bird.velocity = 0;
         pipes = [];
-        document.getElementById("score").innerText = score;
+        score = 0;
+        frameCount = 0;
+        scoreDisplay.innerText = '0';
+        bestDisplay.innerText = bestScore;
         gameLoop();
     }
 
-    function closeGame() {
-        gameRunning = false;
-        document.getElementById("game-modal").style.display = "none";
+    // --- 游戏结束 ---
+    function gameOver() {
+        gameState = STATE.OVER;
+        // 更新最高分
+        if (score > bestScore) {
+            bestScore = score;
+        }
+        finalScore.innerText = score;
+        finalBest.innerText = bestScore;
+        bestDisplay.innerText = bestScore;
+        // 显示结束界面
+        endScreen.style.display = 'flex';
     }
 
-    function flap() { if(gameRunning) birdVY = -8; }
-    canvas.addEventListener("click", flap);
+    // --- 关闭游戏 ---
+    function closeGame() {
+        document.getElementById('game-overlay').style.display = 'none';
+        gameState = STATE.READY;
+    }
 
-    function gameLoop() {
-        if (!gameRunning) return;
-        ctx.clearRect(0, 0, 300, 400);
-        
-        // 物理
-        birdVY += 0.5;
-        birdY += birdVY;
-        ctx.font = "24px serif";
-        ctx.fillText("🥕", 50, birdY);
-
-        // 管道
-        if (pipes.length === 0 || pipes[pipes.length-1].x < 150) {
-            pipes.push({ x: 300, top: Math.random() * 200 + 50 });
+    // --- 跳跃 ---
+    function jump() {
+        if (gameState === STATE.PLAYING) {
+            bird.velocity = bird.jumpForce;
         }
-        for (let i = 0; i < pipes.length; i++) {
+    }
+
+    // --- 按钮事件 ---
+    document.getElementById('btn-start').addEventListener('click', startGame);
+    document.getElementById('btn-restart').addEventListener('click', startGame);
+    document.getElementById('btn-close-end').addEventListener('click', closeGame);
+    document.getElementById('close-game-btn').addEventListener('click', closeGame);
+
+    // --- 键盘/触摸跳跃 ---
+    canvas.addEventListener('mousedown', (e) => { e.preventDefault(); jump(); });
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && gameState === STATE.PLAYING) {
+            e.preventDefault();
+            jump();
+        }
+    });
+
+    // --- 画静态背景（开始界面用） ---
+    function drawBackground() {
+        // 天空
+        ctx.fillStyle = '#70c5ce';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // 地面
+        ctx.fillStyle = '#ded895';
+        ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
+        ctx.fillStyle = '#5a8a2a';
+        ctx.fillRect(0, canvas.height - 45, canvas.width, 8);
+        // 萝卜
+        drawBird(200);
+    }
+
+    // --- 画萝卜 ---
+    function drawBird(y) {
+        // 身体
+        ctx.fillStyle = '#FF6B35';
+        ctx.beginPath();
+        ctx.ellipse(bird.x + bird.w/2, y + bird.h/2, bird.w/2, bird.h/2, 0, 0, Math.PI * 2);
+        ctx.fill();
+        // 叶子
+        ctx.fillStyle = '#2ecc71';
+        ctx.beginPath();
+        ctx.ellipse(bird.x + bird.w/2 - 3, y - 2, 4, 8, -0.3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(bird.x + bird.w/2 + 3, y - 2, 4, 8, 0.3, 0, Math.PI * 2);
+        ctx.fill();
+        // 眼睛
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(bird.x + bird.w/2 + 5, y + bird.h/2 - 3, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(bird.x + bird.w/2 + 6, y + bird.h/2 - 3, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // --- 画管道 ---
+    function drawPipe(p) {
+        // 上管道
+        ctx.fillStyle = '#2ecc71';
+        ctx.fillRect(p.x, 0, pipeWidth, p.topH);
+        ctx.fillStyle = '#27ae60';
+        ctx.fillRect(p.x - 3, p.topH - 20, pipeWidth + 6, 20); // 管口
+        // 下管道
+        ctx.fillStyle = '#2ecc71';
+        ctx.fillRect(p.x, p.topH + pipeGap, pipeWidth, canvas.height - p.topH - pipeGap);
+        ctx.fillStyle = '#27ae60';
+        ctx.fillRect(p.x - 3, p.topH + pipeGap, pipeWidth + 6, 20); // 管口
+    }
+
+    // --- 主循环 ---
+    function gameLoop() {
+        if (gameState !== STATE.PLAYING) return;
+
+        // 清空画布
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 画天空
+        ctx.fillStyle = '#70c5ce';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 画地面
+        ctx.fillStyle = '#ded895';
+        ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
+        ctx.fillStyle = '#5a8a2a';
+        ctx.fillRect(0, canvas.height - 45, canvas.width, 8);
+
+        // --- 萝卜物理 ---
+        bird.velocity += bird.gravity;
+        bird.y += bird.velocity;
+
+        // 天花板限制
+        if (bird.y < 0) { bird.y = 0; bird.velocity = 0; }
+        // 地面碰撞
+        if (bird.y + bird.h >= canvas.height - 40) {
+            bird.y = canvas.height - 40 - bird.h;
+            gameOver();
+            return;
+        }
+
+        // --- 生成管道 ---
+        if (frameCount % 110 === 0) {
+            let minTop = 60;
+            let maxTop = canvas.height - pipeGap - 60 - 40;
+            let topH = Math.floor(Math.random() * (maxTop - minTop)) + minTop;
+            pipes.push({ x: canvas.width, topH: topH, passed: false });
+        }
+
+        // --- 管道移动 & 绘制 & 碰撞 ---
+        for (let i = pipes.length - 1; i >= 0; i--) {
             let p = pipes[i];
-            p.x -= 2;
-            ctx.fillStyle = "green";
-            ctx.fillRect(p.x, 0, 40, p.top);
-            ctx.fillRect(p.x, p.top + 100, 40, 300);
-            
+            p.x -= pipeSpeed;
+
+            drawPipe(p);
+
             // 计分
-            if (!p.passed && p.x + 40 < 50) { score++; p.passed = true; document.getElementById("score").innerText = score; }
-            // 碰撞
-            if (50 + 24 > p.x && 50 < p.x + 40 && (birdY < p.top || birdY + 24 > p.top + 100)) {
-                gameRunning = false;
-                alert("Game Over! 得分: " + score);
+            if (!p.passed && p.x + pipeWidth < bird.x) {
+                score++;
+                p.passed = true;
+                scoreDisplay.innerText = score;
+            }
+
+            // 碰撞检测
+            if (bird.x + bird.w > p.x && bird.x < p.x + pipeWidth) {
+                if (bird.y < p.topH || bird.y + bird.h > p.topH + pipeGap) {
+                    gameOver();
+                    return;
+                }
+            }
+
+            // 移除屏幕外的管道
+            if (p.x + pipeWidth < 0) {
+                pipes.splice(i, 1);
             }
         }
-        if (pipes[0] && pipes[0].x < -40) pipes.shift();
-        if (birdY > 400 || birdY < 0) { gameRunning = false; alert("Game Over!"); }
 
+        // --- 画萝卜 ---
+        drawBird(bird.y);
+
+        frameCount++;
         requestAnimationFrame(gameLoop);
     }
 </script>
 
 </body>
 </html>
+
 
