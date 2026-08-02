@@ -2,397 +2,479 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>萝卜头本波的应用下载站</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>萝卜头本波的资源站</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; }
-        
-        header { text-align: center; margin-bottom: 30px; position: relative; }
-        h1 { margin: 0; font-size: 1.5rem; color: #2c3e50; }
-        .version-tag { 
-            display: inline-block; margin-top: 8px; padding: 4px 10px; 
-            background-color: #e9ecef; color: #6c757d; border-radius: 20px; 
-            font-size: 0.8rem; font-weight: bold; cursor: pointer; user-select: none;
-        }
-        
-        .app-list { list-style: none; padding: 0; margin: 0; }
-        .app-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; }
-        .app-item:last-child { border-bottom: none; }
-        .app-info h3 { margin: 0 0 5px 0; font-size: 1.1rem; }
-        .app-info p { margin: 0; font-size: 0.85rem; color: #666; }
-        .download-btn { text-decoration: none; background-color: #007bff; color: white; padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; transition: background 0.2s; }
-        .download-btn:active { background-color: #0056b3; }
-
-        /* --- 游戏界面 --- */
-        #game-overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.92); z-index: 9999; 
-            flex-direction: column; align-items: center; justify-content: center; 
-        }
-        #score-board { 
-            color: #fff; font-size: 1.1rem; margin-bottom: 8px; font-family: monospace; 
-            display: flex; gap: 30px; 
-        }
-        #score-board span { color: #ffd700; }
-        canvas { background: #70c5ce; border-radius: 8px; box-shadow: 0 0 30px rgba(0,200,255,0.3); max-width: 90%; }
-        
-        /* 关闭按钮 */
-        #close-game-btn {
-            position: absolute; top: 60px; right: 20px;
-            background: rgba(255, 50, 50, 0.85); color: white;
-            border: 2px solid white; padding: 8px 15px; border-radius: 8px;
-            font-size: 0.95rem; font-weight: bold; cursor: pointer; z-index: 10000;
+        /* --- 基础样式 --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            scroll-behavior: smooth; /* 平滑滚动 */
+            overflow-x: hidden;
         }
 
-        /* --- 开始/结束 覆盖层 --- */
-        .game-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: rgba(0,0,0,0.7); border-radius: 8px; z-index: 5;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
-        .game-screen h2 { color: #fff; font-size: 1.8rem; margin: 0 0 5px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        .game-screen .final-score { color: #ffd700; font-size: 1.3rem; margin: 5px 0 20px 0; }
-        .game-screen .best-score { color: #aaa; font-size: 0.95rem; margin-bottom: 20px; }
-        .game-screen button {
-            padding: 12px 35px; font-size: 1.1rem; border: none; border-radius: 25px;
-            cursor: pointer; font-weight: bold; margin: 6px; transition: transform 0.1s;
-        }
-        .game-screen button:active { transform: scale(0.95); }
-        .btn-start { background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; }
-        .btn-restart { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
-        .btn-close-small { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.4) !important; }
-        .game-tip { color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 15px; }
 
-        /* --- 密码弹窗 --- */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10001; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 25px; border-radius: 12px; width: 80%; max-width: 300px; text-align: center; }
-        .modal input { width: 85%; padding: 10px; margin: 15px 0; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; }
-        .modal button { background: #28a745; color: white; border: none; padding: 10px 25px; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+        /* --- 顶部导航与汉堡菜单 --- */
+        .header-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu-btn {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            color: #333;
+        }
+
+        .page-title {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* --- 侧边导航菜单 --- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background: #fff;
+            z-index: 200;
+            transition: 0.3s;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            padding-top: 60px;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 150;
+            display: none;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            border-bottom: 1px solid #f5f5f5;
+            transition: 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #f0f2f5;
+            color: #ff6b00;
+        }
+
+        /* --- 霸气萝卜动画 --- */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fadeOut 0.5s ease-in-out 2.5s forwards;
+        }
+
+        .radish-icon {
+            font-size: 80px;
+            animation: bounceIn 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .radish-text {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b00;
+            opacity: 0;
+            animation: slideUp 0.8s ease-out 1s forwards;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0) translateY(-100px); opacity: 0; }
+            60% { transform: scale(1.1) translateY(10px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        /* --- 内容区域 --- */
+        .content {
+            padding: 80px 20px 20px;
+        }
+
+        /* --- 卡密区域 --- */
+        .card-section {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.2);
+        }
+
+        .input-group {
+            margin: 15px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        button.verify-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button.verify-btn:active {
+            transform: scale(0.95);
+        }
+
+        .admin-link {
+            color: #fff;
+            text-decoration: underline;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- 分区标题 --- */
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 30px 0 15px;
+            padding-left: 10px;
+            border-left: 4px solid #ff6b00;
+            display: flex;
+            align-items: center;
+        }
+
+        /* --- 应用/资料卡片 --- */
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .item-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #ff6b00;
+        }
+
+        .item-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .item-name {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 5px;
+            word-break: break-all;
+        }
+
+        .item-desc {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* --- 弹窗样式 --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+            animation: popIn 0.3s;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-modal {
+            margin-top: 15px;
+            background: #eee;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>萝卜头本波的应用下载站</h1>
-        <div class="version-tag" id="version-display">v0.5.0</div>
-    </header>
+    <!-- 霸气开场动画 -->
+    <div class="splash-screen">
+        <div class="radish-icon">🥕</div>
+        <div class="radish-text">萝卜头本波<br>资源站加载中...</div>
+    </div>
 
-    <ul class="app-list">
-        <li class="app-item">
-            <div class="app-info">
-                <h3>AstroBox (解压版)</h3>
-                <p>大小: 120MB | 版本: 1.5.5</p>
+    <!-- 侧边栏遮罩 -->
+    <div class="sidebar-overlay" onclick="toggleMenu()"></div>
+
+    <!-- 侧边栏菜单 -->
+    <div class="sidebar" id="sidebar">
+        <a href="#apps" class="nav-item" onclick="toggleMenu()">📱 实用应用</a>
+        <a href="#docs" class="nav-item" onclick="toggleMenu()">📂 实用资料</a>
+    </div>
+
+    <!-- 顶部导航 -->
+    <div class="header-bar">
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <div class="page-title">萝卜头本波</div>
+        <div style="width: 24px;"></div> <!-- 占位符保持居中 -->
+    </div>
+
+    <div class="container">
+        <div class="content">
+            
+            <!-- 1. 卡密获取区 -->
+            <div class="card-section">
+                <h3>🔐 专属卡密验证</h3>
+                <p style="font-size: 14px; opacity: 0.9;">
+                    请联系 <span class="admin-link" onclick="openDouyin()">@萝卜头本波</span> 获取密码
+                </p>
+                <div class="input-group">
+                    <input type="text" id="passwordInput" placeholder="输入卡密...">
+                    <button class="verify-btn" onclick="checkPassword()">验证</button>
+                </div>
+                <div id="statusMsg" style="font-size: 12px; height: 15px;"></div>
             </div>
-            <a href="https://pan.quark.cn/s/510dd381a495" class="download-btn" target="_blank">去夸克下载</a>
-        </li>
-        <li class="app-item">
-            <div class="app-info">
-                <h3>表盘自定义工具</h3>
-                <p>大小: 15MB | 版本: 6.4.0</p>
+
+            <!-- 2. 实用应用区 -->
+            <div id="apps">
+                <div class="section-title">📱 实用应用</div>
+                <div class="item-grid" id="appListContainer">
+                    <!-- 应用卡片将在这里自动生成 -->
+                </div>
             </div>
-            <a href="https://pan.quark.cn/s/517d85a70610" class="download-btn" target="_blank">去夸克下载</a>
-        </li>
-    </ul>
-</div>
 
-<!-- 游戏层 -->
-<div id="game-overlay">
-    <div id="score-board">
-        得分: <span id="score-display">0</span> &nbsp;&nbsp; 最高: <span id="best-display">0</span>
-    </div>
-    <div style="position: relative; display: inline-block;">
-        <canvas id="gameCanvas" width="320" height="480"></canvas>
-        
-        <!-- 开始界面 -->
-        <div class="game-screen" id="start-screen">
-            <h2>🥕 萝卜快跑</h2>
-            <p style="color:#ccc; margin:5px 0 20px 0; font-size:0.9rem;">躲避管道，越远越高分！</p>
-            <button class="btn-start" id="btn-start">开始游戏</button>
-            <p class="game-tip">点击屏幕 / 按空格 跳跃</p>
-        </div>
+            <!-- 3. 实用资料区 -->
+            <div id="docs">
+                <div class="section-title">📂 实用资料</div>
+                <div class="item-grid" id="docListContainer">
+                    <!-- 资料卡片将在这里自动生成 -->
+                </div>
+            </div>
 
-        <!-- 结束界面 -->
-        <div class="game-screen" id="end-screen" style="display:none;">
-            <h2>💥 游戏结束</h2>
-            <div class="final-score">得分: <span id="final-score">0</span></div>
-            <div class="best-score">🏆 最高纪录: <span id="final-best">0</span></div>
-            <button class="btn-restart" id="btn-restart">重新开始</button>
-            <button class="btn-close-small" id="btn-close-end">关闭游戏</button>
         </div>
     </div>
-    <button id="close-game-btn">关闭游戏 X</button>
-</div>
 
-<!-- 密码弹窗 -->
-<div id="password-modal" class="modal">
-    <div class="modal-content">
-        <h3>🎮 请输入启动密码</h3>
-        <input type="password" id="pwd-input" placeholder="输入密码...">
-        <br>
-        <button onclick="checkPassword()">进入</button>
+    <!-- 下载确认弹窗 -->
+    <div class="modal" id="downloadModal">
+        <div class="modal-content">
+            <h3 id="modalTitle">准备下载</h3>
+            <p id="modalDesc">确定要获取这个资源吗？</p>
+            <button class="verify-btn" onclick="confirmDownload()" style="width: 100%; margin-top: 10px;">开始获取</button>
+            <button class="close-modal" onclick="closeModal()">取消</button>
+        </div>
     </div>
-</div>
 
-<script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    
-    // --- 游戏状态 ---
-    const STATE = { READY: 0, PLAYING: 1, OVER: 2 };
-    let gameState = STATE.READY;
-    let score = 0;
-    let bestScore = 0;
-    let frameCount = 0;
+    <script>
+        // ==========================================
+        // 👇👇👇 【配置区】在这里添加你的应用和资料 👇👇👇
+        // ==========================================
 
-    // --- 萝卜（鸟）属性 --- 速度调慢
-    const bird = { x: 60, y: 200, w: 28, h: 28, velocity: 0, gravity: 0.25, jumpForce: -4.2 };
-    
-    // --- 管道 ---
-    let pipes = [];
-    const pipeWidth = 45;
-    const pipeGap = 130; // 管道间距
-    const pipeSpeed = 2;
+        // 1. 设置管理员的抖音链接
+        const ADMIN_DOUYIN_LINK = "https://v.douyin.com/a8bJaf0pVLA/"; 
 
-    // --- DOM 元素 ---
-    const startScreen = document.getElementById('start-screen');
-    const endScreen = document.getElementById('end-screen');
-    const scoreDisplay = document.getElementById('score-display');
-    const bestDisplay = document.getElementById('best-display');
-    const finalScore = document.getElementById('final-score');
-    const finalBest = document.getElementById('final-best');
+        // 2. 设置正确的卡密
+        const CORRECT_PASSWORD = "luobotounb6666";
 
-    // --- 版本号彩蛋 ---
-    let clickCount = 0;
-    let clickTimer = null;
-    document.getElementById('version-display').addEventListener('click', () => {
-        clickCount++;
-        if (clickCount === 1) {
-            clickTimer = setTimeout(() => { clickCount = 0; }, 2000);
-        }
-        if (clickCount >= 5) {
-            clearTimeout(clickTimer);
-            clickCount = 0;
-            document.getElementById('password-modal').style.display = 'flex';
-            document.getElementById('pwd-input').focus();
-        }
-    });
+        // 3. 添加【实用应用】
+        // 格式：{ name: "显示的名字", icon: "图标(Emoji或图片链接)", desc: "简短介绍", url: "下载链接" },
+        const appsData = [
+            { 
+                name: "王者荣耀", 
+                icon: "👑", 
+                desc: "5V5英雄公平对战手游", 
+                url: "https://pvp.qq.com/" 
+            },
+            { 
+                name: "微信", 
+                icon: "💬", 
+                desc: "是一个生活方式", 
+                url: "https://weixin.qq.com/" 
+            },
+            // --- 想加新应用？复制下面这三行，改改内容就行 ---
+            { 
+                name: "示例应用", 
+                icon: "🚀", 
+                desc: "这是一个演示用的应用", 
+                url: "#" 
+            },
+            // ------------------------------------------------
+        ];
 
-    // --- 密码验证 ---
-    function checkPassword() {
-        const pwd = document.getElementById('pwd-input').value;
-        if (pwd === '123456') {
-            document.getElementById('password-modal').style.display = 'none';
-            openGame();
-        } else {
-            alert('密码错误！');
-            document.getElementById('pwd-input').value = '';
-        }
-    }
+        // 4. 添加【实用资料】
+        // 格式同上
+        const docsData = [
+            { 
+                name: "新手教程PDF", 
+                icon: "📄", 
+                desc: "点击查看详细操作指南", 
+                url: "#" 
+            },
+            { 
+                name: "内部福利群", 
+                icon: "🎁", 
+                desc: "点击加入交流群", 
+                url: "#" 
+            },
+             // --- 想加新资料？复制下面这三行，改改内容就行 ---
+            { 
+                name: "示例资料", 
+                icon: "📚", 
+                desc: "这是一个演示用的资料", 
+                url: "#" 
+            },
+            // ------------------------------------------------
+        ];
 
-    // --- 打开游戏界面 ---
-    function openGame() {
-        document.getElementById('game-overlay').style.display = 'flex';
-        showStartScreen();
-        drawBackground(); // 画一个静态背景
-    }
+        // ==========================================
+        // 👆👆👆 【配置区结束】 下面不要乱动哦 👆👆👆
+        // ==========================================
 
-    // --- 显示开始界面 ---
-    function showStartScreen() {
-        gameState = STATE.READY;
-        startScreen.style.display = 'flex';
-        endScreen.style.display = 'none';
-    }
+        let currentUrl = ""; // 临时存储当前点击的链接
 
-    // --- 开始游戏 ---
-    function startGame() {
-        gameState = STATE.PLAYING;
-        startScreen.style.display = 'none';
-        endScreen.style.display = 'none';
-        // 重置数据
-        bird.y = 200;
-        bird.velocity = 0;
-        pipes = [];
-        score = 0;
-        frameCount = 0;
-        scoreDisplay.innerText = '0';
-        bestDisplay.innerText = bestScore;
-        gameLoop();
-    }
+        // 初始化页面
+        window.onload = function() {
+            renderList('appListContainer', appsData);
+            renderList('docListContainer', docsData);
+            
+            // 2.5秒后隐藏开场动画
+            setTimeout(() => {
+                document.querySelector('.splash-screen').style.display = 'none';
+            }, 3000);
+        };
 
-    // --- 游戏结束 ---
-    function gameOver() {
-        gameState = STATE.OVER;
-        // 更新最高分
-        if (score > bestScore) {
-            bestScore = score;
-        }
-        finalScore.innerText = score;
-        finalBest.innerText = bestScore;
-        bestDisplay.innerText = bestScore;
-        // 显示结束界面
-        endScreen.style.display = 'flex';
-    }
-
-    // --- 关闭游戏 ---
-    function closeGame() {
-        document.getElementById('game-overlay').style.display = 'none';
-        gameState = STATE.READY;
-    }
-
-    // --- 跳跃 ---
-    function jump() {
-        if (gameState === STATE.PLAYING) {
-            bird.velocity = bird.jumpForce;
-        }
-    }
-
-    // --- 按钮事件 ---
-    document.getElementById('btn-start').addEventListener('click', startGame);
-    document.getElementById('btn-restart').addEventListener('click', startGame);
-    document.getElementById('btn-close-end').addEventListener('click', closeGame);
-    document.getElementById('close-game-btn').addEventListener('click', closeGame);
-
-    // --- 键盘/触摸跳跃 ---
-    canvas.addEventListener('mousedown', (e) => { e.preventDefault(); jump(); });
-    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
-    document.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && gameState === STATE.PLAYING) {
-            e.preventDefault();
-            jump();
-        }
-    });
-
-    // --- 画静态背景（开始界面用） ---
-    function drawBackground() {
-        // 天空
-        ctx.fillStyle = '#70c5ce';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        // 地面
-        ctx.fillStyle = '#ded895';
-        ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
-        ctx.fillStyle = '#5a8a2a';
-        ctx.fillRect(0, canvas.height - 45, canvas.width, 8);
-        // 萝卜
-        drawBird(200);
-    }
-
-    // --- 画萝卜 ---
-    function drawBird(y) {
-        // 身体
-        ctx.fillStyle = '#FF6B35';
-        ctx.beginPath();
-        ctx.ellipse(bird.x + bird.w/2, y + bird.h/2, bird.w/2, bird.h/2, 0, 0, Math.PI * 2);
-        ctx.fill();
-        // 叶子
-        ctx.fillStyle = '#2ecc71';
-        ctx.beginPath();
-        ctx.ellipse(bird.x + bird.w/2 - 3, y - 2, 4, 8, -0.3, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.ellipse(bird.x + bird.w/2 + 3, y - 2, 4, 8, 0.3, 0, Math.PI * 2);
-        ctx.fill();
-        // 眼睛
-        ctx.fillStyle = '#fff';
-        ctx.beginPath();
-        ctx.arc(bird.x + bird.w/2 + 5, y + bird.h/2 - 3, 5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#000';
-        ctx.beginPath();
-        ctx.arc(bird.x + bird.w/2 + 6, y + bird.h/2 - 3, 2.5, 0, Math.PI * 2);
-        ctx.fill();
-    }
-
-    // --- 画管道 ---
-    function drawPipe(p) {
-        // 上管道
-        ctx.fillStyle = '#2ecc71';
-        ctx.fillRect(p.x, 0, pipeWidth, p.topH);
-        ctx.fillStyle = '#27ae60';
-        ctx.fillRect(p.x - 3, p.topH - 20, pipeWidth + 6, 20); // 管口
-        // 下管道
-        ctx.fillStyle = '#2ecc71';
-        ctx.fillRect(p.x, p.topH + pipeGap, pipeWidth, canvas.height - p.topH - pipeGap);
-        ctx.fillStyle = '#27ae60';
-        ctx.fillRect(p.x - 3, p.topH + pipeGap, pipeWidth + 6, 20); // 管口
-    }
-
-    // --- 主循环 ---
-    function gameLoop() {
-        if (gameState !== STATE.PLAYING) return;
-
-        // 清空画布
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // 画天空
-        ctx.fillStyle = '#70c5ce';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // 画地面
-        ctx.fillStyle = '#ded895';
-        ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
-        ctx.fillStyle = '#5a8a2a';
-        ctx.fillRect(0, canvas.height - 45, canvas.width, 8);
-
-        // --- 萝卜物理 ---
-        bird.velocity += bird.gravity;
-        bird.y += bird.velocity;
-
-        // 天花板限制
-        if (bird.y < 0) { bird.y = 0; bird.velocity = 0; }
-        // 地面碰撞
-        if (bird.y + bird.h >= canvas.height - 40) {
-            bird.y = canvas.height - 40 - bird.h;
-            gameOver();
-            return;
+        // 渲染列表函数
+        function renderList(containerId, data) {
+            const container = document.getElementById(containerId);
+            let html = '';
+            data.forEach(item => {
+                html += `
+                    <div class="item-card" onclick="openModal('${item.name}', '${item.url}')">
+                        <div class="item-icon">${item.icon}</div>
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-desc">${item.desc}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
         }
 
-        // --- 生成管道 ---
-        if (frameCount % 110 === 0) {
-            let minTop = 60;
-            let maxTop = canvas.height - pipeGap - 60 - 40;
-            let topH = Math.floor(Math.random() * (maxTop - minTop)) + minTop;
-            pipes.push({ x: canvas.width, topH: topH, passed: false });
+        // 打开抖音主页
+        function openDouyin() {
+            window.location.href = ADMIN_DOUYIN_LINK;
         }
 
-        // --- 管道移动 & 绘制 & 碰撞 ---
-        for (let i = pipes.length - 1; i >= 0; i--) {
-            let p = pipes[i];
-            p.x -= pipeSpeed;
-
-            drawPipe(p);
-
-            // 计分
-            if (!p.passed && p.x + pipeWidth < bird.x) {
-                score++;
-                p.passed = true;
-                scoreDisplay.innerText = score;
-            }
-
-            // 碰撞检测
-            if (bird.x + bird.w > p.x && bird.x < p.x + pipeWidth) {
-                if (bird.y < p.topH || bird.y + bird.h > p.topH + pipeGap) {
-                    gameOver();
-                    return;
-                }
-            }
-
-            // 移除屏幕外的管道
-            if (p.x + pipeWidth < 0) {
-                pipes.splice(i, 1);
-            }
+        // 侧边栏开关
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
         }
 
-        // --- 画萝卜 ---
-        drawBird(bird.y);
-
-        frameCount++;
-        requestAnimationFrame(gameLoop);
-    }
-</script>
-
-</body>
-</html>
-
-
+        // 验证卡密
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            const msg = document.getElementById('statusMsg');
+            
+            if (input === CORRECT_PASSWORD) {
+                msg.style.color = "#fff";
+                msg.innerText = "✅ 验证成功！尊贵身份已激活";
+                alert("欢迎回来！
