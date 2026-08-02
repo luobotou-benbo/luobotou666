@@ -1,480 +1,514 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>萝卜头本波的资源站</title>
-    <style>
-        /* --- 基础样式 --- */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 0;
-            color: #333;
-            scroll-behavior: smooth; /* 平滑滚动 */
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-            min-height: 100vh;
-            background: #fff;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-        }
-
-        /* --- 顶部导航与汉堡菜单 --- */
-        .header-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-sizing: border-box;
-            border-bottom: 1px solid #eee;
-        }
-
-        .menu-btn {
-            font-size: 24px;
-            cursor: pointer;
-            padding: 5px;
-            color: #333;
-        }
-
-        .page-title {
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        /* --- 侧边导航菜单 --- */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -250px;
-            width: 250px;
-            height: 100%;
-            background: #fff;
-            z-index: 200;
-            transition: 0.3s;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-            padding-top: 60px;
-        }
-
-        .sidebar.active {
-            left: 0;
-        }
-
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 150;
-            display: none;
-        }
-
-        .sidebar-overlay.active {
-            display: block;
-        }
-
-        .nav-item {
-            display: block;
-            padding: 15px 20px;
-            text-decoration: none;
-            color: #333;
-            font-size: 16px;
-            border-bottom: 1px solid #f5f5f5;
-            transition: 0.2s;
-        }
-
-        .nav-item:hover {
-            background: #f0f2f5;
-            color: #ff6b00;
-        }
-
-        /* --- 霸气萝卜动画 --- */
-        .splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            animation: fadeOut 0.5s ease-in-out 2.5s forwards;
-        }
-
-        .radish-icon {
-            font-size: 80px;
-            animation: bounceIn 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
-
-        .radish-text {
-            margin-top: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #ff6b00;
-            opacity: 0;
-            animation: slideUp 0.8s ease-out 1s forwards;
-        }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0) translateY(-100px); opacity: 0; }
-            60% { transform: scale(1.1) translateY(10px); opacity: 1; }
-            100% { transform: scale(1) translateY(0); }
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes fadeOut {
-            to { opacity: 0; visibility: hidden; }
-        }
-
-        /* --- 内容区域 --- */
-        .content {
-            padding: 80px 20px 20px;
-        }
-
-        /* --- 卡密区域 --- */
-        .card-section {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.2);
-        }
-
-        .input-group {
-            margin: 15px 0;
-            display: flex;
-            gap: 10px;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            outline: none;
-            font-size: 16px;
-        }
-
-        button.verify-btn {
-            background: #333;
-            color: white;
-            border: none;
-            padding: 0 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        button.verify-btn:active {
-            transform: scale(0.95);
-        }
-
-        .admin-link {
-            color: #fff;
-            text-decoration: underline;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* --- 分区标题 --- */
-        .section-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 30px 0 15px;
-            padding-left: 10px;
-            border-left: 4px solid #ff6b00;
-            display: flex;
-            align-items: center;
-        }
-
-        /* --- 应用/资料卡片 --- */
-        .item-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-        }
-
-        .item-card {
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            transition: 0.2s;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .item-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-color: #ff6b00;
-        }
-
-        .item-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
-
-        .item-name {
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 5px;
-            word-break: break-all;
-        }
-
-        .item-desc {
-            font-size: 12px;
-            color: #888;
-        }
-
-        /* --- 弹窗样式 --- */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            width: 80%;
-            max-width: 300px;
-            text-align: center;
-            animation: popIn 0.3s;
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .close-modal {
-            margin-top: 15px;
-            background: #eee;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>萝卜头本波的资料站</title>
+<style>
+/* --- 基础样式 --- */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    min-height: 100vh;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+/* --- 顶部导航与汉堡菜单 --- */
+.header-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #eee;
+}
+.menu-btn {
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    color: #333;
+}
+.page-title {
+    font-weight: bold;
+    font-size: 18px;
+}
+/* --- 侧边导航菜单 --- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background: #fff;
+    z-index: 200;
+    transition: 0.3s;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    padding-top: 60px;
+    display: flex;
+    flex-direction: column;
+}
+.sidebar.active {
+    left: 0;
+}
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 150;
+    display: none;
+}
+.sidebar-overlay.active {
+    display: block;
+}
+.nav-item {
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    border-bottom: 1px solid #f5f5f5;
+    transition: 0.2s;
+    cursor: pointer;
+}
+.nav-item:hover {
+    background: #f0f2f5;
+    color: #ff6b00;
+}
+/* 侧边栏内容区 */
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px;
+}
+.sidebar-section {
+    display: none;
+    padding-top: 10px;
+}
+.sidebar-section.active {
+    display: block;
+}
+.sidebar-section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px 0 15px;
+    padding-left: 10px;
+    border-left: 4px solid #ff6b00;
+}
+/* --- 霸气萝卜动画 --- */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: fadeOut 0.5s ease-in-out 2.5s forwards;
+}
+.radish-icon {
+    font-size: 80px;
+    animation: bounceIn 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+.radish-text {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff6b00;
+    opacity: 0;
+    animation: slideUp 0.8s ease-out 1s forwards;
+}
+@keyframes bounceIn {
+    0% { transform: scale(0) translateY(-100px); opacity: 0; }
+    60% { transform: scale(1.1) translateY(10px); opacity: 1; }
+    100% { transform: scale(1) translateY(0); }
+}
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+@keyframes fadeOut {
+    to { opacity: 0; visibility: hidden; }
+}
+/* --- 内容区域 --- */
+.content {
+    padding: 80px 20px 20px;
+}
+/* --- 卡密区域 --- */
+.card-section {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.2);
+}
+.input-group {
+    margin: 15px 0;
+    display: flex;
+    gap: 10px;
+}
+input[type="text"] {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    font-size: 16px;
+}
+button.verify-btn {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+button.verify-btn:active {
+    transform: scale(0.95);
+}
+.admin-link {
+    color: #fff;
+    text-decoration: underline;
+    font-weight: bold;
+    cursor: pointer;
+}
+/* --- 应用/资料卡片 --- */
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+}
+.item-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    transition: 0.2s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-color: #ff6b00;
+}
+.item-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+.item-name {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+    word-break: break-all;
+}
+.item-desc {
+    font-size: 12px;
+    color: #888;
+}
+/* --- 弹窗样式 --- */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+    animation: popIn 0.3s;
+}
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+.close-modal {
+    margin-top: 15px;
+    background: #eee;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+</style>
 </head>
 <body>
 
-    <!-- 霸气开场动画 -->
-    <div class="splash-screen">
-        <div class="radish-icon">🥕</div>
-        <div class="radish-text">萝卜头本波<br>资源站加载中...</div>
-    </div>
+<!-- 霸气开场动画 -->
+<div class="splash-screen">
+    <div class="radish-icon">🥕</div>
+    <div class="radish-text">萝卜头本波的资料站</div>
+</div>
 
-    <!-- 侧边栏遮罩 -->
-    <div class="sidebar-overlay" onclick="toggleMenu()"></div>
+<!-- 侧边栏遮罩 -->
+<div class="sidebar-overlay" onclick="toggleMenu()"></div>
 
-    <!-- 侧边栏菜单 -->
-    <div class="sidebar" id="sidebar">
-        <a href="#apps" class="nav-item" onclick="toggleMenu()">📱 实用应用</a>
-        <a href="#docs" class="nav-item" onclick="toggleMenu()">📂 实用资料</a>
-    </div>
-
-    <!-- 顶部导航 -->
-    <div class="header-bar">
-        <div class="menu-btn" onclick="toggleMenu()">☰</div>
-        <div class="page-title">萝卜头本波</div>
-        <div style="width: 24px;"></div> <!-- 占位符保持居中 -->
-    </div>
-
-    <div class="container">
-        <div class="content">
-            
-            <!-- 1. 卡密获取区 -->
-            <div class="card-section">
-                <h3>🔐 专属卡密验证</h3>
-                <p style="font-size: 14px; opacity: 0.9;">
-                    请联系 <span class="admin-link" onclick="openDouyin()">@萝卜头本波</span> 获取密码
-                </p>
-                <div class="input-group">
-                    <input type="text" id="passwordInput" placeholder="输入卡密...">
-                    <button class="verify-btn" onclick="checkPassword()">验证</button>
-                </div>
-                <div id="statusMsg" style="font-size: 12px; height: 15px;"></div>
+<!-- 侧边栏菜单 -->
+<div id="sidebar" class="sidebar">
+    <!-- 菜单项 -->
+    <div class="nav-item" onclick="showSidebarSection('apps')">📱 实用应用</div>
+    <div class="nav-item" onclick="showSidebarSection('docs')">📂 实用资料</div>
+    
+    <!-- 侧边栏内容区 -->
+    <div class="sidebar-content">
+        <div id="sidebar-apps" class="sidebar-section">
+            <div class="sidebar-section-title">📱 实用应用</div>
+            <div class="item-grid" id="sidebar-app-list">
+                <!-- 应用列表由JS生成 -->
             </div>
-
-            <!-- 2. 实用应用区 -->
-            <div id="apps">
-                <div class="section-title">📱 实用应用</div>
-                <div class="item-grid" id="appListContainer">
-                    <!-- 应用卡片将在这里自动生成 -->
-                </div>
+        </div>
+        <div id="sidebar-docs" class="sidebar-section">
+            <div class="sidebar-section-title">📂 实用资料</div>
+            <div class="item-grid" id="sidebar-doc-list">
+                <!-- 资料列表由JS生成 -->
             </div>
-
-            <!-- 3. 实用资料区 -->
-            <div id="docs">
-                <div class="section-title">📂 实用资料</div>
-                <div class="item-grid" id="docListContainer">
-                    <!-- 资料卡片将在这里自动生成 -->
-                </div>
-            </div>
-
         </div>
     </div>
+</div>
 
-    <!-- 下载确认弹窗 -->
-    <div class="modal" id="downloadModal">
-        <div class="modal-content">
-            <h3 id="modalTitle">准备下载</h3>
-            <p id="modalDesc">确定要获取这个资源吗？</p>
-            <button class="verify-btn" onclick="confirmDownload()" style="width: 100%; margin-top: 10px;">开始获取</button>
-            <button class="close-modal" onclick="closeModal()">取消</button>
+<!-- 顶部导航 -->
+<div class="header-bar">
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <div class="page-title">萝卜头本波的资料站</div>
+    <div style="width: 24px;"></div> <!-- 占位符保持居中 -->
+</div>
+
+<div class="container">
+    <div class="content">
+        <!-- 1. 卡密验证区 -->
+        <div class="card-section">
+            <h2>🔒 专属卡密验证</h2>
+            <p style="font-size: 14px; opacity: 0.9;">
+                请联系 <a href="https://v.douyin.com/a8bJaf0pVLA/" target="_blank" style="color: #fff; text-decoration: underline;">@萝卜头本波</a> 获取密码
+            </p>
+            <div class="input-group">
+                <input type="text" id="passwordInput" placeholder="请输入卡密">
+                <button class="verify-btn" onclick="checkPassword()">验证</button>
+            </div>
+            <p id="statusMsg" style="height: 20px; font-size: 14px;"></p>
         </div>
     </div>
+</div>
 
-    <script>
-        // ==========================================
-        // 👇👇👇 【配置区】在这里添加你的应用和资料 👇👇👇
-        // ==========================================
+<!-- 下载确认弹窗 -->
+<div id="downloadModal" class="modal">
+    <div class="modal-content">
+        <h3>即将跳转</h3>
+        <p>即将为您跳转到外部链接，请注意安全。</p>
+        <button class="close-modal" onclick="closeModal()">我知道了</button>
+    </div>
+</div>
 
-        // 1. 设置管理员的抖音链接
-        const ADMIN_DOUYIN_LINK = "https://v.douyin.com/a8bJaf0pVLA/"; 
+<script>
+// ==========================================
+// 👇👇👇 【配置区】在这里添加你的应用和资料 👇👇👇
+// ==========================================
 
-        // 2. 设置正确的卡密
-        const CORRECT_PASSWORD = "luobotounb6666";
+// 1. 设置管理员的抖音链接
+const ADMIN_DOUYIN_LINK = "https://v.douyin.com/a8bJaf0pVLA/";
 
-        // 3. 添加【实用应用】
-        // 格式：{ name: "显示的名字", icon: "图标(Emoji或图片链接)", desc: "简短介绍", url: "下载链接" },
-        const appsData = [
-            { 
-                name: "王者荣耀", 
-                icon: "👑", 
-                desc: "5V5英雄公平对战手游", 
-                url: "https://pvp.qq.com/" 
-            },
-            { 
-                name: "微信", 
-                icon: "💬", 
-                desc: "是一个生活方式", 
-                url: "https://weixin.qq.com/" 
-            },
-            // --- 想加新应用？复制下面这三行，改改内容就行 ---
-            { 
-                name: "示例应用", 
-                icon: "🚀", 
-                desc: "这是一个演示用的应用", 
-                url: "#" 
-            },
-            // ------------------------------------------------
-        ];
+// 2. 设置正确的卡密
+const CORRECT_PASSWORD = "luobotounb6666";
 
-        // 4. 添加【实用资料】
-        // 格式同上
-        const docsData = [
-            { 
-                name: "新手教程PDF", 
-                icon: "📄", 
-                desc: "点击查看详细操作指南", 
-                url: "#" 
-            },
-            { 
-                name: "内部福利群", 
-                icon: "🎁", 
-                desc: "点击加入交流群", 
-                url: "#" 
-            },
-             // --- 想加新资料？复制下面这三行，改改内容就行 ---
-            { 
-                name: "示例资料", 
-                icon: "📚", 
-                desc: "这是一个演示用的资料", 
-                url: "#" 
-            },
-            // ------------------------------------------------
-        ];
+// 3. 添加【实用应用】
+// 格式：{ name: "显示的名字", icon: "图标(Emoji或图片链接)", desc: "简短介绍", url: "下载链接" },
+const appsData = [name:"甲壳虫ADB助手",
+    //            desc:"一个安卓ADB工具。",
+    //            url:"https://pan.quark.cn/s/6e3e6a848e6e",
 
-        // ==========================================
-        // 👆👆👆 【配置区结束】 下面不要乱动哦 👆👆👆
-        // ==========================================
+                  name:"Astro Box",
+                  desc:"小米手环/手表第三方工具箱，支持安装表盘和小程序",
+                  url:"https://pan.quark.cn/s/00d16da27da3",
 
-        let currentUrl = ""; // 临时存储当前点击的链接
+                  name:"AIDE Pro",
+                  desc:"安卓端应用开发IDE，支持Java/C++编译调试与智能补全。",
+                  url:"https://pan.quark.cn/s/1fbb52632626",
 
-        // 初始化页面
-        window.onload = function() {
-            renderList('appListContainer', appsData);
-            renderList('docListContainer', docsData);
-            
-            // 2.5秒后隐藏开场动画
-            setTimeout(() => {
-                document.querySelector('.splash-screen').style.display = 'none';
-            }, 3000);
-        };
+                  name:"Sky ADB",
+                  desc:"Sky ADB助力手机搞机，轻松玩机，备份数据让探索更安心。",
+                  url:"https://pan.quark.cn/s/5e5398f483b0",
 
-        // 渲染列表函数
-        function renderList(containerId, data) {
-            const container = document.getElementById(containerId);
-            let html = '';
-            data.forEach(item => {
-                html += `
-                    <div class="item-card" onclick="openModal('${item.name}', '${item.url}')">
-                        <div class="item-icon">${item.icon}</div>
-                        <div class="item-name">${item.name}</div>
-                        <div class="item-desc">${item.desc}</div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
+                  name:"表盘自定义工具",
+                  desc:"米坛工具装快应用，自定义表盘，备份数据让玩机更安心。",
+                  url:"https://pan.quark.cn/s/c177a0445f42",
 
-        // 打开抖音主页
-        function openDouyin() {
-            window.location.href = ADMIN_DOUYIN_LINK;
-        }
+                  name:"Vmos虚拟机",
+                  desc:"免费的安卓虚拟机",
+                  url:"https://pan.quark.cn/s/c9cac7132b46"
+                 ]
+                 
 
-        // 侧边栏开关
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.querySelector('.sidebar-overlay').classList.toggle('active');
-        }
+                  
+                  
+    {
+        name: "王者荣耀",
+        icon: "👑",
+        desc: "5V5英雄公平对战手游",
+        url: "https://pvp.qq.com/"
+    },
+    {
+        name: "微信",
+        icon: "💬",
+        desc: "是一个生活方式",
+        url: "https://weixin.qq.com/"
+    },
+    // --- 想加新应用？复制下面这三行，改改内容就行 ---
+    // {
+    //     name: "这里写应用名字",
+    //     icon: "这里写Emoji图标",
+    //     desc: "这里写一句话介绍",
+    //     url: "这里写下载链接"
+    // },
+    // ------------------------------------------------
+];
 
-        // 验证卡密
-        function checkPassword() {
-            const input = document.getElementById('passwordInput').value;
-            const msg = document.getElementById('statusMsg');
-            
-            if (input === CORRECT_PASSWORD) {
-                msg.style.color = "#fff";
-                msg.innerText = "✅ 验证成功！尊贵身份已激活";
-                alert("欢迎回来！
+// 4. 添加【实用资料】
+// 格式同上
+const docsData =[name:"学而思学习机PD2／3解除安装限制方案",
+                 desc:"public class TALPAD_BOOM lv1推出的破解方案"
+                ]
+    {    name: "新手教程PDF",
+        icon: "📄",
+        desc: "点击查看详细操作指南",
+        url: "#"
+    },
+    {
+        name: "内部福利群",
+        icon: "🎁",
+        desc: "点击加入交流群",
+        url: "#"
+    },
+    // --- 想加新资料？复制下面这三行，改改内容就行 ---
+    // {
+    //     name: "这里写资料名字",
+    //     icon: "这里写Emoji图标",
+    //     desc: "这里写一句话介绍",
+    //     url: "这里写下载链接"
+    // },
+    // ------------------------------------------------
+];
+
+// ==========================================
+// 👆👆👆 【配置区结束】 下面不要乱动哦 👆👆👆
+// ==========================================
+
+let currentUrl = "";
+
+// 初始化页面
+window.onload = function() {
+    renderList('sidebar-app-list', appsData);
+    renderList('sidebar-doc-list', docsData);
+    // 默认显示应用列表
+    showSidebarSection('apps');
+    setTimeout(() => {
+        document.querySelector('.splash-screen').style.display = 'none';
+    }, 3000);
+};
+
+// 渲染列表函数
+function renderList(containerId, data) {
+    const container = document.getElementById(containerId);
+    let html = '';
+    data.forEach(item => {
+        html += `
+            <div class="item-card" onclick="openLink('${item.url}')">
+            <div class="item-icon">
+              ${item.icon.startsWith('http') 
+              ? `<img src="${item.icon}" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;">` 
+              : item.icon}
+              </div>
+
+                <div class="item-name">${item.name}</div>
+                <div class="item-desc">${item.desc}</div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+// 打开链接
+function openLink(url) {
+    currentUrl = url;
+    document.getElementById('downloadModal').style.display = 'flex';
+}
+
+// 关闭弹窗并跳转
+function closeModal() {
+    document.getElementById('downloadModal').style.display = 'none';
+    if (currentUrl && currentUrl !== '#') {
+        window.open(currentUrl, '_blank');
+    }
+}
+
+// 侧边栏开关
+function toggleMenu() {
+    document.getElementById('sidebar').classList.toggle('active');
+    document.querySelector('.sidebar-overlay').classList.toggle('active');
+}
+
+// 显示侧边栏指定分区
+function showSidebarSection(section) {
+    document.getElementById('sidebar-apps').classList.remove('active');
+    document.getElementById('sidebar-docs').classList.remove('active');
+    document.getElementById('sidebar-' + section).classList.add('active');
+}
+
+// 验证卡密
+function checkPassword() {
+    const input = document.getElementById('passwordInput').value;
+    const msg = document.getElementById('statusMsg');
+    if (input === CORRECT_PASSWORD) {
+        msg.style.color = "#fff";
+        msg.innerText = "✅ 验证成功！尊贵身份已激活";
+        alert("欢迎回来！所有资源已解锁！");
+        toggleMenu(); // 验证成功后自动打开侧边栏
+    } else {
+        msg.style.color = "#ff4d4f";
+        msg.innerText = "❌ 卡密错误，请重试";
+    }
+}
+</script>
+</body>
+</html>
