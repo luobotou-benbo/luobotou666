@@ -496,19 +496,34 @@ function showSidebarSection(section) {
 }
 
 // 验证卡密
-function checkPassword() {
-    const input = document.getElementById('passwordInput').value;
-    const msg = document.getElementById('statusMsg');
-    if (input === CORRECT_PASSWORD) {
-        msg.style.color = "#fff";
-        msg.innerText = "✅ 验证成功！尊贵身份已激活";
-        alert("欢迎回来！所有资源已解锁！");
-        toggleMenu(); // 验证成功后自动打开侧边栏
+    function checkPassword() {
+    // 1. 自动寻找页面上的输入框（不管它叫什么名字）
+    var inputElement = document.querySelector('input[type="text"], input[type="password"]');
+    
+    // 2. 如果找不到输入框，直接报错告诉你
+    if (!inputElement) {
+        alert("❌ 错误：代码找不到输入框！\n请检查 HTML 里的 <input> 标签。");
+        return;
+    }
+
+    // 3. 获取你输入的内容，并去掉首尾可能存在的空格
+    var myInput = inputElement.value.trim(); 
+
+    // 4. 弹窗显示“抓到了什么”，方便我们要对暗号
+    alert("🕵️‍♂️ 系统捕获到的密码是：\n[" + myInput + "]\n\n正确的密码是：\n[" + CORRECT_PASSWORD + "]");
+
+    // 5. 进行比对
+    if (myInput === CORRECT_PASSWORD) {
+        // 验证成功
+        inputElement.style.borderColor = "#4cd964"; // 变绿
+        localStorage.setItem('isAdmin', 'true');    // 记录身份
+        alert("✅ 验证成功！欢迎回来，管理员。");
+        
+        // 刷新页面以显示隐藏内容（或者你可以改成跳转链接）
+        window.location.reload(); 
     } else {
-        msg.style.color = "#ff4d4f";
-        msg.innerText = "❌ 卡密错误，请重试";
+        // 验证失败
+        inputElement.style.borderColor = "#ff3b30"; // 变红
+        alert("❌ 密码错误！\n请仔细核对大小写和特殊字符。");
     }
 }
-</script>
-</body>
-</html>
