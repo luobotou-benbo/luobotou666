@@ -10,627 +10,938 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, sans-serif;
+            font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
         }
 
         body {
             background-color: #f5f7fa;
-            color: #222;
+            color: #333;
+            line-height: 1.5;
         }
 
-        /* 协议弹窗样式 */
-        .mask-wrap {
+        /* ========== 用户协议弹窗 ========== */
+        .agree-mask {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.65);
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
-            padding: 16px;
+            z-index: 99999;
+            padding: 20px;
         }
-        .mask-box {
+        .agree-box {
             width: 100%;
-            max-width: 520px;
+            max-width: 500px;
             background: #fff;
             border-radius: 12px;
-            padding: 24px;
-            max-height: 85vh;
-            display: flex;
-            flex-direction: column;
+            overflow: hidden;
         }
-        .mask-box h3 {
+        .agree-title {
+            padding: 18px;
             text-align: center;
-            margin-bottom: 16px;
-            font-size: 18px;
+            font-size: 17px;
+            font-weight: 600;
+            border-bottom: 1px solid #f0f0f0;
         }
-        .mask-content {
+        .agree-content {
+            padding: 16px 20px;
+            max-height: 55vh;
             overflow-y: auto;
-            line-height: 1.7;
             font-size: 14px;
-            margin-bottom: 20px;
-            flex: 1;
+            color: #555;
         }
-        .check-line {
+        .agree-content h4 {
+            margin: 10px 0 4px;
+            color: #222;
+            font-size: 14px;
+        }
+        .agree-check {
+            padding: 12px 20px;
+            border-top: 1px solid #f0f0f0;
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 18px;
+            font-size: 14px;
         }
-        .btn-group {
+        .agree-btn-box {
             display: flex;
-            gap: 12px;
+            border-top: 1px solid #f0f0f0;
         }
-        button {
+        .agree-btn {
             flex: 1;
-            padding: 11px;
-            border-radius: 8px;
+            padding: 13px;
             border: none;
             font-size: 15px;
             cursor: pointer;
-        }
-        .btn-confirm {
-            background: #2563eb;
-            color: white;
+            transition: background 0.2s;
         }
         .btn-refuse {
-            background: #eee;
-            color: #333;
+            background: #fafafa;
+            color: #666;
+            border-right: 1px solid #f0f0f0;
+        }
+        .btn-refuse:hover {
+            background: #f0f0f0;
+        }
+        .btn-confirm {
+            background: #1677ff;
+            color: #fff;
+        }
+        .btn-confirm:hover {
+            background: #0958d9;
         }
 
-        /* 页面主体布局 */
-        .sidebar {
-            width: 240px;
+        /* ========== 顶部菜单按钮 ========== */
+        .menu-btn {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            width: 42px;
+            height: 42px;
             background: #fff;
-            height: 100vh;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+        .menu-btn span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: #333;
+            border-radius: 1px;
+        }
+
+        /* ========== 遮罩层 ========== */
+        .mask {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        .mask.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ========== 侧边栏 ========== */
+        .sidebar {
             position: fixed;
             top: 0;
-            left: 0;
-            padding: 20px 12px;
+            left: -55vw;
+            width: 50vw;
+            height: 100vh;
+            background: #fff;
+            z-index: 1000;
+            padding-top: 70px;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
             overflow-y: auto;
-            transition: 0.2s;
         }
-        .sidebar.hide {
-            left: -240px;
+        .sidebar.show {
+            left: 0;
         }
-        .sidebar ul {
+        .sidebar-menu {
             list-style: none;
+            padding: 0 12px;
         }
-        .sidebar li {
-            padding: 10px 14px;
+        .sidebar-menu li {
+            padding: 12px 16px;
+            margin-bottom: 4px;
             border-radius: 8px;
-            margin-bottom: 6px;
             cursor: pointer;
+            font-size: 15px;
+            transition: background 0.2s;
         }
-        .sidebar li.active {
-            background-color: #e8f0fe;
-            color: #2563eb;
+        .sidebar-menu li:hover {
+            background: #f5f7fa;
         }
-        .main-content {
-            margin-left: 240px;
-            padding: 24px;
-            min-height: 100vh;
-            transition: 0.2s;
+        .sidebar-menu li.active {
+            background: #e6f4ff;
+            color: #1677ff;
+            font-weight: 500;
         }
-        .main-content.full {
-            margin-left: 0;
-        }
-        .tab-item {
-            display: none;
-        }
-        .tab-item.active {
-            display: block;
-        }
-        .tool-box {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 700px;
-        }
-        textarea, input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            margin: 8px 0;
-            font-size: 14px;
-        }
-        .action-btn {
-            padding: 9px 16px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            margin:4px;
-        }
-        #qrcode-box {
-            margin:12px 0;
+        .version {
+            position: absolute;
+            bottom: 20px;
+            left: 28px;
+            font-size: 12px;
+            color: #999;
+            cursor: pointer;
+            user-select: none;
         }
 
-        /* 小游戏弹窗 */
+        /* ========== 主内容区 ========== */
+        .main-content {
+            padding: 70px 16px 30px;
+            min-height: 100vh;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        .page-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        /* ========== 资源卡片网格 ========== */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+        .resource-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .resource-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .resource-card h3 {
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: #1677ff;
+        }
+        .resource-card p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .file-size {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #f0f7ff;
+            color: #1677ff;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 9px 0;
+            background: #1677ff;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .download-btn:hover {
+            background: #0958d9;
+        }
+
+        /* ========== 工具箱标签栏 ========== */
+        .tool-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 18px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+        }
+        .tool-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        .tab-btn {
+            flex-shrink: 0;
+            padding: 8px 14px;
+            border: none;
+            background: #fff;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.2s;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+        .tab-btn.active {
+            background: #1677ff;
+            color: #fff;
+        }
+
+        /* ========== 工具面板 ========== */
+        .tool-panel {
+            display: none;
+            background: #fff;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .tool-panel.active {
+            display: block;
+        }
+        .input-area {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            margin: 8px 0;
+            outline: none;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+        .input-area:focus {
+            border-color: #1677ff;
+            box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+        }
+        .num-input {
+            width: 110px;
+            padding: 8px 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            margin: 8px 0;
+            outline: none;
+        }
+        .num-input:focus {
+            border-color: #1677ff;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 9px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-primary {
+            background: #1677ff;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #0958d9;
+        }
+        .btn-default {
+            background: #fff;
+            border: 1px solid #d9d9d9;
+            color: #333;
+        }
+        .btn-default:hover {
+            border-color: #1677ff;
+            color: #1677ff;
+        }
+        .output-area {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px 12px;
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            word-break: break-all;
+            white-space: pre-wrap;
+            margin-top: 8px;
+        }
+        .checkbox-group {
+            display: flex;
+            gap: 14px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: #666;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .convert-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .convert-item label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        .hash-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 8px;
+        }
+        .hash-tab {
+            padding: 5px 12px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            cursor: pointer;
+            color: #666;
+            border-radius: 6px;
+        }
+        .hash-tab.active {
+            background: #e6f4ff;
+            color: #1677ff;
+        }
+        .warn-text {
+            color: #ff4d4f;
+            font-size: 12px;
+            margin: 6px 0;
+            line-height: 1.6;
+        }
+        #qrcode-box {
+            margin: 12px 0;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        #download-qrcode {
+            display: none;
+        }
+        .debug-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .debug-select {
+            padding: 8px 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+        .debug-url {
+            flex: 1;
+            min-width: 180px;
+            margin: 0;
+        }
+        .response-box {
+            margin-top: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .response-status {
+            padding: 8px 12px;
+            background: #fafafa;
+            font-weight: 500;
+            font-size: 13px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .response-body {
+            padding: 12px;
+            max-height: 260px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            background: #fff;
+        }
+
+        /* ========== 游戏弹窗 ========== */
         .game-modal {
             position: fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(0,0,0,0.75);
-            display:none;
-            align-items:center;
-            justify-content:center;
-            z-index:9998;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
         .game-modal.show {
-            display:flex;
+            display: flex;
         }
-        canvas {
-            background:#fff;
-            border-radius:8px;
+        .game-container {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .game-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+        .back-btn {
+            padding: 6px 14px;
+            border: none;
+            background: #f5f5f5;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            color: #333;
+        }
+        #gameCanvas {
+            border: 2px solid #eee;
+            border-radius: 8px;
+            background: #87ceeb;
+        }
+        .game-tip {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* ========== 桌面端适配 ========== */
+        @media (min-width: 768px) {
+            .sidebar {
+                width: 280px;
+                left: -290px;
+            }
+            .main-content {
+                padding: 70px 40px 30px;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            .resource-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .convert-row {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        @media (min-width: 500px) and (max-width: 767px) {
+            .resource-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <!-- 用户协议弹窗 -->
-    <div class="mask-wrap" id="agreementMask">
-        <div class="mask-box">
-            <h3>使用须知与免责声明</h3>
-            <div class="mask-content">
-                <p>欢迎使用本工具箱，请认真阅读以下条款：</p>
-                <br>
-                <p>1. 本工具仅作学习交流使用，请遵守当地法律法规，禁止用于非法用途。</p>
-                <p>2. 用户自行承担使用本工具产生的全部风险，开发者不对任何后果承担责任。</p>
-                <p>3. 请勿输入隐私账号、密码、敏感机密信息。</p>
-                <p>4. 如不认同本声明，请立即停止访问。</p>
+
+<!-- 用户协议弹窗 -->
+<div class="agree-mask" id="agreeMask">
+    <div class="agree-box">
+        <div class="agree-title">用户服务协议 & 免责声明</div>
+        <div class="agree-content">
+            <h4>一、使用须知</h4>
+            <p>欢迎使用本工具箱及资源网站！在使用本站所有工具、资源、教程、指令前，请您仔细阅读本《用户服务协议》及《免责声明》。任何人进入、使用本站内容，即代表自愿同意、完全接受本协议全部条款。</p>
+            <h4>二、免责声明</h4>
+            <p>1、本站所有工具、代码、命令、资源、教程仅供学习交流、个人玩机技术参考使用，仅供合法技术研究。</p>
+            <p>2、本站不提供、不参与任何破解商业软件、绕过官方安全锁、侵权、非法刷机、非法解锁、违规设备修改等违法行为。</p>
+            <p>3、用户使用本站ADB命令、刷机指令、玩机工具、资源文件所产生的一切风险由用户自行承担，包括但不限于：设备变砖、数据丢失、失去保修、账号风险、系统故障等。</p>
+            <p>4、部分工具/指令受设备品牌、系统版本、官方安全策略限制，不一定适配所有机型，操作前请自行确认兼容性。</p>
+            <p>5、本站不对任何刷机、解锁、修改设备行为负责，所有操作均为用户自主行为。</p>
+            <p>6、本站所有资源均来源于网络公开分享，若有侵权请联系作者删除。</p>
+            <h4>三、用户义务</h4>
+            <p>1、用户承诺仅在国家法律法规允许范围内使用本站所有功能。</p>
+            <p>2、禁止使用本站工具从事破解、盗版、侵权、违法、违规、黑产等一切非法活动。</p>
+            <p>3、禁止传播、售卖本站资源用于商业用途。</p>
+            <h4>四、隐私说明</h4>
+            <p>本站为纯前端网页，不收集、不上传、不储存用户任何个人信息、设备信息、输入内容，无后台数据记录，用户操作完全本地完成。</p>
+            <h4>五、其他</h4>
+            <p>本协议随时可根据需求更新，继续使用即代表默认接受最新协议。若不同意本协议任意条款，请立即退出本站，禁止使用本站所有功能。</p>
+        </div>
+        <div class="agree-check">
+            <input type="checkbox" id="agreeCheck">
+            <label>我已仔细阅读并同意以上协议</label>
+        </div>
+        <div class="agree-btn-box">
+            <button class="agree-btn btn-refuse" id="refuseBtn">拒绝</button>
+            <button class="agree-btn btn-confirm" id="confirmBtn">同意并进入</button>
+        </div>
+    </div>
+</div>
+
+<!-- 三条杠菜单按钮 -->
+<button class="menu-btn" id="menuBtn">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+<!-- 遮罩层 -->
+<div class="mask" id="mask"></div>
+
+<!-- 侧边栏 -->
+<div class="sidebar" id="sidebar">
+    <ul class="sidebar-menu">
+        <li class="active" data-page="resource">📚 实用资源</li>
+        <li data-page="toolbox">🔧 实用工具箱</li>
+        <a href="https://v.douyin.com/4sU-I7V8Pmk/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:#333;">
+            <li>👤 关注管理员</li>
+        </a>
+    </ul>
+    <div class="version" id="versionText">v1.6.9</div>
+</div>
+
+<!-- 游戏弹窗 -->
+<div class="game-modal" id="gameModal">
+    <div class="game-container">
+        <div class="game-header">
+            <button class="back-btn" id="closeGame">返回</button>
+        </div>
+        <canvas id="gameCanvas" width="360" height="540"></canvas>
+        <div class="game-tip">点击画布让小萝卜头跳跃</div>
+    </div>
+</div>
+
+<!-- 主内容区 -->
+<div class="main-content">
+    <!-- 实用资源页 -->
+    <div class="page active" id="page-resource">
+        <h2 class="page-title">实用资源</h2>
+        <div class="resource-grid">
+            <div class="resource-card">
+                <div>
+                    <h3>VMOS虚拟机</h3>
+                    <p>安卓虚拟机工具，支持后台挂机、多开运行，独立系统环境。</p>
+                    <span class="file-size">316.5M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/9f14ddbe12e1" target="_blank" class="download-btn">立即下载</a>
             </div>
-            <div class="check-line">
-                <input type="checkbox" id="agreeCheck">
-                <label for="agreeCheck">我已阅读并同意以上条款</label>
+            <div class="resource-card">
+                <div>
+                    <h3>必剪 2.90.0</h3>
+                    <p>B站官方出品的手机视频剪辑工具，功能丰富、免费无水印。</p>
+                    <span class="file-size">155.2M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/e28f9dfb6676" target="_blank" class="download-btn">立即下载</a>
             </div>
-            <div class="btn-group">
-                <button class="btn-refuse" id="refuseBtn">拒绝并退出</button>
-                <button class="btn-confirm" id="acceptBtn">同意并进入</button>
+            <div class="resource-card">
+                <div>
+                    <h3>Termux 0.119.0-beta.3</h3>
+                    <p>安卓终端模拟器，无需root即可运行Linux命令和编程环境。</p>
+                    <span class="file-size">109M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/1fe34cd01629" target="_blank" class="download-btn">立即下载</a>
+            </div>
+            <div class="resource-card">
+                <div>
+                    <h3>酷安 16.3.2</h3>
+                    <p>数码爱好者社区，海量应用、玩机教程和工具分享。</p>
+                    <span class="file-size">73.6M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/112f4f2bbec8" target="_blank" class="download-btn">立即下载</a>
+            </div>
+            <div class="resource-card">
+                <div>
+                    <h3>NP管理器</h3>
+                    <p>安卓APK逆向修改工具，支持反编译、签名、去除广告等操作。</p>
+                    <span class="file-size">41.6M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/283d3fbdad32" target="_blank" class="download-btn">立即下载</a>
+            </div>
+            <div class="resource-card">
+                <div>
+                    <h3>自动点击器 2.0.12.31</h3>
+                    <p>手机自动连点工具，可设置点击位置、频率，解放双手。</p>
+                    <span class="file-size">12.7M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/c6b0126a3b00" target="_blank" class="download-btn">立即下载</a>
+            </div>
+            <div class="resource-card">
+                <div>
+                    <h3>X浏览器 5.5.0</h3>
+                    <p>极简轻量化浏览器，体积小速度快，支持广告拦截和资源嗅探。</p>
+                    <span class="file-size">1.4M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/7f38d952913a" target="_blank" class="download-btn">立即下载</a>
+            </div>
+            <div class="resource-card">
+                <div>
+                    <h3>学而思学习机解除安装限制方案</h3>
+                    <p>学而思PD-2/3学习机解除安装限制教程与工具包 v0.1。</p>
+                    <span class="file-size">47.6M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/5617e9504f63" target="_blank" class="download-btn">立即下载</a>
+            </div>
+            <div class="resource-card">
+                <div>
+                    <h3>甲壳虫ADB</h3>
+                    <p>手机端ADB调试工具，无需电脑即可执行ADB命令、调试应用。</p>
+                    <span class="file-size">20.8M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/fdc3a728a43d" target="_blank" class="download-btn">立即下载</a>
+            </div>
+            <div class="resource-card">
+                <div>
+                    <h3>AIDE Pro</h3>
+                    <p>手机端安卓开发IDE，支持编写Java/Android代码并直接编译安装。</p>
+                    <span class="file-size">46M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/9fa3fa8086a2" target="_blank" class="download-btn">立即下载</a>
+            </div>
+            <div class="resource-card">
+                <div>
+                    <h3>skyadb v1.1.5-beta</h3>
+                    <p>轻量级ADB工具，支持无线调试、快速执行常用ADB命令。</p>
+                    <span class="file-size">4.5M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/434e615aef7e" target="_blank" class="download-btn">立即下载</a>
+            </div>
+            <div class="resource-card">
+                <div>
+                    <h3>表盘自定义工具</h3>
+                    <p>智能手表表盘修改制作工具，支持自定义表盘样式与组件。</p>
+                    <span class="file-size">43.7M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/30754fb9b2fc" target="_blank" class="download-btn">立即下载</a>
+            </div>
+            <div class="resource-card">
+                <div>
+                    <h3>AstroBox 1.5.5（安卓版）</h3>
+                    <p>多功能工具箱应用，集成多种实用工具与玩机功能。</p>
+                    <span class="file-size">25.9M</span>
+                </div>
+                <a href="https://pan.quark.cn/s/c5357a9beeab" target="_blank" class="download-btn">立即下载</a>
             </div>
         </div>
     </div>
 
-    <!-- 侧边导航 -->
-    <div class="sidebar" id="sidebar">
-        <ul>
-            <li class="active" data-page="base64">Base64 编解码</li>
-            <li data-page="qrcode">二维码生成</li>
-            <li data-page="password">随机密码生成</li>
-            <li data-page="convert">进制转换</li>
-            <li data-page="hash">Hash加密(MD5/SHA)</li>
-            <li data-page="network">网络请求测试</li>
-        </ul>
-        <div style="position:absolute;bottom:20px;left:12px;font-size:12px;color:#777;" id="versionText">点击此处15次开启彩蛋</div>
-    </div>
+    <!-- 实用工具箱页 -->
+    <div class="page" id="page-toolbox">
+        <h2 class="page-title">实用工具箱</h2>
+        <div class="tool-tabs">
+            <button class="tab-btn active" data-tab="base64">Base64编解码</button>
+            <button class="tab-btn" data-tab="encrypt">加密解密</button>
+            <button class="tab-btn" data-tab="debug">网络调试</button>
+            <button class="tab-btn" data-tab="qrcode">二维码</button>
+            <button class="tab-btn" data-tab="baidu">百度搜索</button>
+            <button class="tab-btn" data-tab="password">密码生成</button>
+            <button class="tab-btn" data-tab="convert">进制转换</button>
+            <button class="tab-btn" data-tab="hash">哈希校验</button>
+            <button class="tab-btn" data-tab="adbcmd">ADB指令</button>
+        </div>
 
-    <!-- 主内容区域 -->
-    <div class="main-content" id="mainWrap">
-        <!-- Base64工具 -->
-        <div class="tab-item active" id="page-base64">
-            <div class="tool-box">
-                <h3>Base64 编码 / 解码</h3>
-                <textarea id="base64-input" rows="5" placeholder="输入内容"></textarea>
-                <div>
-                    <button class="action-btn" onclick="base64Encode()">编码</button>
-                    <button class="action-btn" onclick="base64Decode()">解码</button>
-                </div>
-                <textarea id="base64-output" rows="5" placeholder="结果输出" readonly></textarea>
+        <!-- Base64 -->
+        <div class="tool-panel active" id="panel-base64">
+            <textarea class="input-area" id="base64-input" rows="4" placeholder="请输入要编码/解码的内容"></textarea>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="base64Encode()">编码</button>
+                <button class="btn btn-default" onclick="base64Decode()">解码</button>
             </div>
+            <div class="output-area" id="base64-output">结果将显示在这里</div>
+        </div>
+
+        <!-- 加密解密 -->
+        <div class="tool-panel" id="panel-encrypt">
+            <textarea class="input-area" id="encrypt-input" rows="4" placeholder="请输入要加密/解密的字符串"></textarea>
+            <div>
+                <label style="font-size:13px;color:#666;margin-right:8px;">加密密钥（数字）：</label>
+                <input type="number" class="num-input" id="encrypt-key" value="5" min="1" max="20">
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="stringEncrypt()">加密</button>
+                <button class="btn btn-default" onclick="stringDecrypt()">解密</button>
+            </div>
+            <div class="output-area" id="encrypt-output">结果将显示在这里</div>
+        </div>
+
+        <!-- 网络调试 -->
+        <div class="tool-panel" id="panel-debug">
+            <div class="debug-row">
+                <select class="debug-select" id="debug-method">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                </select>
+                <input type="text" class="input-area debug-url" id="debug-url" placeholder="请输入完整请求网址">
+                <button class="btn btn-primary" onclick="sendRequest()">发送请求</button>
+            </div>
+            <textarea class="input-area" id="debug-body" rows="3" placeholder="POST请求体（可选，GET可忽略）"></textarea>
+            <div class="response-box">
+                <div class="response-status" id="response-status">等待发送请求...</div>
+                <div class="response-body" id="response-body">响应内容将显示在这里</div>
+            </div>
+            <p class="warn-text" style="margin-top:8px;">提示：受浏览器跨域限制，部分网址无法直接请求，仅作调试演示。</p>
         </div>
 
         <!-- 二维码 -->
-        <div class="tab-item" id="page-qrcode">
-            <div class="tool-box">
-                <h3>二维码生成</h3>
-                <input id="qrcode-input" placeholder="填入需要生成二维码的文本/链接">
-                <button class="action-btn" onclick="generateQRCode()">生成二维码</button>
-                <div id="qrcode-box"></div>
-                <button class="action-btn" id="download-qrcode" style="display:none;" onclick="downloadQRCode()">下载图片</button>
+        <div class="tool-panel" id="panel-qrcode">
+            <input type="text" class="input-area" id="qrcode-input" placeholder="请输入要生成二维码的网址或文本">
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="generateQRCode()">生成二维码</button>
+                <button class="btn btn-default" id="download-qrcode" onclick="downloadQRCode()">下载二维码</button>
             </div>
+            <div id="qrcode-box">生成的二维码将显示在这里</div>
+            <p class="warn-text" style="color:#666;">提示：二维码纯前端生成，内容不变则图案永久有效。</p>
         </div>
 
-        <!-- 密码生成 -->
-        <div class="tab-item" id="page-password">
-            <div class="tool-box">
-                <h3>随机密码生成</h3>
-                <div>
-                    <label>密码长度：</label>
-                    <input type="number" id="pwd-length" value="16" min="4" max="64">
-                </div>
-                <div class="check-line">
-                    <input type="checkbox" id="pwd-num" checked>
-                    <label for="pwd-num">数字</label>
-                    <input type="checkbox" id="pwd-lower" checked>
-                    <label for="pwd-lower">小写字母</label>
-                    <input type="checkbox" id="pwd-upper" checked>
-                    <label for="pwd-upper">大写字母</label>
-                    <input type="checkbox" id="pwd-symbol">
-                    <label for="pwd-symbol">特殊符号</label>
-                </div>
-                <button class="action-btn" onclick="generatePassword()">生成密码</button>
-                <input id="pwd-result" readonly placeholder="生成结果">
+        <!-- 百度搜索 -->
+        <form class="tool-panel" id="panel-baidu" action="https://www.baidu.com/s" method="get" target="_blank">
+            <input type="text" class="input-area" name="wd" placeholder="请输入搜索关键词，按回车搜索">
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">百度一下</button>
             </div>
+            <p style="font-size:12px;color:#999;margin-top:8px;">搜索结果将在新标签页打开，与百度官网完全一致</p>
+        </form>
+
+        <!-- 密码生成 -->
+        <div class="tool-panel" id="panel-password">
+            <div>
+                <label style="font-size:13px;color:#666;margin-right:8px;">密码长度：</label>
+                <input type="number" class="num-input" id="pwd-length" value="16" min="4" max="64">
+            </div>
+            <div class="checkbox-group">
+                <label><input type="checkbox" id="pwd-num" checked>数字</label>
+                <label><input type="checkbox" id="pwd-lower" checked>小写字母</label>
+                <label><input type="checkbox" id="pwd-upper" checked>大写字母</label>
+                <label><input type="checkbox" id="pwd-symbol">特殊符号</label>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="generatePassword()">生成密码</button>
+                <button class="btn btn-default" onclick="copyPassword()">复制结果</button>
+            </div>
+            <div class="output-area" id="pwd-output">生成的密码将显示在这里</div>
         </div>
 
         <!-- 进制转换 -->
-        <div class="tab-item" id="page-convert">
-            <div class="tool-box">
-                <h3>进制转换（二/八/十/十六进制）</h3>
-                <input id="bin-val" placeholder="二进制">
-                <input id="oct-val" placeholder="八进制">
-                <input id="dec-val" placeholder="十进制">
-                <input id="hex-val" placeholder="十六进制">
-            </div>
-        </div>
-
-        <!-- Hash工具 -->
-        <div class="tab-item" id="page-hash">
-            <div class="tool-box">
-                <h3>字符串Hash计算</h3>
-                <textarea id="hash-input" rows="4" placeholder="输入待计算文本"></textarea>
-                <button class="action-btn" onclick="calcStringHash()">计算哈希</button>
-                <div style="margin-top:12px;">
-                    <p>MD5：<input id="md5-result" readonly></p>
-                    <p>SHA1：<input id="sha1-result" readonly></p>
-                    <p>SHA256：<input id="sha256-result" readonly></p>
+        <div class="tool-panel" id="panel-convert">
+            <div class="convert-row">
+                <div class="convert-item">
+                    <label>二进制 (BIN)</label>
+                    <input type="text" class="input-area" id="bin-val" oninput="convertFrom('bin')">
+                </div>
+                <div class="convert-item">
+                    <label>八进制 (OCT)</label>
+                    <input type="text" class="input-area" id="oct-val" oninput="convertFrom('oct')">
+                </div>
+                <div class="convert-item">
+                    <label>十进制 (DEC)</label>
+                    <input type="text" class="input-area" id="dec-val" oninput="convertFrom('dec')">
+                </div>
+                <div class="convert-item">
+                    <label>十六进制 (HEX)</label>
+                    <input type="text" class="input-area" id="hex-val" oninput="convertFrom('hex')">
                 </div>
             </div>
+            <p style="font-size:12px;color:#999;">在任意输入框填写数值，其他进制自动转换，支持正整数</p>
         </div>
 
-        <!-- 网络请求 -->
-        <div class="tab-item" id="page-network">
-            <div class="tool-box">
-                <h3>简易网络请求测试</h3>
-                <input id="req-url" placeholder="输入请求地址">
-                <button class="action-btn" onclick="sendRequest()">发起GET请求</button>
-                <textarea id="req-output" rows="6" readonly placeholder="响应内容"></textarea>
+        <!-- 哈希校验 -->
+        <div class="tool-panel" id="panel-hash">
+            <div class="hash-tabs">
+                <button class="hash-tab active" data-type="string">字符串哈希</button>
+                <button class="hash-tab" data-type="file">文件哈希</button>
+            </div>
+            <div id="hash-string-panel">
+                <textarea class="input-area" id="hash-input" rows="3" placeholder="请输入要计算哈希的字符串"></textarea>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="calcStringHash()">计算哈希</button>
+                </div>
+            </div>
+            <div id="hash-file-panel" style="display:none">
+                <input type="file" id="hash-file" style="margin-bottom:10px">
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="calcFileHash()">计算哈希</button>
+                </div>
+            </div>
+            <div style="margin-top:10px">
+                <p style="font-size:12px;color:#666;margin-bottom:4px;">MD5：</p>
+                <div class="output-area" id="md5-result" style="min-height:36px;margin-bottom:8px"></div>
+                <p style="font-size:12px;color:#666;margin-bottom:4px;">SHA-1：</p>
+                <div class="output-area" id="sha1-result" style="min-height:36px;margin-bottom:8px"></div>
+                <p style="font-size:12px;color:#666;margin-bottom:4px;">SHA-256：</p>
+                <div class="output-area" id="sha256-result" style="min-height:36px"></div>
             </div>
         </div>
-    </div>
 
-    <!-- 彩蛋小游戏弹窗 -->
-    <div class="game-modal" id="gameModal">
-        <canvas width="320" height="480" id="gameCanvas"></canvas>
+        <!-- ADB指令 -->
+        <div class="tool-panel" id="panel-adbcmd">
+            <p class="warn-text">⚠️ 须知：需电脑安装ADB工具；手机开启USB调试；点击按钮自动复制命令</p>
+            <h4 style="margin:10px 0;font-size:14px;">📱 模式切换命令</h4>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="copyCmd('adb reboot bootloader')">进入Fastboot</button>
+                <button class="btn btn-primary" onclick="copyCmd('adb reboot recovery')">进入Recovery</button>
+                <button class="btn btn-primary" onclick="copyCmd('adb reboot edl')">进入9008模式</button>
+                <button class="btn btn-default" onclick="copyCmd('adb reboot')">正常重启</button>
+            </div>
+            <h4 style="margin:14px 0 8px;font-size:14px;">🔍 设备检测</h4>
+            <div class="btn-group">
+                <button class="btn btn-default" onclick="copyCmd('adb devices')">查看ADB设备</button>
+                <button class="btn btn-default" onclick="copyCmd('fastboot devices')">查看Fastboot设备</button>
+            </div>
+            <h4 style="margin:14px 0 8px;font-size:14px;">🔓 BL锁相关命令</h4>
+            <p class="warn-text">不同厂商机型命令有差异，多数新款手机官方关闭解锁通道</p>
+            <div class="btn-group">
+                <button class="btn btn-default" onclick="copyCmd('fastboot flashing unlock')">新版通用解锁</button>
+                <button class="btn btn-default" onclick="copyCmd('fastboot oem unlock')">旧机型解锁</button>
+                <button class="btn btn-default" onclick="copyCmd('fastboot flashing lock')">重新上锁</button>
+            </div>
+            <div class="output-area" id="adb-cmd-out" style="margin-top:14px;">点击上方按钮自动复制命令</div>
+        </div>
     </div>
+</div>
 
 <script>
-// ===================== 协议弹窗逻辑 =====================
-const agreementMask = document.getElementById('agreementMask');
+// ========== 用户协议逻辑 ==========
+const agreeMask = document.getElementById('agreeMask');
 const agreeCheck = document.getElementById('agreeCheck');
-const acceptBtn = document.getElementById('acceptBtn');
 const refuseBtn = document.getElementById('refuseBtn');
+const confirmBtn = document.getElementById('confirmBtn');
 
-// 读取本地存储
-if(localStorage.getItem('toolboxAgree') === 'yes'){
-    agreementMask.style.display = 'none';
+if(localStorage.getItem('toolboxAgree') === 'yes') {
+    agreeMask.style.display = 'none';
 }
-
-acceptBtn.addEventListener('click', ()=>{
-    if(!agreeCheck.checked){
-        alert("请勾选同意条款后进入");
+confirmBtn.onclick = function() {
+    if(!agreeCheck.checked) {
+        alert('请先勾选同意用户协议与免责声明');
         return;
     }
-    localStorage.setItem('toolboxAgree','yes');
-    agreementMask.style.display = 'none';
+    localStorage.setItem('toolboxAgree', 'yes');
+    agreeMask.style.display = 'none';
+}
+refuseBtn.onclick = function() {
+    alert('您已拒绝协议，无法使用本站功能');
+    document.body.innerHTML = '';
+}
+
+// ========== 侧边栏开关 ==========
+const menuBtn = document.getElementById('menuBtn');
+const sidebar = document.getElementById('sidebar');
+const mask = document.getElementById('mask');
+
+menuBtn.addEventListener('click', function() {
+    sidebar.classList.toggle('show');
+    mask.classList.toggle('show');
+});
+mask.addEventListener('click', function() {
+    sidebar.classList.remove('show');
+    mask.classList.remove('show');
 });
 
-refuseBtn.addEventListener('click', ()=>{
-    document.body.innerHTML = '<div style="text-align:center;padding-top:30px;">您拒绝协议，无法使用工具箱</div>';
-});
-
-// ===================== 侧边栏切换 =====================
-const menuList = document.querySelectorAll('.sidebar li');
-menuList.forEach(item=>{
-    item.addEventListener('click',function(){
-        menuList.forEach(p=>p.classList.remove('active'));
+// ========== 页面切换 ==========
+const pageMenus = document.querySelectorAll('.sidebar-menu li[data-page]');
+pageMenus.forEach(item => {
+    item.addEventListener('click', function() {
+        pageMenus.forEach(p => p.classList.remove('active'));
         this.classList.add('active');
         const pageId = this.getAttribute('data-page');
-        document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page-' + pageId).classList.add('active');
-    })
-})
-
-// ===================== Base64 编解码 =====================
-function base64Encode(){
-    const input = document.getElementById('base64-input').value;
-    if(!input){
-        alert("请先输入内容");
-        return;
-    }
-    try{
-        const res = btoa(unescape(encodeURIComponent(input)));
-        document.getElementById('base64-output').value = res;
-    }catch(err){
-        document.getElementById('base64-output').value = "编码失败："+err.message;
-    }
-}
-function base64Decode(){
-    const input = document.getElementById('base64-input').value;
-    if(!input){
-        alert("请先输入内容");
-        return;
-    }
-    try{
-        const res = decodeURIComponent(escape(atob(input)));
-        document.getElementById('base64-output').value = res;
-    }catch(err){
-        document.getElementById('base64-output').value = "解码失败，请检查Base64格式";
-    }
-}
-
-// ===================== 二维码生成 =====================
-let qrcode = null;
-function generateQRCode(){
-    const text = document.getElementById('qrcode-input').value;
-    const box = document.getElementById('qrcode-box');
-    const downloadBtn = document.getElementById('download-qrcode');
-    if(!text){
-        alert("请输入内容");
-        return;
-    }
-    box.innerHTML = "";
-    qrcode = new QRCode(box, {
-        text: text,
-        width:180,
-        height:180,
-        colorDark:'#000000',
-        colorLight:'#ffffff',
-        correctLevel: QRCode.CorrectLevel.H
+        sidebar.classList.remove('show');
+        mask.classList.remove('show');
     });
-    downloadBtn.style.display = "inline-block";
-}
-function downloadQRCode(){
-    const canvas = document.querySelector("#qrcode-box canvas");
-    if(!canvas){
-        alert("请先生成二维码");
-        return;
-    }
-    const a = document.createElement('a');
-    a.href = canvas.toDataURL("image/png");
-    a.download = "二维码.png";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
-// ===================== 随机密码 =====================
-function generatePassword(){
-    const len = parseInt(document.getElementById('pwd-length').value);
-    const hasNum = document.getElementById('pwd-num').checked;
-    const hasLower = document.getElementById('pwd-lower').checked;
-    const hasUpper = document.getElementById('pwd-upper').checked;
-    const hasSym = document.getElementById('pwd-symbol').checked;
-
-    if(!hasNum && !hasLower && !hasUpper && !hasSym){
-        alert("至少勾选一类字符");
-        return;
-    }
-    let pool = "";
-    if(hasNum) pool += "0123456789";
-    if(hasLower) pool += "abcdefghijklmnopqrstuvwxyz";
-    if(hasUpper) pool += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    if(hasSym) pool += "!@#$%^&*()_+-=[]{}<>?";
-
-    let result = "";
-    for(let i=0;i<len;i++){
-        let randomIdx = Math.floor(Math.random() * pool.length);
-        result += pool[randomIdx];
-    }
-    document.getElementById('pwd-result').value = result;
-}
-
-// ===================== 进制转换 =====================
-let convertLock = false;
-const binInput = document.getElementById("bin-val");
-const octInput = document.getElementById("oct-val");
-const decInput = document.getElementById("dec-val");
-const hexInput = document.getElementById("hex-val");
-
-function convertFrom(source){
-    if(convertLock) return;
-    convertLock = true;
-    let num = null;
-    let val = document.getElementById(source+"-val").value.trim();
-    try{
-        if(val === ""){
-            binInput.value = "";
-            octInput.value = "";
-            decInput.value = "";
-            hexInput.value = "";
-        }else{
-            if(source === "bin") num = parseInt(val,2);
-            if(source === "oct") num = parseInt(val,8);
-            if(source === "dec") num = parseInt(val,10);
-            if(source === "hex") num = parseInt(val,16);
-
-            if(isNaN(num)){
-                alert("非法数字");
-            }else{
-                binInput.value = num.toString(2);
-                octInput.value = num.toString(8);
-                decInput.value = num.toString(10);
-                hexInput.value = num.toString(16).toUpperCase();
-            }
-        }
-    }catch(e){}
-    convertLock = false;
-}
-binInput.addEventListener("input",()=>convertFrom("bin"));
-octInput.addEventListener("input",()=>convertFrom("oct"));
-decInput.addEventListener("input",()=>convertFrom("dec"));
-hexInput.addEventListener("input",()=>convertFrom("hex"));
-
-// ===================== Hash 计算函数 =====================
-async function md5Hash(str){
-    const buf = new TextEncoder().encode(str);
-    const hashBuf = await crypto.subtle.digest("MD5", buf);
-    return Array.from(new Uint8Array(hashBuf)).map(v=>v.toString(16).padStart(2,"0")).join("");
-}
-async function sha1Hash(str){
-    const buf = new TextEncoder().encode(str);
-    const hashBuf = await crypto.subtle.digest("SHA-1", buf);
-    return Array.from(new Uint8Array(hashBuf)).map(v=>v.toString(16).padStart(2,"0")).join("");
-}
-async function sha256Hash(str){
-    const buf = new TextEncoder().encode(str);
-    const hashBuf = await crypto.subtle.digest("SHA-256", buf);
-    return Array.from(new Uint8Array(hashBuf)).map(v=>v.toString(16).padStart(2,"0")).join("");
-}
-
-async function calcStringHash(){
-    const text = document.getElementById("hash-input").value;
-    if(!text){
-        alert("请输入字符串");
-        return;
-    }
-    const md5res = await md5Hash(text);
-    const sha1res = await sha1Hash(text);
-    const sha256res = await sha256Hash(text);
-    document.getElementById("md5-result").value = md5res;
-    document.getElementById("sha1-result").value = sha1res;
-    document.getElementById("sha256-result").value = sha256res;
-}
-
-// ===================== 网络请求 =====================
-async function sendRequest(){
-    const url = document.getElementById("req-url").value;
-    const outputBox = document.getElementById("req-output");
-    if(!url){
-        alert("请填写请求地址");
-        return;
-    }
-    try{
-        const resp = await fetch(url);
-        const text = await resp.text();
-        outputBox.value = `响应状态：${resp.status} ${resp.statusText}\n\n${text}`;
-    }catch(err){
-        outputBox.value = "请求失败\n错误："+err.message+"\n大概率浏览器跨域限制。";
-    }
-}
-
-// ===================== 彩蛋小游戏逻辑 =====================
-const versionText = document.getElementById("versionText");
-const gameModal = document.getElementById("gameModal");
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-let clickCount = 0;
-
-versionText.addEventListener("click",()=>{
-    clickCount++;
-    if(clickCount >=15){
-        clickCount = 0;
-        gameModal.classList.add("show");
-        initGame();
-    }
 });
-gameModal.addEventListener("click",()=>{
-    gameModal.classList.remove("show");
-})
 
-let bird = {x:80,y:200,size:26,speedY:0,gravity:0.3,jumpForce:-6};
-let pipes = [];
-let pipeWidth = 60;
-let pipeGap = 130;
-let pipeSpeed = 2;
-let lastPipeTime = 0;
-let score = 0;
-let gameRunning = false;
-
-function initGame(){
-    bird.y = 200;
-    bird.speedY = 0;
-    pipes = [];
-    score = 0;
-    lastPipeTime = 0;
-    gameRunning = true;
-    requestAnimationFrame(gameLoop);
-}
-function gameLoop(time){
-    if(!gameRunning) return;
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    //小鸟物理
-    bird.speedY += bird.gravity;
-    bird.y += bird.speedY;
-
-    //生成管道
-    if(time - lastPipeTime > 1600){
-        lastPipeTime = time;
-        const topHeight = Math.random()*(canvas.height-pipeGap-120)+40;
-        pipes.push({
-            x: canvas.width,
-            topH: topHeight,
-            passed: false
-        })
-    }
-
-    //更新管道
-    for(let i=pipes.length-1;i>=0;i--){
-        const p = pipes[i];
-        p.x -= pipeSpeed;
-        //绘制上管道
-        ctx.fillStyle="#37ad57";
-        ctx.fillRect(p.x,0,pipeWidth,p.topH);
-        //绘制下管道
-        ctx.fillRect(p.x, p.topH+pipeGap, pipeWidth, canvas.height-p.topH-pipeGap);
-
-        //计分
-        if(!p.passed && p.x+pipeWidth < bird.x){
-            p.passed = true;
-            score++;
-        }
-        //移除出屏幕管道
-        if(p.x+pipeWidth < 0) pipes.splice(i,1);
-    }
-
-    //绘制小鸟
-    ctx.fillStyle="#ff8822";
-    ctx.beginPath();
-    ctx.arc(bird.x,bird.y,bird.size,0,Math.PI*2);
-    ctx.fill();
-
-    //碰撞检测
-    let crash = false;
-    if(bird.y <=0 || bird.y+bird.size >= canvas.height) crash=true;
-    for(let p of pipes){
-        if(bird.x+bird.size > p.x && bird.x < p.x+pipeWidth){
-            if(bird.y < p.topH || bird.y+bird.size > p.topH+pipeGap){
-                crash=true;
-            }
-        }
-    }
-    if(crash){
-        gameRunning = false;
-        ctx.fillStyle="#000";
-        ctx.font="bold 24px sans-serif";
-        ctx.textAlign="center";
-        ctx.fillText("游戏结束",canvas.width/2,canvas.height/2-30);
-        ctx.fillText("得分："+score,canvas.width/2,canvas.height/2);
-        ctx.font="16px sans-serif";
-        ctx.fillText("点击画布重新开始",canvas.width/2,canvas.height/2+35);
-        return;
-    }
-
-    //绘制分数
-    ctx.fillStyle="#000";
-    ctx.font="bold 22px sans-serif";
-    ctx.fillText(""+score, canvas.width/2, 40);
-
-    requestAnimationFrame(gameLoop);
-}
-canvas.onclick = ()=>{
-    if(gameRunning){
-        bird.speedY = bird.jumpForce;
-    }else{
-        initGame();
-    }
-}
-</script>
-</body>
-</html>
+// ========== 工具箱标签切换
