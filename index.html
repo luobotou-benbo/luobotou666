@@ -1,536 +1,342 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>萝卜头本波的资料站</title>
-<style>
-/* --- 基础样式 --- */
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f0f2f5;
-    margin: 0;
-    padding: 0;
-    color: #333;
-    scroll-behavior: smooth;
-    overflow-x: hidden;
+实用资源与工具箱（含用户协议免责弹窗完整版）<!DOCTYPE<html lang="zh实用资源与工具箱{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif}body{background:#f5f7fa;color:#333}/ 协议弹窗样式 */.agree-mask{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px}.agree-box{width:100%;max-width:500px;background:#fff;border-radius:12px;overflow:hidden}.agree-title{font-size:18px;font-weight:bold;text-align:center;padding:20px;border-bottom:1px solid #eee}.agree-content{padding:20px;max-height:60vh;overflow-y:auto;font-size:14px;line-height:1.8;color:#555}.agree-content h4{margin:10px 0 5px;color:#222}.agree-check{padding:15px 20px;border-top:1px solid #eee;display:flex;align-items:center;gap:8px}.agree-check input{width:16px;height:16px}.agree-btn-box{display:flex;border-top:1px solid #eee}.agree-btn{flex:1;text-align:center;padding:14px;border:none;font-size:15px;cursor:pointer}.btn-refuse{background:#f5f5f5;color:#666;border-right:1px solid #eee}.btn-confirm{background:#1890ff;color:#fff}.menu-btn{position:fixed;top:20px;left:20px;width:44px;height:44px;background:#fff;border:none;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;z-index:1001;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px}.menu-btn span{display:block;width:22px;height:2px;background:#333;border-radius:1px}.mask{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.5);z-index:999;display:none;opacity:0;transition:opacity .3s ease}.mask.show{display:block;opacity:1}.sidebar{position:fixed;top:0;left:-50vw;width:50vw;height:100vh;background:#fff;z-index:1000;padding-top:80px;transition:left .3s ease;box-shadow:2px 0 12px rgba(0,0,0,.1);overflow-y:auto}.sidebar.show{left:0}.version{position:absolute;bottom:20px;left:30px;font-size:13px;color:#999;cursor:pointer;user-select:none}.menu-item{display:block;width:100%;padding:18px 30px;color:#333;text-decoration:none;font-size:16px;cursor:pointer;border-bottom:1px solid #f0f0f0;transition:background .2s}.menu-item:hover{background:#f5f7fa}.menu-link{color:#1890ff;text-decoration:underline}.menu-link:hover{color:#096dd9;background:#e6f7ff}.main-content{padding:80px 40px 40px;min-height:100vh}.page{display:none}.page.active{display:block}.page-title{font-size:28px;margin-bottom:30px;color:#1f1f1f}.resource-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}.resource-card{background:#fff;border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.08);transition:all .3s;height:100%;display:flex;flex-direction:column;justify-content:space-between}.resource-card:hover{transform:translateY(-3px);box-shadow:0 4px 16px rgba(0,0,0,.12)}.resource-card h3{font-size:18px;margin-bottom:10px;color:#1890ff}.resource-card p{color:#666;font-size:14px;line-height:1.6;margin-bottom:15px}.file-size{display:inline-block;margin-bottom:12px;padding:3px 8px;background:#f0f7ff;color:#1890ff;border-radius:4px;font-size:12px}.download-btn{display:block;width:100%;padding:10px 0;background:#1890ff;color:#fff;text-align:center;border-radius:6px;text-decoration:none;font-size:14px;transition:background .3s}.download-btn:hover{background:#096dd9}.tool-tabs{display:flex;gap:10px;margin-bottom:25px;border-bottom:1px solid #e8e8e8;padding-bottom:0;flex-wrap:wrap}.tab-btn{padding:12px 24px;border:none;background:none;font-size:15px;cursor:pointer;color:#666;border-bottom:2px solid transparent;transition:all .3s}.tab-btn.active{color:#1890ff;border-bottom:2px solid #1890ff;font-weight:600}.tool-panel{display:none;background:#fff;border-radius:8px;padding:25px;box-shadow:0 2px 8px rgba(0,0,0,.08)}.tool-panel.active{display:block}.input-area{width:100%;padding:12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;margin-bottom:15px;resize:vertical;outline:none}.key-input,.num-input{width:120px;padding:10px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;margin-bottom:15px;outline:none}.input-area:focus,.key-input:focus,.num-input:focus{border-color:#1890ff;box-shadow:0 0 0 2px rgba(24,144,255,.2)}.checkbox-group{display:flex;gap:15px;margin-bottom:15px;flex-wrap:wrap;font-size:14px;color:#666}.checkbox-group label{display:flex;align-items:center;gap:5px;cursor:pointer}.convert-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:15px}.convert-item label{display:block;font-size:13px;color:#666;margin-bottom:5px}.hash-tabs{display:flex;gap:10px;margin-bottom:15px;border-bottom:1px solid #f0f0f0;padding-bottom:10px}.hash-tab{padding:6px 14px;border:none;background:#f5f5f5;border-radius:4px;cursor:pointer;font-size:13px;color:#666}.hash-tab.active{background:#1890ff;color:#fff}.btn-group{display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap}.btn{padding:10px 20px;border:none;border-radius:6px;cursor:pointer;font-size:14px;transition:background .3s}.btn-primary{background:#1890ff;color:#fff}.btn-primary:hover{background:#096dd9}.btn-default{background:#fff;border:1px solid #d9d9d9;color:#333}.btn-default:hover{border-color:#1890ff;color:#1890ff}.output-area{width:100%;min-height:100px;padding:12px;background:#fafafa;border:1px solid #e8e8e8;border-radius:6px;font-size:14px;word-break:break-all;white-space:pre-wrap}.debug-row{display:flex;gap:10px;margin-bottom:15px;align-items:center;flex-wrap:wrap}.debug-select{padding:10px;border:1px solid #d9d9d9;border-radius:6px;outline:none}.debug-url{flex:1;min-width:200px}.response-box{margin-top:15px;border:1px solid #e8e8e8;border-radius:6px;overflow:hidden}.response-status{padding:10px 15px;background:#f0f2f5;font-weight:600;font-size:14px}.response-body{padding:15px;max-height:300px;overflow-y:auto;font-family:monospace;font-size:13px;background:#fafafa}#qrcode-box{margin-top:20px;display:flex;justify-content:center;padding:20px;background:#fff;border:1px dashed #d9d9d9;border-radius:6px;min-height:200px;align-items:center;flex-direction:column;gap:15px}#download-qrcode{display:none}.game-modal{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.7);z-index:10000;display:none;align-items:center;justify-content:center}.game-modal.show{display:flex}.game-container{background:#fff;border-radius:12px;padding:20px;text-align:center}.game-header{display:flex;justify-content:flex-end;align-items:center;margin-bottom:15px}.back-btn{padding:6px 16px;border:none;background:#f5f5f5;border-radius:6px;font-size:14px;cursor:pointer;color:#333;transition:background .3s}.back-btn:hover{background:#e8e8e8}#gameCanvas{border:2px solid #ddd;border-radius:8px}.game-tip{margin-top:10px;font-size:13px;color:#666}.cmd-block{background:#111;color:#4cd964;padding:12px;border-radius:6px;font-family:monospace;margin:8px 0;word-break:break-all}.warn-text{color:#f44336;font-size:13px;margin:6px 0;line-height:1.6}@media(max-width:768px){.main-content{padding:80px 20px 20px}.page-title{font-size:22px}#gameCanvas{width:100%;max-width:360px;height:auto}.convert-row{grid-template</style
+⚠️须知：需要电脑安装ADB工具；手机开启【USB调试】；命令点击即可复制；刷机操作有丢失数据、变砖风险
+📱 模式切换命令
+进入Fastboot(线刷模式)进入Recovery进入9008 EDL深度🔍 设备检测命令
+查看已连接设备Fast
+🔓 BL锁相关命令（仅作参考）
+不同厂商机型命令存在差异，多数新款手机官方关闭
+fastboot flashing unlock（新版通用fastboot oem unlock（旧机型）重新
+💡 常用Fastboot附加
+fastbootfastboot内进入900
+点击上方按钮自动复制命令，复制
+// ====================== 用户协议弹窗逻辑 ====================== const agreeMask = document.getElementById('agreeMask'); const agreeCheck = document.getElementById('agreeCheck'); const refuseBtn = document.getElementById('refuseBtn'); const confirmBtn = document.getElementById('confirmBtn'); // 判断是否已经同意过
+if(localStorage.getItem("toolboxAgree")=="yes"){
+agreeMask.style.display = "none";
+}else{
+// 不同意则禁止进入
+confirmBtn.onclick = function(){
+if(!agreeCheck.checked){
+alert("请先阅读并勾选同意用户协议与免责声明！");
+return;
 }
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    position: relative;
-    min-height: 100vh;
-    background: #fff;
-    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+localStorage.setItem("toolboxAgree","yes");
+agreeMask.style.display = "none";
 }
-/* --- 顶部导航与汉堡菜单 --- */
-.header-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    box-sizing: border-box;
-    border-bottom: 1px solid #eee;
+refuseBtn.onclick = function(){
+alert("您已拒绝协议，无法使用本站所有功能！即将退出页面。");
+document.body.innerHTML = "";
 }
-.menu-btn {
-    font-size: 24px;
-    cursor: pointer;
-    padding: 5px;
-    color: #333;
 }
-.page-title {
-    font-weight: bold;
-    font-size: 18px;
+ 
+// ====================== 原有全部逻辑不变 ======================
+const menuBtn=document.getElementById('menuBtn'),sidebar=document.getElementById('sidebar'),mask=document.getElementById('mask');
+menuBtn.addEventListener('click',function(){sidebar.classList.toggle('show'),mask.classList.toggle('show')});
+mask.addEventListener('click',function(){sidebar.classList.remove('show'),mask.classList.remove('show')});
+ 
+const menuItems=document.querySelectorAll('.menu-item[data-page]');
+menuItems.forEach(function(e){
+e.addEventListener('click',function(){
+menuItems.forEach(i=>i.classList.remove('active'));
+this.classList.add('active');
+const pageId=this.getAttribute('data-page');
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById('page-'+pageId).classList.add('active');
+sidebar.classList.remove('show');mask.classList.remove('show');
+})
+});
+ 
+const tabBtns=document.querySelectorAll('.tab-btn');
+tabBtns.forEach(function(e){
+e.addEventListener('click',function(){
+tabBtns.forEach(t=>t.classList.remove('active'));
+this.classList.add('active');
+const tabId=this.getAttribute('data-tab');
+document.querySelectorAll('.tool-panel').forEach(p=>p.classList.remove('active'));
+document.getElementById('panel-'+tabId).classList.add('active');
+})
+});
+ 
+// 复制adb命令函数
+function copyCmd(text){
+navigator.clipboard.writeText(text).then(()=>{
+document.getElementById('adb-cmd-out').innerText="✅复制成功："+text;
+alert("命令已复制："+text);
+}).catch(()=>{
+document.getElementById('adb-cmd-out').innerText="❌复制失败，请手动复制："+text;
+});
 }
-/* --- 侧边导航菜单 --- */
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: -250px;
-    width: 250px;
-    height: 100%;
-    background: #fff;
-    z-index: 200;
-    transition: 0.3s;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-    padding-top: 60px;
-    display: flex;
-    flex-direction: column;
+ 
+function base64Encode(){
+const e=document.getElementById('base64-input').value;if(!e)return alert('请先输入内容');
+try{document.getElementById('base64-output').innerText=btoa(unescape(encodeURIComponent(e)))}
+catch(err){document.getElementById('base64-output').innerText='编码失败：'+err.message}
 }
-.sidebar.active {
-    left: 0;
+function base64Decode(){
+const e=document.getElementById('base64-input').value;if(!e)return alert('请先输入内容');
+try{document.getElementById('base64-output').innerText=decodeURIComponent(escape(atob(e)))}
+catch(err){document.getElementById('base64-output').innerText='解码失败，请检查Base64格式'}
 }
-.sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 150;
-    display: none;
+ 
+function stringEncrypt(){
+const str=document.getElementById('encrypt-input').value;
+if(!str)return alert('请输入内容');
+let res='';
+for(let i<str.length;i++) res+=String.fromCharCode(str.charCodeAt(i)+i);
+document.getElementById('encrypt-output').innerText=res;
 }
-.sidebar-overlay.active {
-    display: block;
+function stringDecrypt(){
+const str=document.getElementById('encrypt-input').value;
+if(!str)return alert('请输入内容');
+let res='';
+for(let i=0;i<str.length;i++) res+=String.fromCharCode(str.charCodeAt(i)-i);
+document.getElementById('encrypt-output').innerText=res;
 }
-.nav-item {
-    display: block;
-    padding: 15px 20px;
-    text-decoration: none;
-    color: #333;
-    font-size: 16px;
-    border-bottom: 1px solid #f5f5f5;
-    transition: 0.2s;
-    cursor: pointer;
+ 
+function sendRequest(){
+const url=document.getElementById('debug-url').value;
+const method=document.getElementById('debug-method').value;
+const body=document.getElementById('debug-body').value;
+if(!url)return alert('填写请求地址');
+const statusBox=document.getElementById('response-status');
+const bodyBox=document.getElementById('response-body');
+statusBox.innerText="请求发送中...";bodyBox.innerText="";
+const opt={method,headers:{"Content-Type":"application/x-www-form-urlencoded"}};
+if(method=="POST"&&body) opt.body=body;
+fetch(url,opt).then(resp=>{
+statusBox.innerText= 响应状态：${resp.status} ${resp.statusText} ;
+return resp.text();
+}).then(txt=>bodyBox.innerText=txt).catch(err=>{
+statusBox.innerText="请求失败";
+bodyBox.innerText="错误："+err.message+"\n大概率浏览器跨域限制。";
+});
 }
-.nav-item:hover {
-    background: #f0f2f5;
-    color: #ff6b00;
+ 
+let qrcode=null;
+function generateQRCode(){
+const txt=document.getElementById('qrcode-input').value;
+const box=document.getElementById('qrcode-box');
+const dlBtn=document.getElementById('download-qrcode');
+if(!txt) return alert("输入内容");
+box.innerHTML="";qrcode=null;
+qrcode=new QRCode(box,{text:txt,width:180,height:180,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.H});
+dlBtn.style.display="inline-block";
 }
-/* 侧边栏内容区 */
-.sidebar-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 20px;
+function downloadQRCode(){
+const canvas=document.querySelector("#qrcode-box canvas");
+if(!canvas) return alert("先生成二维码");
+const a=document.createElement('a');
+a.href=canvas.toDataURL("image/png");
+a.download="二维码.png";
+document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
-.sidebar-section {
-    display: none;
-    padding-top: 10px;
+ 
+function generatePassword(){
+const len=parseInt(document.getElementById('pwd-length').value);
+const hasNum=document.getElementById('pwd-num').checked;
+const hasLow=document.getElementById('pwd-lower').checked;
+const hasUp=document.getElementById('pwd-upper').checked;
+const hasSym=document.getElementById('pwd-symbol').checked;
+if(!hasNum&&!hasLow&&!hasUp&&!hasSym) return alert("至少勾选一类字符");
+let pool="";
+if(hasNum) pool+="0123456789";
+if(hasLow) pool+="abcdefghijklmnopqrstuvwxyz";
+if(hasUp) pool+="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+if(hasSym) pool+="!@#$%^&()_+-=[]{}|<>?";
+let pass="";
+for(let i=0;i<len;i++) pass+=pool[Math.floor(Math.random()pool.length)];
+document.getElementById('pwd-output').innerText=pass;
 }
-.sidebar-section.active {
-    display: block;
+function copyPassword(){
+const text=document.getElementById('pwd-output').innerText;
+if(!text||text=="生成的密码将显示在这里") return alert("先创建密码");
+navigator.clipboard.writeText(text).then(()=>alert("密码已复制"));
 }
-.sidebar-section-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 20px 0 15px;
-    padding-left: 10px;
-    border-left: 4px solid #ff6b00;
+ 
+let convertLock=false;
+function convertFrom(source){
+if(convertLock) return;
+convertLock=true;
+let num=0;
+const inputVal=document.getElementById(source+"-val").value.trim();
+try{
+if(inputVal==""){
+["bin","oct","dec","hex"].forEach(t=>document.getElementById(t+"-val").value="");
+}else{
+if(source=="bin") num=parseInt(inputVal,2);
+if(source=="oct") num=parseInt(inputVal,8);
+if(source=="dec") num=parseInt(inputVal,10);
+if(source=="hex") num=parseInt(inputVal,16);
+if(isNaN(num)) alert("非法数字");
+else{
+document.getElementById("bin-val").value=num.toString(2);
+document.getElementById("oct-val").value=num.toString(8);
+document.getElementById("dec-val").value=num.toString(10);
+document.getElementById("hex-val").value=num.toString(16).toUpperCase();
 }
-/* --- 霸气萝卜动画 --- */
-.splash-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    animation: fadeOut 0.5s ease-in-out 2.5s forwards;
 }
-.radish-icon {
-    font-size: 80px;
-    animation: bounceIn 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}catch(e){}
+convertLock=false;
 }
-.radish-text {
-    margin-top: 20px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #ff6b00;
-    opacity: 0;
-    animation: slideUp 0.8s ease-out 1s forwards;
+ 
+const hashTabs=document.querySelectorAll('.hash-tab');
+hashTabs.forEach(btn=>{
+btn.onclick=()=>{
+hashTabs.forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+const type=btn.dataset.type;
+if(type=="string"){
+document.getElementById("hash-string-panel").style.display="block";
+document.getElementById("hash-file-panel").style.display="none";
+}else{
+document.getElementById("hash-string-panel").style.display="none";
+document.getElementById("hash-file-panel").style.display="block";
 }
-@keyframes bounceIn {
-    0% { transform: scale(0) translateY(-100px); opacity: 0; }
-    60% { transform: scale(1.1) translateY(10px); opacity: 1; }
-    100% { transform: scale(1) translateY(0); }
 }
-@keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+});
+ 
+async function md5Hash(str){
+const buf=new TextEncoder().encode(str);
+const hash=await crypto.subtle.digest("MD5",buf);
+return Array.from(new Uint8Array(hash)).map(v=>v.toString(16).padStart(2,"0")).join("");
 }
-@keyframes fadeOut {
-    to { opacity: 0; visibility: hidden; }
+async function sha1Hash(str){
+const buf=new TextEncoder().encode(str);
+const hash=await crypto.subtle.digest("SHA-1",buf);
+return Array.from(new Uint8Array(hash)).map(v=>v.toString(16).padStart(2,"0")).join("");
 }
-/* --- 内容区域 --- */
-.content {
-    padding: 80px 20px 20px;
+async function sha256Hash(str){
+const buf=new TextEncoder().encode(str);
+const hash=await crypto.subtle.digest("SHA-256",buf);
+return Array.from(new Uint8Array(hash)).map(v=>v.toString(16).padStart(2,"0")).join("");
 }
-/* --- 卡密区域 --- */
-.card-section {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 30px;
-    text-align: center;
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.2);
+ 
+async function calcStringHash(){
+const txt=document.getElementById("hash-input").value;
+if(!txt) return alert("输入字符串");
+const md5=await md5Hash(txt);
+const sha1=await sha1Hash(txt);
+const sha256=await sha256Hash(txt);
+document.getElementById("md5-result").innerText=md5;
+document.getElementById("sha1-result").innerText=sha1;
+document.getElementById("sha256-result").innerText=sha256;
 }
-.input-group {
-    margin: 15px 0;
-    display: flex;
-    gap: 10px;
+async function calcFileHash(){
+const file=document.getElementById("hash-file").files[0];
+if(!file) return alert("选择文件");
+const buf=await file.arrayBuffer();
+const md5Raw=await crypto.subtle.digest("MD5",buf);
+const sha1Raw=await crypto.subtle.digest("SHA-1",buf);
+const sha256Raw=await crypto.subtle.digest("SHA-256",buf);
+const md5=Array.from(new Uint8Array(md5Raw)).map(v=>v.toString(16).padStart(2,"0")).join("");
+const sha1=Array.from(new Uint8Array(sha1Raw)).map(v=>v.toString(16).padStart(2,"0")).join("");
+const sha256=Array.from(new Uint8Array(sha256Raw)).map(v=>v.toString(16).padStart(2,"0")).join("");
+document.getElementById("md5-result").innerText=md5;
+document.getElementById("sha1-result").innerText=sha1;
+document.getElementById("sha256-result").innerText=sha256;
 }
-input[type="text"] {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    outline: none;
-    font-size: 16px;
+ 
+//彩蛋小游戏
+const versionText=document.getElementById('versionText'),gameModal=document.getElementById('gameModal'),closeGame=document.getElementById('closeGame'),canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d');
+let clickCount=0,gameTimer=null,gameRunning=false;
+versionText.onclick=()=>{clickCount++;if(clickCount>=15){clickCount=0;gameModal.classList.add('show');initGame();}}
+closeGame.onclick=()=>{gameModal.classList.remove('show');gameRunning=false;if(gameTimer)cancelAnimationFrame(gameTimer);}
+ 
+const bird={x:80,y:250,size:30,velocity:0,gravity:.3,jumpForce:-6};
+let pipes=[],pipeWidth=60,pipeGap=200,pipeSpeed=2,lastPipeTime=0,score=0;
+const clouds=[{x:50,y:60,size:40},{x:150,y:100,size:50},{x:280,y:50,size:35},{x:350,y:120,size:45}];
+ 
+function initGame(){
+bird.y=250;bird.velocity=0;pipes.length=0;score=0;lastPipeTime=0;gameRunning=true;gameLoop();
 }
-button.verify-btn {
-    background: #333;
-    color: white;
-    border: none;
-    padding: 0 20px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
+function gameLoop(time){
+if(!gameRunning)return;
+ctx.clearRect(0,0,canvas.width,canvas.height);
+const grad=ctx.createLinearGradient(0,0,0,canvas.height);
+grad.addColorStop(0,"#87CEEB");grad.addColorStop(1,"#E0F6FF");
+ctx.fillStyle=grad;ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(255,255,255,0.8)";
+clouds.forEach(c=>{
+c.x-=0.5;if(c.x+c.size<0)c.x=canvas.width+c.size;
+ctx.beginPath();ctx.arc(c.x,c.y,c.size/2,0,Math.PI2);
+ctx.arc(c.x+c.size/2,c.y-5,c.size/2.5,0,Math.PI2);
+ctx.arc(c.x+c.size,c.y,c.size/2,0,Math.PI*2);ctx.fill();
+});
+ctx.fillStyle="#7CCD7C";ctx.fillRect(0,canvas.height-40,canvas.width,40);
+ctx.fillStyle="#6BBF6B";
+for(let i<canvas.width;i+=20) ctx.fillRect(i,canvas.height-40,2,8);
+ 
+bird.velocity+=bird.gravity;bird.y+=bird.velocity;
+drawRadishBird(bird.x,bird.y,bird.size);
+ 
+if(time-lastPipeTime>1500){createRadishPipe();lastPipeTime=time;}
+for(let i=pipes.length-1;i>=0;i--){
+const p=pipes[i];
+p.x-=pipeSpeed;
+drawRadishPipe(p.x,p.topHeight,true);
+drawRadishPipe(p.x,p.topHeight+pipeGap,false);
+if(!p.passed&&p.x+pipe<bird.x){p.passed=true;score++;}
+if(p.x+<0)pipes.splice(i,1);
+if(checkCollision(p)) return gameOver();
 }
-button.verify-btn:active {
-    transform: scale(0.95);
+if(bird.y-bird<0||bird.y+bird.size/2>canvas.height-40) return gameOver();
+ 
+ctx.fillStyle="#fff";ctx.font="bold 36px Arial";ctx.textAlign="center";
+ctx.strokeStyle="#333";ctx.lineWidth=3;
+ctx.strokeText(score,canvas.width/2,70);ctx.fillText(score,canvas.width/2,70);
+gameTimer=requestAnimationFrame(gameLoop);
 }
-.admin-link {
-    color: #fff;
-    text-decoration: underline;
-    font-weight: bold;
-    cursor: pointer;
+function drawRadishBird(x,y,s){
+const r=s/2;
+ctx.fillStyle="#ff6b35";ctx.beginPath();ctx.ellipse(x,y,r,r1.2,0,0,Math.PI2);ctx.fill();
+ctx.fillStyle="#52c41a";
+ctx.beginPath();ctx.ellipse(x-5,y-r1.1,6,10,-0.3,0,Math.PI2);ctx.fill();
+ctx.beginPath();ctx.ellipse(x+5,y-r1.1,6,10,0.3,0,Math.PI2);ctx.fill();
+ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(x+6,y-3,5,0,Math.PI2);ctx.fill();
+ctx.fillStyle="#000";ctx.beginPath();ctx.arc(x+7,y-3,2,0,Math.PI2);ctx.fill();
 }
-/* --- 应用/资料卡片 --- */
-.item-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 15px;
+function createRadishPipe(){
+const minH=80;
+const maxH=canvas.height-pipeGap-minH-40;
+const topH=Math.random()*(maxH-minH)+minH;
+pipes.push({x:canvas.width,topHeight:topH,passed:false});
 }
-.item-card {
-    background: #fff;
-    border: 1px solid #eee;
-    border-radius: 12px;
-    padding: 15px;
-    text-align: center;
-    transition: 0.2s;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+function drawRadishPipe(x,h,isTop){
+const w=pipeWidth;
+let height;
+if(isTop){height=h;ctx.fillStyle="#ff7a45";ctx.fillRect(x,0,w,height);
+ctx.beginPath();ctx.moveTo(x,height);ctx.lineTo(x+w/2,height+20);ctx.lineTo(x+w,height);ctx.fill();
+ctx.fillStyle="#52c41a";ctx.fillRect(x+5,height-15,w-10,15);
+}else{height=canvas.height-h-pipeGap;ctx.fillStyle="#ff7a45";ctx.fillRect(x,h+pipeGap,w,height);
+ctx.beginPath();ctx.moveTo(x,h+pipeGap);ctx.lineTo(x+w/2,h+pipeGap-20);ctx.lineTo(x+w,h+pipeGap);ctx.fill();
+ctx.fillStyle="#52c41a";ctx.fillRect(x+5,h+pipeGap,w-10,15);
 }
-.item-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    border-color: #ff6b00;
 }
-.item-icon {
-    font-size: 40px;
-    margin-bottom: 10px;
+function checkCollision(pipe){
+const l=bird.x-bird.size/2,r=bird.x+bird.size/2;
+const t=bird.y-bird.size/2,b=bird.y+bird.size/2;
+const px1=pipe.x,px2=pipe.x+pipeWidth;
+const gapTop=pipe.topHeight;
+const gapBot=pipe.topHeight+pipeGap;
+return (r><px2)&&(t<gapTop||b>gapBot);
 }
-.item-name {
-    font-weight: bold;
-    font-size: 14px;
-    margin-bottom: 5px;
-    word-break: break-all;
+function gameOver(){
+gameRunning=false;
+if(gameTimer)cancelAnimationFrame(gameTimer);
+ctx.fillStyle="rgba(0,0,0,0.5)";ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="#fff";ctx.font="bold 36px Arial";ctx.textAlign="center";
+ctx.fillText("游戏结束",canvas.width/2,canvas.height/2-30);
+ctx.font="20px Arial";
+ctx.fillText("得分："+score,canvas.width/2,canvas.height/2+10);
+ctx.fillText("点击画布重新开始",canvas.width/2,canvas.height/2+50);
 }
-.item-desc {
-    font-size: 12px;
-    color: #888;
-}
-/* --- 弹窗样式 --- */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-}
-.modal-content {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    width: 80%;
-    max-width: 300px;
-    text-align: center;
-    animation: popIn 0.3s;
-}
-@keyframes popIn {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-.close-modal {
-    margin-top: 15px;
-    background: #eee;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-}
-</style>
-</head>
-<body>
-
-<!-- 霸气开场动画 -->
-<div class="splash-screen">
-    <div class="radish-icon">🥕</div>
-    <div class="radish-text">萝卜头本波的资料站</div>
-</div>
-
-<!-- 侧边栏遮罩 -->
-<div class="sidebar-overlay" onclick="toggleMenu()"></div>
-
-<!-- 侧边栏菜单 -->
-<div id="sidebar" class="sidebar">
-    <!-- 菜单项 -->
-    <div class="nav-item" onclick="showSidebarSection('apps')">📱 实用应用</div>
-    <div class="nav-item" onclick="showSidebarSection('docs')">📂 实用资料</div>
-    
-    <!-- 侧边栏内容区 -->
-    <div class="sidebar-content">
-        <div id="sidebar-apps" class="sidebar-section">
-            <div class="sidebar-section-title">📱 实用应用</div>
-            <div class="item-grid" id="sidebar-app-list">
-                <!-- 应用列表由JS生成 -->
-            </div>
-        </div>
-        <div id="sidebar-docs" class="sidebar-section">
-            <div class="sidebar-section-title">📂 实用资料</div>
-            <div class="item-grid" id="sidebar-doc-list">
-                <!-- 资料列表由JS生成 -->
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 顶部导航 -->
-<div class="header-bar">
-    <div class="menu-btn" onclick="toggleMenu()">☰</div>
-    <div class="page-title">萝卜头本波的资料站</div>
-    <div style="width: 24px;"></div> <!-- 占位符保持居中 -->
-</div>
-
-<div class="container">
-    <div class="content">
-        <!-- 1. 卡密验证区 -->
-        <div class="card-section">
-            <h2>🔒 专属卡密验证</h2>
-            <p style="font-size: 14px; opacity: 0.9;">
-                请联系 <a href="https://v.douyin.com/a8bJaf0pVLA/" target="_blank" style="color: #fff; text-decoration: underline;">@萝卜头本波</a> 获取密码
-            </p>
-            <div class="input-group">
-                <input type="text" id="passwordInput" placeholder="请输入卡密">
-                <button class="verify-btn" onclick="checkPassword()">验证</button>
-            </div>
-            <p id="statusMsg" style="height: 20px; font-size: 14px;"></p>
-        </div>
-    </div>
-</div>
-
-<!-- 下载确认弹窗 -->
-<div id="downloadModal" class="modal">
-    <div class="modal-content">
-        <h3>即将跳转</h3>
-        <p>即将为您跳转到外部链接，请注意安全。</p>
-        <button class="close-modal" onclick="closeModal()">我知道了</button>
-    </div>
-</div>
-
-<script>
-// ==========================================
-// 👇👇👇 【配置区】在这里添加你的应用和资料 👇👇👇
-// ==========================================
-
-// 1. 设置管理员的抖音链接
-const ADMIN_DOUYIN_LINK = "https://v.douyin.com/a8bJaf0pVLA/";
-
-// 2. 设置正确的卡密
-const CORRECT_PASSWORD = "6666";
-
-// 3. 添加【实用应用】
-// 格式：{ name: "显示的名字", icon: "图标(Emoji或图片链接)", desc: "简短介绍", url: "下载链接" },
-const appsData = [name:"甲壳虫ADB助手",
-    //            desc:"一个安卓ADB工具。",
-    //            url:"https://pan.quark.cn/s/6e3e6a848e6e",
-
-                  name:"Astro Box",
-                  desc:"小米手环/手表第三方工具箱，支持安装表盘和小程序",
-                  url:"https://pan.quark.cn/s/00d16da27da3",
-
-                  name:"AIDE Pro",
-                  desc:"安卓端应用开发IDE，支持Java/C++编译调试与智能补全。",
-                  url:"https://pan.quark.cn/s/1fbb52632626",
-
-                  name:"Sky ADB",
-                  desc:"Sky ADB助力手机搞机，轻松玩机，备份数据让探索更安心。",
-                  url:"https://pan.quark.cn/s/5e5398f483b0",
-
-                  name:"表盘自定义工具",
-                  desc:"米坛工具装快应用，自定义表盘，备份数据让玩机更安心。",
-                  url:"https://pan.quark.cn/s/c177a0445f42",
-
-                  name:"Vmos虚拟机",
-                  desc:"免费的安卓虚拟机",
-                  url:"https://pan.quark.cn/s/c9cac7132b46"
-                 ]
-                 
-
-                  
-                  
-    {
-        name: "王者荣耀",
-        icon: "👑",
-        desc: "5V5英雄公平对战手游",
-        url: "https://pvp.qq.com/"
-    },
-    {
-        name: "微信",
-        icon: "💬",
-        desc: "是一个生活方式",
-        url: "https://weixin.qq.com/"
-    },
-    // --- 想加新应用？复制下面这三行，改改内容就行 ---
-    // {
-    //     name: "这里写应用名字",
-    //     icon: "这里写Emoji图标",
-    //     desc: "这里写一句话介绍",
-    //     url: "这里写下载链接"
-    // },
-    // ------------------------------------------------
-];
-
-// 4. 添加【实用资料】
-// 格式同上
-const docsData =[name:"学而思学习机PD2／3解除安装限制方案",
-                 desc:"public class TALPAD_BOOM lv1推出的破解方案"
-                ]
-    {    name: "新手教程PDF",
-        icon: "📄",
-        desc: "点击查看详细操作指南",
-        url: "#"
-    },
-    {
-        name: "内部福利群",
-        icon: "🎁",
-        desc: "点击加入交流群",
-        url: "#"
-    },
-    // --- 想加新资料？复制下面这三行，改改内容就行 ---
-    // {
-    //     name: "这里写资料名字",
-    //     icon: "这里写Emoji图标",
-    //     desc: "这里写一句话介绍",
-    //     url: "这里写下载链接"
-    // },
-    // ------------------------------------------------
-];
-
-// ==========================================
-// 👆👆👆 【配置区结束】 下面不要乱动哦 👆👆👆
-// ==========================================
-
-let currentUrl = "";
-
-// 初始化页面
-window.onload = function() {
-    renderList('sidebar-app-list', appsData);
-    renderList('sidebar-doc-list', docsData);
-    // 默认显示应用列表
-    showSidebarSection('apps');
-    setTimeout(() => {
-        document.querySelector('.splash-screen').style.display = 'none';
-    }, 3000);
+canvas.onclick=()=>{
+if(gameRunning) bird.velocity=bird.jumpForce;
+else initGame();
 };
-
-// 渲染列表函数
-function renderList(containerId, data) {
-    const container = document.getElementById(containerId);
-    let html = '';
-    data.forEach(item => {
-        html += `
-            <div class="item-card" onclick="openLink('${item.url}')">
-            <div class="item-icon">
-              ${item.icon.startsWith('http') 
-              ? `<img src="${item.icon}" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;">` 
-              : item.icon}
-              </div>
-
-                <div class="item-name">${item.name}</div>
-                <div class="item-desc">${item.desc}</div>
-            </div>
-        `;
-    });
-    container.innerHTML = html;
+document.onkeydown=(e)=>{
+if(e.code=="Space"&&gameModal.classList.contains("show")){
+e.preventDefault();
+if(gameRunning) bird.velocity=bird.jumpForce;else initGame();
 }
-
-// 打开链接
-function openLink(url) {
-    currentUrl = url;
-    document.getElementById('downloadModal').style.display = 'flex';
-}
-
-// 关闭弹窗并跳转
-function closeModal() {
-    document.getElementById('downloadModal').style.display = 'none';
-    if (currentUrl && currentUrl !== '#') {
-        window.open(currentUrl, '_blank');
-    }
-}
-
-// 侧边栏开关
-function toggleMenu() {
-    document.getElementById('sidebar').classList.toggle('active');
-    document.querySelector('.sidebar-overlay').classList.toggle('active');
-}
-
-// 显示侧边栏指定分区
-function showSidebarSection(section) {
-    document.getElementById('sidebar-apps').classList.remove('active');
-    document.getElementById('sidebar-docs').classList.remove('active');
-    document.getElementById('sidebar-' + section).classList.add('active');
-}
-
-// 验证卡密
-    function checkPassword() {
-    // 1. 找到输入框 (假设ID是 passwordInput，如果不一样请改成你HTML里的ID)
-    var inputBox = document.getElementById('passwordInput'); 
-    
-    // 2. 找到显示提示文字的地方 (假设ID是 msg)
-    var msgBox = document.getElementById('msg');
-
-    // 3. 拿到用户输入的真正的字 (一定要加 .value)
-    var myValue = inputBox.value; 
-
-    // 4. 开始比对
-    if (myValue === CORRECT_PASSWORD) {
-        
-        // 【关键修改】不管侧边栏打没打开，先弹窗告诉你成功了！
-        alert("🎉 欢迎用户！密码正确，正在解锁资源...");
-
-        // 修改提示文字颜色为绿色
-        if(msgBox) {
-            msgBox.style.color = "#4cd964"; 
-            msgBox.innerText = "✅ 验证成功！";
-        }
-
-        // 尝试打开侧边栏
-        try {
-            toggleMenu(); 
-        } catch(e) {
-            console.log("侧边栏打开失败，但不影响验证结果");
-        }
-
-    } else {
-        // 密码错误的情况
-        if(msgBox) {
-            msgBox.style.color = "#ff4d4f";
-            msgBox.innerText = "❌ 密码错误，请重试";
-        }
-        alert("密码不对哦，再试试？");
-    }
-}
+};
+``` ## 新增功能总结 ✅ 进入网页**强制弹窗用户协议+免责声明** ✅ **必须勾选同意**才能使用网站 ✅ 拒绝直接清空页面、禁止使用 ✅ 本地缓存：**只弹一次**，下次打开不再提示 ✅ 协议内容完整合规（玩机、刷机、ADB工具专用免责）
