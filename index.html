@@ -12,17 +12,22 @@
             box-sizing: border-box;
             font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
         }
-
         body {
             background-color: #f5f7fa;
             color: #333;
             line-height: 1.5;
         }
+        body.no-scroll {
+            overflow: hidden;
+        }
 
-        /* ========== 用户协议弹窗 ========== */
+        /* 协议弹窗 */
         .agree-mask {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.65);
             display: flex;
             align-items: center;
@@ -74,25 +79,18 @@
             border: none;
             font-size: 15px;
             cursor: pointer;
-            transition: background 0.2s;
         }
         .btn-refuse {
             background: #fafafa;
             color: #666;
             border-right: 1px solid #f0f0f0;
         }
-        .btn-refuse:hover {
-            background: #f0f0f0;
-        }
         .btn-confirm {
             background: #1677ff;
             color: #fff;
         }
-        .btn-confirm:hover {
-            background: #0958d9;
-        }
 
-        /* ========== 顶部菜单按钮 ========== */
+        /* 菜单按钮 */
         .menu-btn {
             position: fixed;
             top: 16px;
@@ -119,10 +117,13 @@
             border-radius: 1px;
         }
 
-        /* ========== 遮罩层 ========== */
+        /* 遮罩 */
         .mask {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
             opacity: 0;
@@ -134,7 +135,7 @@
             visibility: visible;
         }
 
-        /* ========== 侧边栏 ========== */
+        /* 侧边栏 */
         .sidebar {
             position: fixed;
             top: 0;
@@ -161,10 +162,6 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 15px;
-            transition: background 0.2s;
-        }
-        .sidebar-menu li:hover {
-            background: #f5f7fa;
         }
         .sidebar-menu li.active {
             background: #e6f4ff;
@@ -181,7 +178,7 @@
             user-select: none;
         }
 
-        /* ========== 主内容区 ========== */
+        /* 主内容 */
         .main-content {
             padding: 70px 16px 30px;
             min-height: 100vh;
@@ -199,7 +196,7 @@
             color: #1f2937;
         }
 
-        /* ========== 资源卡片网格 ========== */
+        /* 资源卡片 */
         .resource-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -213,11 +210,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .resource-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         .resource-card h3 {
             font-size: 16px;
@@ -248,13 +240,9 @@
             border-radius: 8px;
             text-decoration: none;
             font-size: 14px;
-            transition: background 0.2s;
-        }
-        .download-btn:hover {
-            background: #0958d9;
         }
 
-        /* ========== 工具箱标签栏 ========== */
+        /* 工具箱 */
         .tool-tabs {
             display: flex;
             gap: 6px;
@@ -275,15 +263,12 @@
             font-size: 13px;
             cursor: pointer;
             color: #666;
-            transition: all 0.2s;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
         }
         .tab-btn.active {
             background: #1677ff;
             color: #fff;
         }
-
-        /* ========== 工具面板 ========== */
         .tool-panel {
             display: none;
             background: #fff;
@@ -303,7 +288,6 @@
             margin: 8px 0;
             outline: none;
             resize: vertical;
-            transition: border-color 0.2s;
         }
         .input-area:focus {
             border-color: #1677ff;
@@ -318,9 +302,6 @@
             margin: 8px 0;
             outline: none;
         }
-        .num-input:focus {
-            border-color: #1677ff;
-        }
         .btn-group {
             display: flex;
             gap: 10px;
@@ -333,23 +314,15 @@
             border-radius: 8px;
             font-size: 14px;
             cursor: pointer;
-            transition: background 0.2s;
         }
         .btn-primary {
             background: #1677ff;
             color: #fff;
         }
-        .btn-primary:hover {
-            background: #0958d9;
-        }
         .btn-default {
             background: #fff;
             border: 1px solid #d9d9d9;
             color: #333;
-        }
-        .btn-default:hover {
-            border-color: #1677ff;
-            color: #1677ff;
         }
         .output-area {
             width: 100%;
@@ -467,10 +440,13 @@
             background: #fff;
         }
 
-        /* ========== 游戏弹窗 ========== */
+        /* 游戏弹窗 */
         .game-modal {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.75);
             z-index: 10000;
             display: none;
@@ -512,7 +488,7 @@
             color: #666;
         }
 
-        /* ========== 桌面端适配 ========== */
+        /* 桌面适配 */
         @media (min-width: 768px) {
             .sidebar {
                 width: 280px;
@@ -537,43 +513,43 @@
         }
     </style>
 </head>
-<body>
+<body class="no-scroll">
 
-<!-- 用户协议弹窗 -->
+<!-- 协议弹窗 -->
 <div class="agree-mask" id="agreeMask">
     <div class="agree-box">
-        <div class="agree-title">用户服务协议 & 免责声明</div>
+        <div class="agree-title">用户服务协议与免责声明</div>
         <div class="agree-content">
             <h4>一、使用须知</h4>
-            <p>欢迎使用本工具箱及资源网站！在使用本站所有工具、资源、教程、指令前，请您仔细阅读本《用户服务协议》及《免责声明》。任何人进入、使用本站内容，即代表自愿同意、完全接受本协议全部条款。</p>
+            <p>欢迎使用本实用资源与工具箱网站。在使用本站所有工具、资源、教程、指令前，请您仔细阅读本《用户服务协议与免责声明》。任何人进入、使用本站内容，即代表自愿同意并完全接受本协议全部条款。</p>
             <h4>二、免责声明</h4>
-            <p>1、本站所有工具、代码、命令、资源、教程仅供学习交流、个人玩机技术参考使用，仅供合法技术研究。</p>
+            <p>1、本站所有工具、代码、命令、资源、教程仅供学习交流、个人玩机技术参考使用，仅限合法技术研究场景。</p>
             <p>2、本站不提供、不参与任何破解商业软件、绕过官方安全锁、侵权、非法刷机、非法解锁、违规设备修改等违法行为。</p>
-            <p>3、用户使用本站ADB命令、刷机指令、玩机工具、资源文件所产生的一切风险由用户自行承担，包括但不限于：设备变砖、数据丢失、失去保修、账号风险、系统故障等。</p>
-            <p>4、部分工具/指令受设备品牌、系统版本、官方安全策略限制，不一定适配所有机型，操作前请自行确认兼容性。</p>
-            <p>5、本站不对任何刷机、解锁、修改设备行为负责，所有操作均为用户自主行为。</p>
+            <p>3、用户使用本站工具所产生的一切风险由用户自行承担，包括但不限于：设备变砖、数据丢失、失去保修、账号异常、系统故障等。</p>
+            <p>4、部分工具受设备品牌、系统版本、官方安全策略限制，不一定适配所有机型，操作前请自行确认兼容性。</p>
+            <p>5、本站不对任何设备修改行为承担责任，所有操作均为用户自主行为。</p>
             <p>6、本站所有资源均来源于网络公开分享，若有侵权请联系作者删除。</p>
             <h4>三、用户义务</h4>
-            <p>1、用户承诺仅在国家法律法规允许范围内使用本站所有功能。</p>
-            <p>2、禁止使用本站工具从事破解、盗版、侵权、违法、违规、黑产等一切非法活动。</p>
+            <p>1、用户承诺仅在国家法律法规允许的范围内使用本站所有功能。</p>
+            <p>2、禁止使用本站工具从事破解、盗版、侵权、违法违规、黑产等一切非法活动。</p>
             <p>3、禁止传播、售卖本站资源用于商业用途。</p>
             <h4>四、隐私说明</h4>
-            <p>本站为纯前端网页，不收集、不上传、不储存用户任何个人信息、设备信息、输入内容，无后台数据记录，用户操作完全本地完成。</p>
-            <h4>五、其他</h4>
-            <p>本协议随时可根据需求更新，继续使用即代表默认接受最新协议。若不同意本协议任意条款，请立即退出本站，禁止使用本站所有功能。</p>
+            <p>本站为纯前端网页，不收集、不上传、不储存用户任何个人信息、设备信息、输入内容，无后台数据记录，所有用户操作均在本地完成。</p>
+            <h4>五、其他说明</h4>
+            <p>本协议可根据需求更新，继续使用即代表默认接受最新协议。若不同意本协议任意条款，请立即退出本站，禁止使用本站所有功能。</p>
         </div>
         <div class="agree-check">
             <input type="checkbox" id="agreeCheck">
             <label>我已仔细阅读并同意以上协议</label>
         </div>
         <div class="agree-btn-box">
-            <button class="agree-btn btn-refuse" id="refuseBtn">拒绝</button>
-            <button class="agree-btn btn-confirm" id="confirmBtn">同意并进入</button>
+            <button class="agree-btn btn-refuse" onclick="refuseAgree()">拒绝</button>
+            <button class="agree-btn btn-confirm" onclick="confirmAgree()">同意并进入</button>
         </div>
     </div>
 </div>
 
-<!-- 三条杠菜单按钮 -->
+<!-- 菜单按钮 -->
 <button class="menu-btn" id="menuBtn">
     <span></span>
     <span></span>
@@ -592,14 +568,14 @@
             <li>👤 关注管理员</li>
         </a>
     </ul>
-    <div class="version" id="versionText">v1.6.9</div>
+    <div class="version" id="versionText">v1.7.0</div>
 </div>
 
 <!-- 游戏弹窗 -->
 <div class="game-modal" id="gameModal">
     <div class="game-container">
         <div class="game-header">
-            <button class="back-btn" id="closeGame">返回</button>
+            <button class="back-btn" onclick="closeGame()">返回</button>
         </div>
         <canvas id="gameCanvas" width="360" height="540"></canvas>
         <div class="game-tip">点击画布让小萝卜头跳跃</div>
@@ -731,10 +707,8 @@
             <button class="tab-btn" data-tab="password">密码生成</button>
             <button class="tab-btn" data-tab="convert">进制转换</button>
             <button class="tab-btn" data-tab="hash">哈希校验</button>
-            <button class="tab-btn" data-tab="adbcmd">ADB指令</button>
         </div>
 
-        <!-- Base64 -->
         <div class="tool-panel active" id="panel-base64">
             <textarea class="input-area" id="base64-input" rows="4" placeholder="请输入要编码/解码的内容"></textarea>
             <div class="btn-group">
@@ -744,7 +718,6 @@
             <div class="output-area" id="base64-output">结果将显示在这里</div>
         </div>
 
-        <!-- 加密解密 -->
         <div class="tool-panel" id="panel-encrypt">
             <textarea class="input-area" id="encrypt-input" rows="4" placeholder="请输入要加密/解密的字符串"></textarea>
             <div>
@@ -758,7 +731,6 @@
             <div class="output-area" id="encrypt-output">结果将显示在这里</div>
         </div>
 
-        <!-- 网络调试 -->
         <div class="tool-panel" id="panel-debug">
             <div class="debug-row">
                 <select class="debug-select" id="debug-method">
@@ -776,7 +748,6 @@
             <p class="warn-text" style="margin-top:8px;">提示：受浏览器跨域限制，部分网址无法直接请求，仅作调试演示。</p>
         </div>
 
-        <!-- 二维码 -->
         <div class="tool-panel" id="panel-qrcode">
             <input type="text" class="input-area" id="qrcode-input" placeholder="请输入要生成二维码的网址或文本">
             <div class="btn-group">
@@ -787,7 +758,6 @@
             <p class="warn-text" style="color:#666;">提示：二维码纯前端生成，内容不变则图案永久有效。</p>
         </div>
 
-        <!-- 百度搜索 -->
         <form class="tool-panel" id="panel-baidu" action="https://www.baidu.com/s" method="get" target="_blank">
             <input type="text" class="input-area" name="wd" placeholder="请输入搜索关键词，按回车搜索">
             <div class="btn-group">
@@ -796,7 +766,6 @@
             <p style="font-size:12px;color:#999;margin-top:8px;">搜索结果将在新标签页打开，与百度官网完全一致</p>
         </form>
 
-        <!-- 密码生成 -->
         <div class="tool-panel" id="panel-password">
             <div>
                 <label style="font-size:13px;color:#666;margin-right:8px;">密码长度：</label>
@@ -815,7 +784,6 @@
             <div class="output-area" id="pwd-output">生成的密码将显示在这里</div>
         </div>
 
-        <!-- 进制转换 -->
         <div class="tool-panel" id="panel-convert">
             <div class="convert-row">
                 <div class="convert-item">
@@ -838,7 +806,6 @@
             <p style="font-size:12px;color:#999;">在任意输入框填写数值，其他进制自动转换，支持正整数</p>
         </div>
 
-        <!-- 哈希校验 -->
         <div class="tool-panel" id="panel-hash">
             <div class="hash-tabs">
                 <button class="hash-tab active" data-type="string">字符串哈希</button>
@@ -865,83 +832,402 @@
                 <div class="output-area" id="sha256-result" style="min-height:36px"></div>
             </div>
         </div>
-
-        <!-- ADB指令 -->
-        <div class="tool-panel" id="panel-adbcmd">
-            <p class="warn-text">⚠️ 须知：需电脑安装ADB工具；手机开启USB调试；点击按钮自动复制命令</p>
-            <h4 style="margin:10px 0;font-size:14px;">📱 模式切换命令</h4>
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="copyCmd('adb reboot bootloader')">进入Fastboot</button>
-                <button class="btn btn-primary" onclick="copyCmd('adb reboot recovery')">进入Recovery</button>
-                <button class="btn btn-primary" onclick="copyCmd('adb reboot edl')">进入9008模式</button>
-                <button class="btn btn-default" onclick="copyCmd('adb reboot')">正常重启</button>
-            </div>
-            <h4 style="margin:14px 0 8px;font-size:14px;">🔍 设备检测</h4>
-            <div class="btn-group">
-                <button class="btn btn-default" onclick="copyCmd('adb devices')">查看ADB设备</button>
-                <button class="btn btn-default" onclick="copyCmd('fastboot devices')">查看Fastboot设备</button>
-            </div>
-            <h4 style="margin:14px 0 8px;font-size:14px;">🔓 BL锁相关命令</h4>
-            <p class="warn-text">不同厂商机型命令有差异，多数新款手机官方关闭解锁通道</p>
-            <div class="btn-group">
-                <button class="btn btn-default" onclick="copyCmd('fastboot flashing unlock')">新版通用解锁</button>
-                <button class="btn btn-default" onclick="copyCmd('fastboot oem unlock')">旧机型解锁</button>
-                <button class="btn btn-default" onclick="copyCmd('fastboot flashing lock')">重新上锁</button>
-            </div>
-            <div class="output-area" id="adb-cmd-out" style="margin-top:14px;">点击上方按钮自动复制命令</div>
-        </div>
     </div>
 </div>
 
 <script>
-// ========== 用户协议逻辑 ==========
-const agreeMask = document.getElementById('agreeMask');
-const agreeCheck = document.getElementById('agreeCheck');
-const refuseBtn = document.getElementById('refuseBtn');
-const confirmBtn = document.getElementById('confirmBtn');
-
-if(localStorage.getItem('toolboxAgree') === 'yes') {
-    agreeMask.style.display = 'none';
-}
-confirmBtn.onclick = function() {
-    if(!agreeCheck.checked) {
-        alert('请先勾选同意用户协议与免责声明');
+// ========== 协议弹窗函数 ==========
+function confirmAgree() {
+    const check = document.getElementById('agreeCheck');
+    if (!check.checked) {
+        alert('请勾选【我已仔细阅读并同意以上协议】');
         return;
     }
-    localStorage.setItem('toolboxAgree', 'yes');
-    agreeMask.style.display = 'none';
-}
-refuseBtn.onclick = function() {
-    alert('您已拒绝协议，无法使用本站功能');
-    document.body.innerHTML = '';
+    document.getElementById('agreeMask').style.display = 'none';
+    document.body.classList.remove('no-scroll');
 }
 
-// ========== 侧边栏开关 ==========
+function refuseAgree() {
+    alert('您拒绝协议，无法继续使用网站');
+    document.body.innerHTML = '<div style="text-align:center;padding-top:50px;font-size:16px;">您已拒绝协议，禁止访问本站</div>';
+}
+
+// ========== 侧边菜单 ==========
 const menuBtn = document.getElementById('menuBtn');
 const sidebar = document.getElementById('sidebar');
 const mask = document.getElementById('mask');
-
-menuBtn.addEventListener('click', function() {
+menuBtn.addEventListener('click', ()=>{
     sidebar.classList.toggle('show');
     mask.classList.toggle('show');
 });
-mask.addEventListener('click', function() {
+mask.addEventListener('click', ()=>{
     sidebar.classList.remove('show');
     mask.classList.remove('show');
 });
 
-// ========== 页面切换 ==========
-const pageMenus = document.querySelectorAll('.sidebar-menu li[data-page]');
-pageMenus.forEach(item => {
-    item.addEventListener('click', function() {
-        pageMenus.forEach(p => p.classList.remove('active'));
+// 页面切换
+document.querySelectorAll('.sidebar-menu li[data-page]').forEach(item=>{
+    item.onclick = function(){
+        const pageId = this.dataset.page;
+        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+        document.getElementById('page-'+pageId).classList.add('active');
+        document.querySelectorAll('.sidebar-menu li').forEach(li=>li.classList.remove('active'));
         this.classList.add('active');
-        const pageId = this.getAttribute('data-page');
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('page-' + pageId).classList.add('active');
         sidebar.classList.remove('show');
         mask.classList.remove('show');
+    }
+})
+
+// ========== 工具箱标签切换 ==========
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.onclick = function(){
+        const tab = this.dataset.tab;
+        document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.tool-panel').forEach(p=>p.classList.remove('active'));
+        document.getElementById('panel-'+tab).classList.add('active');
+    }
+})
+
+document.querySelectorAll('.hash-tab').forEach(tab=>{
+    tab.onclick = function(){
+        const type = this.dataset.type;
+        document.querySelectorAll('.hash-tab').forEach(t=>t.classList.remove('active'));
+        this.classList.add('active');
+        if(type === 'string'){
+            document.getElementById('hash-string-panel').style.display = 'block';
+            document.getElementById('hash-file-panel').style.display = 'none';
+        }else{
+            document.getElementById('hash-string-panel').style.display = 'none';
+            document.getElementById('hash-file-panel').style.display = 'block';
+        }
+    }
+})
+
+// ========== Base64 ==========
+function base64Encode(){
+    const txt = document.getElementById('base64-input').value;
+    let res = btoa(unescape(encodeURIComponent(txt)));
+    document.getElementById('base64-output').innerText = res;
+}
+function base64Decode(){
+    const txt = document.getElementById('base64-input').value;
+    try{
+        let res = decodeURIComponent(escape(atob(txt)));
+        document.getElementById('base64-output').innerText = res;
+    }catch(e){
+        document.getElementById('base64-output').innerText = "解码失败，无效Base64";
+    }
+}
+
+// ========== 简易移位加密 ==========
+function stringEncrypt(){
+    let str = document.getElementById('encrypt-input').value;
+    let k = Number(document.getElementById('encrypt-key').value);
+    let out = "";
+    for(let i=0;i<str.length;i++){
+        out += String.fromCharCode(str.charCodeAt(i)+k);
+    }
+    document.getElementById('encrypt-output').innerText = btoa(out);
+}
+function stringDecrypt(){
+    let str = document.getElementById('encrypt-input').value;
+    let k = Number(document.getElementById('encrypt-key').value);
+    try{
+        str = atob(str);
+        let out = "";
+        for(let i=0;i<str.length;i++){
+            out += String.fromCharCode(str.charCodeAt(i)-k);
+        }
+        document.getElementById('encrypt-output').innerText = out;
+    }catch(e){
+        document.getElementById('encrypt-output').innerText = "解密失败";
+    }
+}
+
+// ========== 二维码 ==========
+let qrCodeObj;
+function generateQRCode(){
+    const text = document.getElementById('qrcode-input').value.trim();
+    const box = document.getElementById('qrcode-box');
+    const downloadBtn = document.getElementById('download-qrcode');
+    if(!text){
+        box.innerText="请输入内容";
+        downloadBtn.style.display="none";
+        return;
+    }
+    box.innerHTML="";
+    qrCodeObj = new QRCode(box,{
+        text:text,
+        width:240,
+        height:240
     });
+    downloadBtn.style.display="block";
+}
+function downloadQRCode(){
+    const canvas = document.querySelector("#qrcode-box canvas");
+    if(!canvas) return;
+    const a = document.createElement("a");
+    a.href = canvas.toDataURL("image/png");
+    a.download = "qrcode.png";
+    a.click();
+}
+
+// ========== 密码生成 ==========
+let lastPwd = "";
+function generatePassword(){
+    let len = Number(document.getElementById('pwd-length').value);
+    let pool = "";
+    if(document.getElementById('pwd-num').checked) pool += "0123456789";
+    if(document.getElementById('pwd-lower').checked) pool += "abcdefghijklmnopqrstuvwxyz";
+    if(document.getElementById('pwd-upper').checked) pool += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    if(document.getElementById('pwd-symbol').checked) pool += "!@#$%^&*()_+-=";
+    if(!pool){
+        document.getElementById('pwd-output').innerText="至少选择一类字符";
+        return;
+    }
+    let pwd = "";
+    for(let i=0;i<len;i++){
+        pwd += pool[Math.floor(Math.random()*pool.length)];
+    }
+    lastPwd = pwd;
+    document.getElementById('pwd-output').innerText = pwd;
+}
+async function copyPassword(){
+    if(!lastPwd) return;
+    await navigator.clipboard.writeText(lastPwd);
+    alert("已复制密码");
+}
+
+// ========== 进制转换 ==========
+let lockConvert = false;
+function convertFrom(type){
+    if(lockConvert) return;
+    lockConvert=true;
+    const binEl = document.getElementById('bin-val');
+    const octEl = document.getElementById('oct-val');
+    const decEl = document.getElementById('dec-val');
+    const hexEl = document.getElementById('hex-val');
+    let dec;
+    try{
+        let val = document.getElementById(type+"-val").value.trim();
+        if(val === ""){
+            binEl.value="";octEl.value="";decEl.value="";hexEl.value="";
+            lockConvert=false;
+            return;
+        }
+        switch(type){
+            case 'bin': dec = parseInt(val,2); break;
+            case 'oct': dec = parseInt(val,8); break;
+            case 'dec': dec = parseInt(val,10); break;
+            case 'hex': dec = parseInt(val,16); break;
+        }
+        if(isNaN(dec)) throw 1;
+        binEl.value = dec.toString(2);
+        octEl.value = dec.toString(8);
+        decEl.value = dec.toString(10);
+        hexEl.value = dec.toString(16).toUpperCase();
+    }catch(e){
+    }
+    setTimeout(()=>lockConvert=false,100);
+}
+
+// ========== 网络请求 ==========
+async function sendRequest(){
+    const method = document.getElementById('debug-method').value;
+    const url = document.getElementById('debug-url').value.trim();
+    const bodyTxt = document.getElementById('debug-body').value;
+    const statusBox = document.getElementById('response-status');
+    const bodyBox = document.getElementById('response-body');
+    if(!url){
+        statusBox.innerText="请填写请求地址";
+        return;
+    }
+    try{
+        let opt = {method};
+        if(method==="POST" && bodyTxt){
+            opt.body = bodyTxt;
+        }
+        statusBox.innerText="请求中...";
+        const res = await fetch(url,opt);
+        statusBox.innerText="状态码："+res.status;
+        const txt = await res.text();
+        bodyBox.innerText = txt;
+    }catch(err){
+        statusBox.innerText="请求失败";
+        bodyBox.innerText = err.toString()+"\n大概率浏览器跨域拦截";
+    }
+}
+
+// ========== Hash计算 ==========
+async function calcStringHash(){
+    const str = document.getElementById('hash-input').value;
+    const buf = new TextEncoder().encode(str);
+    await computeHash(buf);
+}
+async function calcFileHash(){
+    const file = document.getElementById('hash-file').files[0];
+    if(!file) return alert("选择文件");
+    const buf = await file.arrayBuffer();
+    await computeHash(new Uint8Array(buf));
+}
+async function computeHash(data){
+    const md5Res = await crypto.subtle.digest("MD5", data);
+    const sha1Res = await crypto.subtle.digest("SHA-1", data);
+    const sha256Res = await crypto.subtle.digest("SHA-256", data);
+    document.getElementById('md5-result').innerText = buf2hex(md5Res);
+    document.getElementById('sha1-result').innerText = buf2hex(sha1Res);
+    document.getElementById('sha256-result').innerText = buf2hex(sha256Res);
+}
+function buf2hex(buffer){
+    return Array.from(new Uint8Array(buffer)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+
+// ========== 彩蛋小游戏完整逻辑 ==========
+const gameCanvas = document.getElementById('gameCanvas');
+const ctx = gameCanvas.getContext('2d');
+let gameRunning = false;
+let gameScore = 0;
+let clickCount = 0;
+
+// 角色与管道参数
+const bird = {
+    x: 80,
+    y: 200,
+    size: 18,
+    speedY: 0,
+    gravity: 0.4,
+    jumpForce: -8
+};
+let pipes = [];
+const pipeWidth = 50;
+const pipeGap = 140;
+const pipeSpeed = 2;
+let lastPipeTime = 0;
+
+// 点击版本号触发彩蛋
+document.getElementById('versionText').addEventListener('click', ()=>{
+    clickCount++;
+    if(clickCount >= 15){
+        clickCount = 0;
+        document.getElementById('gameModal').classList.add('show');
+        initGame();
+    }
 });
 
-// ========== 工具箱标签切换
+// 关闭游戏
+function closeGame(){
+    document.getElementById('gameModal').classList.remove('show');
+    gameRunning = false;
+}
+
+// 初始化游戏
+function initGame(){
+    bird.y = 200;
+    bird.speedY = 0;
+    pipes = [];
+    gameScore = 0;
+    lastPipeTime = 0;
+    gameRunning = true;
+    requestAnimationFrame(gameLoop);
+}
+
+// 游戏主循环
+function gameLoop(time){
+    if(!gameRunning) return;
+    ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+    // 绘制背景
+    ctx.fillStyle = '#87ceeb';
+    ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+    // 角色物理
+    bird.speedY += bird.gravity;
+    bird.y += bird.speedY;
+
+    // 生成管道
+    if(time - lastPipeTime > 1500){
+        lastPipeTime = time;
+        const topHeight = Math.random() * (gameCanvas.height - pipeGap - 120) + 40;
+        pipes.push({
+            x: gameCanvas.width,
+            topH: topHeight,
+            passed: false
+        });
+    }
+
+    // 更新与绘制管道
+    for(let i = pipes.length - 1; i >= 0; i--){
+        const p = pipes[i];
+        p.x -= pipeSpeed;
+
+        // 上管道
+        ctx.fillStyle = '#2ecc71';
+        ctx.fillRect(p.x, 0, pipeWidth, p.topH);
+        // 下管道
+        ctx.fillRect(p.x, p.topH + pipeGap, pipeWidth, gameCanvas.height - p.topH - pipeGap);
+
+        // 计分
+        if(!p.passed && p.x + pipeWidth < bird.x){
+            p.passed = true;
+            gameScore++;
+        }
+
+        // 移除出屏管道
+        if(p.x + pipeWidth < 0) pipes.splice(i, 1);
+    }
+
+    // 绘制小萝卜头（橙色圆形+绿叶）
+    ctx.fillStyle = '#ff7f24';
+    ctx.beginPath();
+    ctx.arc(bird.x, bird.y, bird.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#2ecc71';
+    ctx.fillRect(bird.x - 4, bird.y - bird.size - 6, 8, 8);
+
+    // 碰撞检测
+    let crash = false;
+    if(bird.y - bird.size <= 0 || bird.y + bird.size >= gameCanvas.height) crash = true;
+    for(let p of pipes){
+        if(bird.x + bird.size > p.x && bird.x - bird.size < p.x + pipeWidth){
+            if(bird.y - bird.size < p.topH || bird.y + bird.size > p.topH + pipeGap){
+                crash = true;
+            }
+        }
+    }
+
+    // 绘制分数
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 28px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(gameScore, gameCanvas.width / 2, 50);
+
+    // 游戏结束
+    if(crash){
+        gameRunning = false;
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText('游戏结束', gameCanvas.width / 2, gameCanvas.height / 2 - 30);
+        ctx.font = '18px sans-serif';
+        ctx.fillText('得分：' + gameScore, gameCanvas.width / 2, gameCanvas.height / 2);
+        ctx.font = '14px sans-serif';
+        ctx.fillText('点击画布重新开始', gameCanvas.width / 2, gameCanvas.height / 2 + 35);
+        return;
+    }
+
+    requestAnimationFrame(gameLoop);
+}
+
+// 画布点击跳跃/重开
+gameCanvas.addEventListener('click', ()=>{
+    if(gameRunning){
+        bird.speedY = bird.jumpForce;
+    }else{
+        initGame();
+    }
+});
+</script>
+</body>
+</html>
