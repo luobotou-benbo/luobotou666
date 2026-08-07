@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>萝卜头本波的资料站</title>
+  <style>
+    :root {
+      --bg: #f6f8ff;
+      --card: rgba(255, 255, 255, 0.9);
+      --text: #172033;
+      --muted: #64748b;
+      --line: #dfe7f3;
+      --primary: #4f46e5;
+      --primary2: #06b6d4;
+      --shadow: 0 20px 50px rgba(23, 32, 51, 0.1);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(79, 70, 229, 0.18), transparent 32rem),
+        radial-gradient(circle at top right, rgba(6, 182, 212, 0.14), transparent 28rem),
+        linear-gradient(180deg, #ffffff 0%, var(--bg) 45%, #eef4ff 100%);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      line-height: 1.6;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(223, 231, 243, 0.7);
+      background: rgba(246, 248, 255, 0.78);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      display: flex;
+      max-width: 1180px;
+      margin: 0 auto;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 15px;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      box-shadow: 0 12px 26px rgba(79, 70, 229, 0.28);
+    }
+
+    .search {
+      display: flex;
+      min-width: min(390px, 100%);
+      align-items: center;
+      gap: 0.6rem;
+      border: 1px solid rgba(79, 70, 229, 0.16);
+      border-radius: 999px;
+      padding: 0.45rem 0.55rem 0.45rem 0.95rem;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: 0 12px 30px rgba(23, 32, 51, 0.06);
+    }
+
+    .search strong {
+      flex: 0 0 auto;
+      color: var(--primary);
+      font-size: 0.84rem;
+    }
+
+    .search input {
+      width: 100%;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.55rem 0.7rem;
+      color: var(--text);
+      background: transparent;
+      outline: none;
+    }
+
+    .hero {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 5.2rem 1.25rem 2.4rem;
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.65rem;
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 880px;
+      margin: 0 auto 1rem;
+      font-size: clamp(2.5rem, 8vw, 6.2rem);
+      line-height: 1.03;
+      letter-spacing: -0.08em;
+    }
+
+    h2 {
+      margin-bottom: 0.4rem;
+      font-size: clamp(1.7rem, 3vw, 2.6rem);
+      line-height: 1.15;
+      letter-spacing: -0.05em;
+    }
+
+    h3 {
+      margin-bottom: 0.35rem;
+      font-size: 1.14rem;
+      letter-spacing: -0.02em;
+    }
+
+    .btn {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.72rem 1rem;
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--text);
+      font-weight: 800;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(79, 70, 229, 0.26);
+      box-shadow: 0 12px 24px rgba(23, 32, 51, 0.08);
+    }
+
+    .btn-primary {
+      border-color: transparent;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      box-shadow: 0 14px 30px rgba(79, 70, 229, 0.22);
+    }
+
+    .developer-link {
+      color: #2563eb;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      font-weight: 850;
+    }
+
+    .developer-link:hover {
+      color: #1d4ed8;
+    }
+
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(79, 70, 229, 0.18);
+      border-radius: 999px;
+      padding: 0.36rem 0.75rem;
+      color: var(--primary);
+      background: rgba(255, 255, 255, 0.78);
+      font-size: 0.84rem;
+      font-weight: 850;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.12s ease, background 0.12s ease;
+    }
+
+    .version-badge:active {
+      transform: scale(0.94);
+      background: rgba(79, 70, 229, 0.12);
+    }
+
+    .egg-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      place-items: center;
+      padding: 1rem;
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(16px);
+    }
+
+    .egg-modal.show {
+      display: grid;
+    }
+
+    .egg-card {
+      width: min(420px, 100%);
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: 28px;
+      padding: 1.2rem;
+      background: rgba(255, 255, 255, 0.97);
+      box-shadow: 0 30px 80px rgba(15, 23, 42, 0.32);
+      text-align: center;
+    }
+
+    .egg-card h2 {
+      margin-bottom: 0.4rem;
+      font-size: 1.4rem;
+    }
+
+    .egg-card p {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 0.8rem;
+    }
+
+    #eggCanvas {
+      display: block;
+      width: 100%;
+      max-width: 360px;
+      height: 480px;
+      margin: 0 auto;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #bef0ff 0%, #e8f7ff 60%, #d4f0c0 100%);
+      touch-action: none;
+    }
+
+    .egg-actions {
+      display: flex;
+      gap: 0.6rem;
+      justify-content: center;
+      margin-top: 0.9rem;
+    }
+
+    .site-content {
+      filter: blur(8px);
+      pointer-events: none;
+      user-select: none;
+      transition: filter 0.25s ease;
+    }
+
+    body.agreed .site-content {
+      filter: none;
+      pointer-events: auto;
+      user-select: auto;
+    }
+
+    .agreement-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+      background: rgba(15, 23, 42, 0.62);
+      backdrop-filter: blur(16px);
+    }
+
+    body.agreed .agreement-modal {
+      display: none;
+    }
+
+    .agreement-card {
+      width: min(680px, 100%);
+      max-height: min(86vh, 760px);
+      overflow: auto;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: 28px;
+      padding: 1.4rem;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 30px 80px rgba(15, 23, 42, 0.28);
+    }
+
+    .agreement-card h2 {
+      margin-bottom: 0.65rem;
+    }
+
+    .agreement-card p,
+    .agreement-card li {
+      color: var(--muted);
+    }
+
+    .agreement-card ul {
+      margin: 0 0 1rem;
+      padding-left: 1.2rem;
+    }
+
+    .agreement-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .btn-danger {
+      color: #b91c1c;
+      background: rgba(220, 38, 38, 0.08);
+    }
+
+    .main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 1.25rem 4rem;
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .resource-card {
+      display: flex;
+      min-height: 230px;
+      flex-direction: column;
+      border: 1px solid rgba(79, 70, 229, 0.11);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.78)),
+        #ffffff;
+      box-shadow: 0 12px 34px rgba(23, 32, 51, 0.06);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+
+    .resource-card p {
+      color: var(--muted);
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin: auto 0 1.1rem;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tag-list li {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.22rem 0.58rem;
+      color: var(--muted);
+      font-size: 0.76rem;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .visit-link {
+      display: block;
+      border-radius: 16px;
+      padding: 0.78rem 0.85rem;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      text-align: center;
+      font-weight: 850;
+    }
+
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      padding: 3rem 1rem;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .empty p {
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 2rem 1rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 880px) {
+      .nav {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .hero {
+        padding-top: 3.2rem;
+      }
+
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hero,
+      .main,
+      .nav {
+        padding-right: 1rem;
+        padding-left: 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="modal-open">
+  <section id="agreementModal" class="agreement-modal" role="dialog" aria-modal="true" aria-labelledby="agreementTitle">
+    <div class="agreement-card">
+      <p class="eyebrow">进入前请阅读</p>
+      <h2 id="agreementTitle">用户服务协议和免责声明</h2>
+      <p>欢迎访问萝卜头本波的资料站。本站仅用于整理和展示网络资源链接，不提供资源上传、存储、破解、修改或分发服务。</p>
+      <h3>用户服务协议</h3>
+      <ul>
+        <li>你应当自觉遵守国家法律法规，不得将本站资源用于违法违规用途。</li>
+        <li>本站展示的链接来自用户整理分享，点击后会跳转到第三方页面或网盘页面。</li>
+        <li>你需要自行判断资源是否适合下载、安装和使用，并自行承担使用风险。</li>
+      </ul>
+      <h3>免责声明</h3>
+      <ul>
+        <li>本站不保证第三方链接长期有效，也不保证链接内容的完整性、准确性和安全性。</li>
+        <li>因访问第三方链接、下载文件、安装软件或使用资源造成的任何问题，本站不承担责任。</li>
+        <li>如有侵权或不合适内容，请联系开发者处理，本站会尽快移除相关链接。</li>
+      </ul>
+      <p>点击“我已阅读并同意”后，表示你已经阅读、理解并同意以上内容。</p>
+      <div class="agreement-actions">
+        <button id="agreeBtn" class="btn btn-primary" type="button">我已阅读并同意</button>
+        <button id="rejectBtn" class="btn btn-danger" type="button">不同意</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="site-content">
+  <header class="header">
+    <nav class="nav">
+      <a class="brand" href="#">
+        <span class="brand-mark">萝</span>
+        <span>萝卜头本波的资料站</span>
+      </a>
+      <label class="search" for="searchInput">
+        <strong>搜索</strong>
+        <input id="searchInput" type="search" placeholder="搜索名称、说明或标签" />
+      </label>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>萝卜头本波的资料站</h1>
+    <p class="version-badge" id="versionBadge">当前版本：<span id="versionText">3.1.5</span></p>
+    <a class="developer-link" href="https://v.douyin.com/4sU-I7V8Pmk/" target="_blank" rel="noopener">关注开发者</a>
+  </section>
+
+  <main class="main">
+    <section id="resourceGrid" class="resource-grid" aria-live="polite"></section>
+
+    <section id="emptyState" class="empty" hidden>
+      <h3>没有找到匹配的资料</h3>
+      <p>换个关键词再试试。</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>萝卜头本波的资料站 · v<span id="footerVersionText">3.1.5</span></p>
+  </footer>
+  </div>
+
+  <section id="eggModal" class="egg-modal" role="dialog" aria-modal="true">
+    <div class="egg-card">
+      <h2>萝卜飞飞</h2>
+      <p>点击屏幕或按空格让萝卜飞起来，躲过萝卜柱子，看你能飞多远！</p>
+      <canvas id="eggCanvas" width="360" height="480"></canvas>
+      <div class="egg-actions">
+        <button id="eggRestart" class="btn btn-primary" type="button">重新开始</button>
+        <button id="eggClose" class="btn" type="button">关闭</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const SITE_VERSION = "3.1.5";
+
+    const LINKS = [
+      { title: "必剪 2.90.0", url: "https://pan.quark.cn/s/3f1241f71434", description: "B站官方出品的手机视频剪辑工具，适合做短视频和素材整理。", tags: ["剪辑", "B站", "视频"] },
+      { title: "调色光影 1.0", url: "https://pan.quark.cn/s/ca557b552ced", description: "视频调色和光影处理工具，让画面更有质感。", tags: ["调色", "光影", "视频"] },
+      { title: "吐司", url: "https://pan.quark.cn/s/15af20e1067b", description: "实用小工具，详情打开链接查看。", tags: ["工具"] },
+      { title: "TRAE 0.0.16", url: "https://pan.quark.cn/s/eb66d8e693f1", description: "AI 编程助手，帮助你更高效地写代码。", tags: ["AI", "编程", "开发"] },
+      { title: "扣子 3.1.0", url: "https://pan.quark.cn/s/c76b4482a621", description: "字节跳动出品的 AI 应用搭建平台，无需代码也能做智能体。", tags: ["AI", "智能体", "开发"] },
+      { title: "monkeycode", url: "https://pan.quark.cn/s/411c30cb66c0", description: "代码辅助工具，提升开发效率。", tags: ["代码", "开发"] },
+      { title: "Termux", url: "https://pan.quark.cn/s/a7f93e5667e8", description: "安卓终端模拟器，在手机上跑 Linux 命令和脚本。", tags: ["终端", "Linux", "安卓"] },
+      { title: "AIDE Pro", url: "https://pan.quark.cn/s/fe8cd6959cfb", description: "安卓手机上的 Java/Android 开发 IDE，可以直接编译运行 APK。", tags: ["IDE", "安卓", "开发"] },
+      { title: "甲壳虫ADB", url: "https://pan.quark.cn/s/a31998fa7953", description: "图形化 ADB 工具，方便手机连接电脑调试。", tags: ["ADB", "调试", "安卓"] },
+      { title: "skyadb", url: "https://pan.quark.cn/s/84c82e5fc2fe", description: "ADB 连接工具，支持无线调试。", tags: ["ADB", "调试", "无线"] },
+      { title: "AstroBox 安卓版", url: "https://pan.quark.cn/s/3aee51bd2e9e", description: "安卓端 ADB 工具盒子，手机对手机调试。", tags: ["ADB", "安卓", "工具"] },
+      { title: "NP管理器", url: "https://pan.quark.cn/s/4a3c45c9b555", description: "APK 逆向和修改工具，支持签名、汉化、去广告等。", tags: ["APK", "逆向", "修改"] },
+      { title: "vmos", url: "https://pan.quark.cn/s/5dbbf14a8181", description: "安卓虚拟机，在手机上运行另一个安卓系统。", tags: ["虚拟机", "安卓", "多开"] },
+      { title: "萝卜飞飞", url: "https://pan.quark.cn/s/495caed16e07", description: "萝卜飞飞彩蛋！连续点击页面顶部版本号16次，就能在网页里直接玩到网页版。原版APK也可在此下载。", tags: ["工具", "趣味", "彩蛋"] },
+      { title: "自动点击器 2.0.12.31", url: "https://pan.quark.cn/s/4ab57fdcabd8", description: "自动点击屏幕工具，适合游戏和重复操作场景。", tags: ["自动", "点击", "辅助"] },
+      { title: "X浏览器 5.5.0", url: "https://pan.quark.cn/s/980e43990a77", description: "轻量极速浏览器，体积小功能强，支持插件。", tags: ["浏览器", "轻量", "极速"] },
+      { title: "表盘自定义工具", url: "https://pan.quark.cn/s/83a881184a05", description: "智能手表表盘自定义和制作工具。", tags: ["表盘", "手表", "自定义"] },
+      { title: "酷安 16.3.2", url: "https://pan.quark.cn/s/8d69d2c47b4b", description: "发现高品质应用和游戏的社区平台。", tags: ["应用商店", "社区", "安卓"] },
+      { title: "学而思学习机", url: "https://pan.quark.cn/s/1c932cd51ec0", description: "学而思学习机定制版，包含学习资源和课程。", tags: ["学习", "课程", "教育"] },
+      { title: "抖音 38.5.0", url: "https://pan.quark.cn/s/525f86a1f84d", description: "抖音短视频应用安装包。", tags: ["抖音", "短视频", "娱乐"] },
+      { title: "极速赛车向前冲", url: "https://pan.quark.cn/s/50dde9e1125e", description: "赛车类游戏资源，点击打开夸克网盘获取。", tags: ["游戏", "赛车", "娱乐"] },
+      { title: "MT管理器 2.19.2", url: "https://pan.quark.cn/s/4b4fe9831aaa", description: "强大的文件管理和 APK 修改工具，适合安卓高级用户。", tags: ["文件管理", "APK", "安卓"] },
+      { title: "Reqable ARM", url: "https://pan.quark.cn/s/7780d84e654d", description: "网络抓包和接口调试工具，适合开发与测试使用。", tags: ["抓包", "接口", "调试"] },
+      { title: "JsxposedX", url: "https://pan.quark.cn/s/07d76cca4e45", description: "安卓模块相关工具，适合高级系统玩法。", tags: ["模块", "安卓", "系统"] },
+      { title: "沐雪社区", url: "https://pan.quark.cn/s/de3ca95f3b26", description: "应用资源社区，点击打开夸克网盘获取。", tags: ["社区", "资源", "应用"] },
+      { title: "Shizuku", url: "https://pan.quark.cn/s/7c2dbaa06fd4", description: "安卓权限辅助工具，可帮助部分应用获得更高级的系统能力。", tags: ["权限", "安卓", "系统"] },
+      { title: "67ef9085...tv24", url: "https://pan.quark.cn/s/9fd00dec0af0", description: "新增夸克网盘资源，点击打开链接获取。", tags: ["新增", "夸克网盘", "资源"] },
+      { title: "67ef9085...9-19", url: "https://pan.quark.cn/s/714b6813e167", description: "新增夸克网盘资源，点击打开链接获取。", tags: ["新增", "夸克网盘", "资源"] },
+      { title: "67ef907d...FI模块", url: "https://pan.quark.cn/s/4e14e2804b9e", description: "模块相关资源，点击打开夸克网盘获取。", tags: ["模块", "安卓", "工具"] },
+      { title: "v0.22.0_221", url: "https://pan.quark.cn/s/63770ba32029", description: "新增夸克网盘资源，点击打开链接获取。", tags: ["新增", "夸克网盘", "资源"] },
+      { title: "67ef9078...局侧边栏", url: "https://pan.quark.cn/s/8c267d1a3f7c", description: "侧边栏相关资源，点击打开夸克网盘获取。", tags: ["侧边栏", "模块", "工具"] },
+      { title: "67ef907d...马达增强", url: "https://pan.quark.cn/s/4b35ea8719db", description: "马达增强相关资源，点击打开夸克网盘获取。", tags: ["马达", "增强", "模块"] },
+      { title: "67ef9078...综合_6", url: "https://pan.quark.cn/s/4ea21f45a030", description: "综合类夸克网盘资源，点击打开链接获取。", tags: ["综合", "夸克网盘", "资源"] },
+      { title: "67ef9078...301)", url: "https://pan.quark.cn/s/ad6ad2f5cbd2", description: "新增夸克网盘资源，点击打开链接获取。", tags: ["新增", "夸克网盘", "资源"] },
+      { title: "67ef9078...发者选项", url: "https://pan.quark.cn/s/d36a4fb9b714", description: "开发者选项相关资源，点击打开夸克网盘获取。", tags: ["开发者选项", "安卓", "工具"] },
+      { title: "67ef9078...load", url: "https://pan.quark.cn/s/3758c434e746", description: "新增夸克网盘资源，点击打开链接获取。", tags: ["新增", "夸克网盘", "资源"] },
+      { title: "zram-swa...ster", url: "https://pan.quark.cn/s/c48771ee2a0b", description: "ZRAM / Swap 相关资源，点击打开夸克网盘获取。", tags: ["ZRAM", "Swap", "系统"] },
+      { title: "4_4", url: "https://pan.quark.cn/s/7df2d9096088", description: "新增夸克网盘资源，点击打开链接获取。", tags: ["新增", "夸克网盘", "资源"] },
+      { title: "67efc9fa...TA稳定", url: "https://pan.quark.cn/s/3337bb6bea84", description: "稳定版相关资源，点击打开夸克网盘获取。", tags: ["稳定版", "夸克网盘", "资源"] },
+      { title: "67ef907c...高刷_2", url: "https://pan.quark.cn/s/90aa1c2607f1", description: "高刷相关资源，点击打开夸克网盘获取。", tags: ["高刷", "模块", "安卓"] },
+      { title: "direct-u...demo", url: "https://pan.quark.cn/s/17f40d84badd", description: "Demo 示例相关资源，点击打开夸克网盘获取。", tags: ["Demo", "开发", "工具"] },
+      { title: "Dhizuku v2.12.0", url: "https://pan.quark.cn/s/4f3b7465f17c", description: "安卓权限辅助相关工具，点击打开夸克网盘获取。", tags: ["权限", "安卓", "工具"] },
+      { title: "Hail v1.10.0", url: "https://pan.quark.cn/s/04395b0dfe81", description: "应用冻结和管理工具，点击打开夸克网盘获取。", tags: ["应用管理", "冻结", "安卓"] },
+      { title: "Magisk v28.0", url: "https://pan.quark.cn/s/e7f6306a43a5", description: "安卓 Root 和模块管理工具，点击打开夸克网盘获取。", tags: ["Magisk", "Root", "模块"] },
+      { title: "app-release (1)", url: "https://pan.quark.cn/s/ebb57810253f", description: "新增应用安装包资源，点击打开夸克网盘获取。", tags: ["APK", "应用", "资源"] },
+      { title: "KeyAttes....8.4", url: "https://pan.quark.cn/s/8f4a7b4d69d4", description: "Key Attestation 相关工具，点击打开夸克网盘获取。", tags: ["KeyAttestation", "安卓", "工具"] },
+      { title: "VioletBo...ease", url: "https://pan.quark.cn/s/33e822c62bf1", description: "新增系统工具资源，点击打开夸克网盘获取。", tags: ["系统", "安卓", "工具"] },
+      { title: "AppManag....1.0", url: "https://pan.quark.cn/s/d7ef10ffd344", description: "应用管理相关工具，点击打开夸克网盘获取。", tags: ["应用管理", "安卓", "工具"] },
+      { title: "InstallW...ease", url: "https://pan.quark.cn/s/a70805b79ca7", description: "安装相关工具资源，点击打开夸克网盘获取。", tags: ["安装", "安卓", "工具"] },
+      { title: "vmospro", url: "https://pan.quark.cn/s/e976766bb048", description: "VMOS Pro 虚拟机相关资源，点击打开夸克网盘获取。", tags: ["虚拟机", "安卓", "多开"] },
+      { title: "番茄小说", url: "https://pan.quark.cn/s/c6df97e58d60", description: "小说阅读类应用资源，点击打开夸克网盘获取。", tags: ["小说", "阅读", "应用"] },
+      { title: "剪映国际版", url: "https://pan.quark.cn/s/beea219e7a4b", description: "剪映国际版视频剪辑工具，点击打开夸克网盘获取。", tags: ["剪辑", "视频", "国际版"] },
+      { title: "云端私档 3", url: "https://pan.quark.cn/s/9b747e0ae209", description: "云端私档相关资源，点击打开夸克网盘获取。", tags: ["云端", "私档", "工具"] },
+      { title: "红果短剧", url: "https://pan.quark.cn/s/25a513dc0bca", description: "短剧观看类应用资源，点击打开夸克网盘获取。", tags: ["短剧", "娱乐", "应用"] },
+      { title: "百度", url: "https://pan.quark.cn/s/eac5deb54d32", description: "百度应用资源，点击打开夸克网盘获取。", tags: ["百度", "搜索", "应用"] },
+      { title: "快手", url: "https://pan.quark.cn/s/18b89e4a6cdb", description: "快手短视频应用资源，点击打开夸克网盘获取。", tags: ["快手", "短视频", "娱乐"] },
+      { title: "deepseek", url: "https://pan.quark.cn/s/116b4199251f", description: "DeepSeek AI 相关应用资源，点击打开夸克网盘获取。", tags: ["AI", "DeepSeek", "工具"] }
+    ];
+
+    const state = {
+      query: ""
+    };
+
+    const resourceGrid = document.querySelector("#resourceGrid");
+    const emptyState = document.querySelector("#emptyState");
+    const searchInput = document.querySelector("#searchInput");
+    const agreeBtn = document.querySelector("#agreeBtn");
+    const rejectBtn = document.querySelector("#rejectBtn");
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function getFilteredLinks() {
+      const query = state.query.toLowerCase();
+      return LINKS.filter(item => {
+        const haystack = [
+          item.title,
+          item.description,
+          ...(item.tags || [])
+        ].join(" ").toLowerCase();
+        return !query || haystack.includes(query);
+      });
+    }
+
+    function renderLinks() {
+      const links = getFilteredLinks();
+
+      if (!links.length) {
+        resourceGrid.innerHTML = "";
+        emptyState.hidden = false;
+        return;
+      }
+
+      emptyState.hidden = true;
+      resourceGrid.innerHTML = links.map(item => {
+        const tags = (item.tags || []).map(tag => `<li>${escapeHtml(tag)}</li>`).join("");
+        return `
+          <article class="resource-card">
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.description || "这个资料暂时没有说明。")}</p>
+            <ul class="tag-list">${tags}</ul>
+            <a class="visit-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">打开资料</a>
+          </article>
+        `;
+      }).join("");
+    }
+
+    let searchTimer;
+    searchInput.addEventListener("input", event => {
+      window.clearTimeout(searchTimer);
+      searchTimer = window.setTimeout(() => {
+        state.query = event.target.value.trim();
+        renderLinks();
+      }, 180);
+    });
+
+    agreeBtn.addEventListener("click", () => {
+      document.body.classList.add("agreed");
+      document.body.classList.remove("modal-open");
+    });
+
+    rejectBtn.addEventListener("click", () => {
+      window.alert("你需要同意用户服务协议和免责声明后才能进入网页。");
+    });
+
+    renderLinks();
+
+    /* ===== 彩蛋：连续点击版本号16次触发萝卜飞飞小游戏 ===== */
+    const versionBadge = document.querySelector("#versionBadge");
+    const eggModal = document.querySelector("#eggModal");
+    const eggClose = document.querySelector("#eggClose");
+    const eggRestart = document.querySelector("#eggRestart");
+    const eggCanvas = document.querySelector("#eggCanvas");
+    const eggCtx = eggCanvas.getContext("2d");
+
+    let eggClickCount = 0;
+    let eggClickTimer = null;
+
+    versionBadge.addEventListener("click", () => {
+      eggClickCount++;
+      window.clearTimeout(eggClickTimer);
+      eggClickTimer = window.setTimeout(() => { eggClickCount = 0; }, 1200);
+      if (eggClickCount >= 16) {
+        eggClickCount = 0;
+        openEgg();
+      }
+    });
+
+    function openEgg() {
+      eggModal.classList.add("show");
+      startEggGame();
+    }
+
+    function closeEgg() {
+      eggModal.classList.remove("show");
+      stopEggGame();
+    }
+
+    eggClose.addEventListener("click", closeEgg);
+
+    /* ===== 萝卜飞飞小游戏（Flappy Bird 风格） ===== */
+    const egg = {
+      running: false,
+      rafId: null,
+      state: "ready",
+      bird: { x: 90, y: 240, vy: 0, r: 16 },
+      pipes: [],
+      score: 0,
+      best: 0,
+      frame: 0,
+      gravity: 0.45,
+      jump: -7.5,
+      pipeGap: 155,
+      pipeWidth: 56,
+      pipeSpeed: 2.2,
+      pipeInterval: 95
+    };
+
+    function resetEggGame() {
+      egg.bird = { x: 90, y: 240, vy: 0, r: 16 };
+      egg.pipes = [];
+      egg.score = 0;
+      egg.frame = 0;
+      egg.state = "ready";
+    }
+
+    function startEggGame() {
+      resetEggGame();
+      egg.running = true;
+      eggLoop();
+    }
+
+    function stopEggGame() {
+      egg.running = false;
+      if (egg.rafId) cancelAnimationFrame(egg.rafId);
+    }
+
+    function eggFlap() {
+      if (egg.state === "over") {
+        resetEggGame();
+        egg.state = "playing";
+        return;
+      }
+      if (egg.state === "ready") {
+        egg.state = "playing";
+      }
+      egg.bird.vy = egg.jump;
+    }
+
+    function eggLoop() {
+      if (!egg.running) return;
+      updateEgg();
+      drawEgg();
+      egg.rafId = requestAnimationFrame(eggLoop);
+    }
+
+    function updateEgg() {
+      if (egg.state !== "playing") return;
+      egg.frame++;
+      egg.bird.vy += egg.gravity;
+      egg.bird.y += egg.bird.vy;
+
+      if (egg.frame % egg.pipeInterval === 0) {
+        const minTop = 60;
+        const maxTop = eggCanvas.height - egg.pipeGap - 90;
+        const top = minTop + Math.random() * Math.max(20, maxTop - minTop);
+        egg.pipes.push({ x: eggCanvas.width, top, scored: false });
+      }
+
+      egg.pipes.forEach(p => { p.x -= egg.pipeSpeed; });
+      egg.pipes = egg.pipes.filter(p => p.x + egg.pipeWidth > 0);
+
+      egg.pipes.forEach(p => {
+        if (!p.scored && p.x + egg.pipeWidth < egg.bird.x) {
+          p.scored = true;
+          egg.score++;
+        }
+      });
+
+      if (egg.bird.y + egg.bird.r > eggCanvas.height - 40 || egg.bird.y - egg.bird.r < 0) {
+        eggGameOver();
+        return;
+      }
+
+      for (const p of egg.pipes) {
+        const bx = egg.bird.x;
+        const by = egg.bird.y;
+        const br = egg.bird.r;
+        if (bx + br > p.x && bx - br < p.x + egg.pipeWidth) {
+          if (by - br < p.top || by + br > p.top + egg.pipeGap) {
+            eggGameOver();
+            return;
+          }
+        }
+      }
+    }
+
+    function eggGameOver() {
+      egg.state = "over";
+      if (egg.score > egg.best) egg.best = egg.score;
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      if (h <= 0 || w <= 0) return;
+      r = Math.min(r, w / 2, h / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function drawEgg() {
+      const ctx = eggCtx;
+      const w = eggCanvas.width;
+      const h = eggCanvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      /* 地面 */
+      ctx.fillStyle = "#7ec850";
+      ctx.fillRect(0, h - 40, w, 40);
+      ctx.fillStyle = "#5fa838";
+      ctx.fillRect(0, h - 40, w, 6);
+
+      /* 萝卜柱子 */
+      ctx.fillStyle = "#4ade80";
+      ctx.strokeStyle = "#16a34a";
+      ctx.lineWidth = 3;
+      egg.pipes.forEach(p => {
+        roundRect(ctx, p.x, 0, egg.pipeWidth, p.top, 8);
+        ctx.fill();
+        ctx.stroke();
+        roundRect(ctx, p.x, p.top + egg.pipeGap, egg.pipeWidth, h - 40 - p.top - egg.pipeGap, 8);
+        ctx.fill();
+        ctx.stroke();
+      });
+
+      /* 萝卜角色 */
+      ctx.save();
+      ctx.translate(egg.bird.x, egg.bird.y);
+      const angle = Math.max(-0.4, Math.min(0.9, egg.bird.vy * 0.06));
+      ctx.rotate(angle);
+      ctx.font = "32px serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("\u{1F955}", 0, 0);
+      ctx.restore();
+
+      /* 分数 */
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#172033";
+      ctx.lineWidth = 4;
+      ctx.font = "bold 28px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.strokeText(String(egg.score), w / 2, 20);
+      ctx.fillText(String(egg.score), w / 2, 20);
+
+      /* 状态提示 */
+      ctx.textBaseline = "middle";
+      if (egg.state === "ready") {
+        ctx.fillStyle = "rgba(23,32,51,0.7)";
+        ctx.font = "bold 20px sans-serif";
+        ctx.fillText("点击屏幕开始飞行", w / 2, h / 2 - 70);
+      } else if (egg.state === "over") {
+        ctx.fillStyle = "rgba(23,32,51,0.82)";
+        roundRect(ctx, w / 2 - 110, h / 2 - 55, 220, 110, 16);
+        ctx.fill();
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 24px sans-serif";
+        ctx.fillText("游戏结束", w / 2, h / 2 - 28);
+        ctx.font = "16px sans-serif";
+        ctx.fillText("得分 " + egg.score + " · 最高 " + egg.best, w / 2, h / 2 + 2);
+        ctx.fillText("点击屏幕重新开始", w / 2, h / 2 + 26);
+      }
+    }
+
+    eggCanvas.addEventListener("pointerdown", e => { e.preventDefault(); eggFlap(); });
+    eggRestart.addEventListener("click", () => { resetEggGame(); egg.state = "playing"; });
+
+    document.addEventListener("keydown", e => {
+      if (e.code === "Space" && eggModal.classList.contains("show")) {
+        e.preventDefault();
+        eggFlap();
+      }
+    });
+  </script>
+</body>
+</html>
